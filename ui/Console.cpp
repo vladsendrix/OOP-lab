@@ -20,7 +20,7 @@ namespace ui
         std::cin>>option;
         switch (option) {
             case 0 : {
-                std::cout<<"Goodbye!"<<std::endl;
+                //std::cout<<"Goodbye!"<<std::endl;
                 return;
             }
             case 1: {
