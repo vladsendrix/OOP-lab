@@ -1,6 +1,7 @@
 #include "Console.h"
 #include <iostream>
 
+//This is a comment
 namespace ui
 {
     Console::Console(const controller::ProductController& controller) : controller_(controller) {}
