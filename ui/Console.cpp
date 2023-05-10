@@ -32,7 +32,7 @@ namespace ui
                 break;
             }
             case 3: {
-                editScooter();
+                //editScooter();
                 break;
             }
 
