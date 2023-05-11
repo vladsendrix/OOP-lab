@@ -1,3 +1,5 @@
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
 #include "../repository/Repository.h"
 #include <vector>
@@ -6,7 +8,7 @@ namespace controller {
     private:
         repository::Repository repo;
     public:
-        explicit ProductController(repository::Repository &scooterRepo);
+        explicit ProductController(const repository::Repository &scooterRepo);
         void addScooter();
         void deleteScooter();
         void editScooter();
@@ -16,3 +18,5 @@ namespace controller {
         void listScooterByAge();
     };
 };
+
+#endif

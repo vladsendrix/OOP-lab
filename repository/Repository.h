@@ -1,3 +1,5 @@
+#ifndef REPOSITORY_H
+#define REPOSITORY_H
 
 #include "../domain/Domain.h"
 #include <vector>
@@ -19,3 +21,5 @@ namespace repository {
             std::vector<domain::Scooter> listScooterByAge();
     };
 };
+
+#endif

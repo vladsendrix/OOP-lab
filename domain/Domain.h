@@ -1,3 +1,5 @@
+#ifndef DOMAIN_H
+#define DOMAIN_H
 
 #include <string>
 
@@ -45,3 +47,5 @@ namespace domain {
         State set_state();
     };
 };
+
+#endif

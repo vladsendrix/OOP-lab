@@ -2,7 +2,7 @@
 
 namespace controller
 {
-    ProductController::ProductController(repository::Repository &scooterRepo)
+    ProductController::ProductController(const repository::Repository &scooterRepo)
     {
         this->repo=scooterRepo;
     }

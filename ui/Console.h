@@ -1,5 +1,8 @@
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
 #include "../controller/Controller.h"
+
 namespace ui
 {
     class Console {
@@ -12,3 +15,5 @@ namespace ui
             void userMethods();
     };
 };
+
+#endif
