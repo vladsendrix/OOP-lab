@@ -26,33 +26,33 @@ namespace ui {
                 return;
             }
             case 1: {
-                addScooter();
+                ctrl.addScooter();
                 break;
             }
             case 2: {
-                controller.deleteScooter();
+                ctrl.deleteScooter();
                 break;
             }
             case 3: {
-                controller.editScooter();
+                ctrl.editScooter();
                 break;
             }
 
             case 4: {
-                controller.searchScooterByStandPlace();
+                ctrl.searchScooterByStandPlace();
                 break;
             }
 
             case 5: {
-                controller.filterScooterByAge();
+                ctrl.filterScooterByAge();
                 break;
             }
             case 6: {
-                controller.filterScooterByMileage();
+                ctrl.filterScooterByMileage();
                 break;
             }
             case 7: {
-                controller.listScooterByAge();
+                ctrl.listScooterByAge();
                 break;
             }
             default: {
@@ -81,35 +81,35 @@ namespace ui {
                 return;
             }
             case 1: {
-                // controller.reserveScooter();
+                // ctrl.reserveScooter();
                 break;
             }
             case 2: {
-                // useScooter();
+                // ctrl.useScooter();
                 break;
             }
             case 3: {
-                controller.searchScooterByStandPlace();
+                ctrl.searchScooterByStandPlace();
                 break;
             }
 
             case 4: {
-                controller.filterScooterByAge();
+                ctrl.filterScooterByAge();
                 break;
             }
 
             case 5: {
-                controller.filterScooterByMileage();
+                ctrl.filterScooterByMileage();
                 break;
             }
 
             case 6: {
-                // controller.reserveScooter();
+                // ctrl.reserveScooter();
                 break;
             }
 
             case 7: {
-                // controller.useScooter();
+                // ctrl.useScooter();
                 break;
             }
             default: {
@@ -117,7 +117,6 @@ namespace ui {
             }
         }
     }
-
 
 
     void Console::run()
@@ -135,7 +134,6 @@ namespace ui {
                             "Enter option:";
                 std::cin>>role;
             }
-
             if (role==0) {
                 break;
             } else if (role == 1) {

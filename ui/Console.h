@@ -1,4 +1,4 @@
-#pragma once
+
 #include "../controller/Controller.h"
 namespace ui
 {

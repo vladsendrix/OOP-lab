@@ -8,11 +8,11 @@ namespace repository {
 
     void Repository::addScooter(domain::Scooter scooter)
     {
-
+         this->scooters.push_back(scooter);
     }
     void Repository::deleteScooter(domain::Scooter scooter)
     {
-
+        
     }
 
     void Repository::editScooter(domain::Scooter scooter)
