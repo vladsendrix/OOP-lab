@@ -1,4 +1,4 @@
-#pragma once 
+
 #include <string>
 
 namespace domain {
@@ -36,7 +36,7 @@ namespace domain {
         int get_mileage();
         std::string get_lastStandPlace();
         State get_state();
-        
+
         std::string set_id();
         std::string set_model();
         Date set_commision_date();

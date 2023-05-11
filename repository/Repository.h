@@ -1,4 +1,4 @@
-#pragma once
+
 #include "../domain/Domain.h"
 #include <vector>
 #include <string>
