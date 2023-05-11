@@ -1,4 +1,5 @@
 #include "Controller.h"
+using namespace controller;
 namespace ui
 {
     class Console {

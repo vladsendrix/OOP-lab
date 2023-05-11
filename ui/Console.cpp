@@ -130,7 +130,7 @@ namespace ui {
                             "Enter option:";
                 std::cin>>role;
             }
-            
+
             if (role==0) {
                 break;
             } else if (role == 1) {
