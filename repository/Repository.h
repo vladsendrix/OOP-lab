@@ -7,6 +7,7 @@ namespace repository {
         private:
             std::vector<domain::Scooter> scooters;
         public:
+            Repository(std::vector<domain::Scooter> scooters = std::vector<domain::Scooter>());
             void addScooter(domain::Scooter scooter);
             void deleteScooter(domain::Scooter scooter);
             void editScooter(domain::Scooter scooter);
@@ -15,4 +16,4 @@ namespace repository {
             std::vector<domain::Scooter> filterScooterByMileage(int mileage);
             std::vector<domain::Scooter> listScooterByAge();
     };
-}
+};

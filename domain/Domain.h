@@ -32,4 +32,4 @@ namespace domain {
         std::string get_id();
         std::string get_model();
     };
-}
+};

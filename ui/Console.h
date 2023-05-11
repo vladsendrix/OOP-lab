@@ -11,4 +11,4 @@ namespace ui
             void adminMethods();  
             void userMethods();      
     };
-}
+};

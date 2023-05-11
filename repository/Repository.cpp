@@ -1,6 +1,11 @@
 #include "Repository.h"
 
 namespace repository {
+    Repository::Repository(std::vector<domain::Scooter> scooters_ )
+    {
+        scooters=std::move(scooters_);
+    }
+
     void Repository::addScooter(domain::Scooter scooter)
     {
 
