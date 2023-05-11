@@ -1,10 +1,10 @@
 #include "Console.h"
 #include <iostream>
 
-//This is a comment
-namespace ui
-{
-    Console::Console(const controller::ProductController& controller) : controller_(controller) {}
+namespace ui {
+    Console::Console(const controller::ProductController& controller_) {
+        controller=controller_;
+    } 
 
     void Console::adminMethods() {
         std::cout<<"Menu\n"
@@ -21,7 +21,7 @@ namespace ui
         std::cin>>option;
         switch (option) {
             case 0 : {
-                //std::cout<<"Goodbye!"<<std::endl;
+                std::cout<<"Goodbye!"<<std::endl;
                 return;
             }
             case 1: {
@@ -33,11 +33,12 @@ namespace ui
                 break;
             }
             case 3: {
-                //editScooter();
+                editScooter();
                 break;
             }
 
             case 4: {
+                searchScooterByStandPlace();
                 break;
             }
 
@@ -46,13 +47,15 @@ namespace ui
                 break;
             }
             case 6: {
+                filterScooterByMileage();
                 break;
             }
             case 7: {
+                listScooterByAge();
                 break;
             }
             default: {
-                std::cout<<"Invalid option, please try again." << endl;
+                std::cout<<"Invalid option, please try again." << std::endl;
             }
         }
     }
@@ -77,11 +80,11 @@ namespace ui
                 return;
             }
             case 1: {
-                
+                // reserveScooter();
                 break;
             }
             case 2: {
-
+                // useScooter();
                 break;
             }
             case 3: {
@@ -90,129 +93,51 @@ namespace ui
             }
 
             case 4: {
+                filterScooterByAge();
                 break;
             }
 
             case 5: {
+                filterScooterByMileage();
                 break;
             }
 
             case 6: {
+                // reserveScooter();
                 break;
             }
 
             case 7: {
+                // useScooter();
                 break;
             }
             default: {
-                std::cout<<"Invalid option, please try again." << endl;
+                std::cout<<"Invalid option, please try again." << std::endl;
             }
         }
-    void Console::run()
-    {
+    }
+    void Console::run() {
         int option;
 
         while (true)
         {
-            int role{0};
-            while(role != 1 && role != 2)
-            {
-                std::cout<<"Please choose: \n"
+            int role{-1};
+            while(role!=0 || role != 1 || role != 2){
+                std::cout<<"Please choose:\n"
+                            "0.EXIT\n"
                             "1. Admin\n"
                             "2. User\n"
                             "Enter option:";
                 std::cin>>role;
             }
             
-            if (role == 1) {
+            if (role==0) {
+                break;
+            } else if (role == 1) {
                 adminMethods();
             } else {
                 userMethods();
             } 
-
-            std::cout << "Menu:" << std::endl;
-            std::cout << "1. Add product" << std::endl;
-            std::cout << "2. Delete product" << std::endl;
-            std::cout << "3. Get products by name" << std::endl;
-            std::cout << "4. Get short supply products" << std::endl;
-            std::cout << "5. Get all products by expiry date" << std::endl;
-            std::cout << "6. Exit" << std::endl;
-            std::cout << "Enter option: ";
-
-            std::cin >> option;
-
-            switch (option)
-            {
-            case 1:
-            {
-                domain::Product product;
-                std::cout << "Enter product name: ";
-                std::cin >> product.name;
-                std::cout << "Enter product origin: ";
-                std::cin >> product.origin;
-                std::cout << "Enter product expiry date (year month day): ";
-                std::cin >> product.expiry_date.year >> product.expiry_date.month >> product.expiry_date.day;
-                std::cout << "Enter product quantity: ";
-                std::cin >> product.quantity;
-                std::cout << "Enter product price: ";
-                std::cin >> product.price;
-
-                controller_.addProduct(product);
-                break;
-            }
-            case 2:
-            {
-                std::string name;
-                std::cout << "Enter product name: ";
-                std::cin >> name;
-
-                controller_.deleteProduct(name);
-                break;
-            }
-            case 3:
-            {
-                std::string name;
-                std::cout << "Enter product name: ";
-                std::cin >> name;
-
-                auto products = controller_.getProductsByName(name);
-                for (const auto& product : products)
-                {
-                    std::cout << product.getName() << std::endl;
-                }
-                break;
-            }
-            case 4:
-            {
-                int threshold;
-                std::cout << "Enter short supply threshold: ";
-                std::cin >> threshold;
-
-                auto products = controller_.getShortSupplyProducts(threshold);
-                for (const auto& product : products)
-                {
-                    std::cout << product.getName() << std::endl;
-                }
-                break;
-            }
-            case 5:
-            {
-                auto products = controller_.getAllProductsByExpiryDate();
-                for (const auto& product : products)
-                {
-                    std::cout << product.getName() << std::endl;
-                }
-                break;
-            }
-            case 6:
-            {
-                std::cout << "Goodbye!" << std::endl;
-                return;
-            }
-            default:
-                std::cout << "Invalid option, please try again." << std::endl;
-            }
-        }
+        }  
     }
-}
 }
