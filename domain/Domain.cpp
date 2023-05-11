@@ -1,63 +1,63 @@
 #include "Domain.h"
 
 namespace domain {
-    Scooter::Scooter(std::string &id, std::string &model, Date &commision_date, int &mileage,
-                     std::string &lastStandPlace, State &state) {
+    Scooter::Scooter(const std::string& id, const std::string& model, const Date& commissionDate,
+                     int mileage, const std::string& lastStandPlace, const State& state) {
         this->id = id;
         this->model = model;
-        this->commision_date = commision_date;
+        this->commissionDate = commissionDate;
         this->mileage = mileage;
         this->lastStandPlace = lastStandPlace;
         this->state = state;
     }
 
-    std::string Scooter::getID() {
+    std::string Scooter::getID() const {
         return this->id;
     }
 
-    std::string Scooter::getModel() {
+    std::string Scooter::getModel() const {
         return this->model;
     }
 
-    Date Scooter::ComissionDate() {
-        return this->commision_date;
+    Date Scooter::getCommissionDate() const {
+        return this->commissionDate;
     }
 
-    int Scooter::getMileage() {
+    int Scooter::getMileage() const {
         return this->mileage;
     }
 
-    std::string Scooter::getLastStandPlace() {
+    std::string Scooter::getLastStandPlace() const {
         return this->lastStandPlace;
     }
 
-    State Scooter::getState() {
+    State Scooter::getState() const {
         return this->state;
     }
 
-    // setter methods
+    // Setter methods
 
-    void Scooter::setID(std::string& id) {
-        return this->id;
+    void Scooter::setID(const std::string& id) {
+        this->id = id;
     }
 
-    void Scooter::setModel() {
-        return this->model;
+    void Scooter::setModel(const std::string& model) {
+        this->model = model;
     }
 
-    void Scooter::setComissionDate() {
-        return this->commision_date;
+    void Scooter::setCommissionDate(const Date& commissionDate) {
+        this->commissionDate = commissionDate;
     }
 
-    void Scooter::setMileage(int& mileage) {
-        return this->mileage;
+    void Scooter::setMileage(int mileage) {
+        this->mileage = mileage;
     }
 
-    void Scooter::setLastStandPlace() {
-        return this->lastStandPlace;
+    void Scooter::setLastStandPlace(const std::string& lastStandPlace) {
+        this->lastStandPlace = lastStandPlace;
     }
 
-    void Scooter::setState(State& state) {
-        return this->state;
+    void Scooter::setState(const State& state) {
+        this->state = state;
     }
-};
+}
