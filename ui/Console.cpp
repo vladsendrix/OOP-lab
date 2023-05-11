@@ -2,7 +2,7 @@
 #include <iostream>
 
 namespace ui {
-    Console::Console(const controller::ProductController &scooterController)
+    Console::Console(controller::ProductController &scooterController)
     {
         this->ctrl =scooterController;
     }

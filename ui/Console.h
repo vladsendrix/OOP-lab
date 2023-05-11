@@ -1,3 +1,4 @@
+#pragma once
 #include "../controller/Controller.h"
 namespace ui
 {
@@ -5,7 +6,7 @@ namespace ui
         private:
         controller::ProductController ctrl;
         public:
-            Console(const controller::ProductController& scooterController);
+            Console(controller::ProductController &scooterController);
             void run();
             void adminMethods();
             void userMethods();
