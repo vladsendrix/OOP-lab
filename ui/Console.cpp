@@ -121,22 +121,20 @@ namespace ui {
 
     void Console::run() {
         int option;
-
+        std::cout<<"@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n";
         while (true) {
             int role{-1};
-            while (role != 0 || role != 1 || role != 2) {
-                std::cout << "Please choose:\n"
-                             "0.EXIT\n"
-                             "1. Admin\n"
-                             "2. User\n"
-                             "Enter option:";
-                std::cin >> role;
-            }
+            std::cout <<"\nPlease choose:\n"
+                        "0.EXIT\n"
+                        "1. Admin\n"
+                        "2. User\n"
+                        "Enter option:";
+            std::cin >> role;
             if (role == 0) {
                 break;
             } else if (role == 1) {
                 adminMethods();
-            } else {
+            } else if (role == 2) {
                 userMethods();
             }
         }
