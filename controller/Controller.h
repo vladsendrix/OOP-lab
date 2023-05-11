@@ -23,6 +23,10 @@ namespace controller {
         void filterScooterByMileage();
 
         void listScooterByAge();
+
+        void reserveScooter();
+
+        void useScooter();
     };
 };
 

@@ -8,7 +8,7 @@ namespace ui {
     }
 
     void Console::adminMethods() {
-        std::cout << "Menu\n"
+        std::cout << "\nMenu\n"
                      "0. EXIT\n"
                      "1. Add scooter\n"
                      "2. Delete scooter\n"
@@ -63,15 +63,13 @@ namespace ui {
 
     void Console::userMethods() {
 
-        std::cout << "Menu\n"
+        std::cout << "\nMenu\n"
                      "0. EXIT\n"
-                     "1. Reservation of scooter\n"
-                     "2. Use scooter\n"
-                     "3. Search scooter by stand place"
-                     "4. Filter scooter by age\n"
-                     "5. Filter scooter by mileage\n"
-                     "6. Reserve a scooter\n"
-                     "7. Use a scooter\n"
+                     "1. Search scooter by stand place"
+                     "2. Filter scooter by age\n"
+                     "3. Filter scooter by mileage\n"
+                     "4. Reserve a scooter\n"
+                     "5. Use a scooter\n"
                      "Enter option: ";
         int option;
         std::cin >> option;
@@ -80,38 +78,32 @@ namespace ui {
                 std::cout << "Goodbye!" << std::endl;
                 return;
             }
+
             case 1: {
-                // ctrl.reserveScooter();
-                break;
-            }
-            case 2: {
-                // ctrl.useScooter();
-                break;
-            }
-            case 3: {
                 ctrl.searchScooterByStandPlace();
                 break;
             }
 
-            case 4: {
+            case 2: {
                 ctrl.filterScooterByAge();
                 break;
             }
 
-            case 5: {
+            case 3: {
                 ctrl.filterScooterByMileage();
                 break;
             }
 
-            case 6: {
-                // ctrl.reserveScooter();
+            case 4: {
+                ctrl.reserveScooter();
                 break;
             }
 
-            case 7: {
-                // ctrl.useScooter();
+            case 5: {
+                ctrl.useScooter();
                 break;
             }
+            
             default: {
                 std::cout << "Invalid option, please try again." << std::endl;
             }

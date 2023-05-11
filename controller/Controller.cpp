@@ -26,4 +26,10 @@ namespace controller {
 
     void ProductController::listScooterByAge() {
     }
+    void ProductController::reserveScooter()
+    {
+    }
+    void ProductController::useScooter()
+    {
+    }
 };
