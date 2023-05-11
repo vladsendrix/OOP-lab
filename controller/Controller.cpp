@@ -1,14 +1,11 @@
 #include "Controller.h"
 
-namespace controller
-{
-    ProductController::ProductController(const repository::Repository &scooterRepo)
-    {
-        this->repo=scooterRepo;
+namespace controller {
+    ProductController::ProductController(const repository::Repository &scooterRepo) {
+        this->repo = scooterRepo;
     }
 
-    void ProductController::addScooter()
-    {
+    void ProductController::addScooter() {
 
     }
 

@@ -1,18 +1,19 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
-
 #include "../controller/Controller.h"
 
-namespace ui
-{
+namespace ui {
     class Console {
-        private:
+    private:
         controller::ProductController ctrl;
-        public:
-            Console(controller::ProductController &scooterController);
-            void run();
-            void adminMethods();
-            void userMethods();
+    public:
+        Console(controller::ProductController &scooterController);
+
+        void run();
+
+        void adminMethods();
+
+        void userMethods();
     };
 };
 
