@@ -5,7 +5,7 @@
 
 int main() {
     repository::Repository scooters=repository::Repository();
-    controller::Controller controller;
+    controller::Controller controller=;
     ui::ConsoleUI ui(controller);
     ui.run();
     return 0;

@@ -2,7 +2,14 @@
 
 namespace controller
 {
-    void ProductController::addScooter() {
+    ProductController::ProductController(repository::Repository &scooterRepo)
+    {
+        this->repo=scooterRepo;
+    }
+
+    void ProductController::addScooter()
+    {
+
     }
 
     void ProductController::deleteScooter() {

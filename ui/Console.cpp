@@ -2,9 +2,10 @@
 #include <iostream>
 
 namespace ui {
-    Console::Console(const controller::ProductController& controller_) {
-        controller=controller_;
-    } 
+    Console::Console(const controller::ProductController &scooterController)
+    {
+        this->ctrl =scooterController;
+    }
 
     void Console::adminMethods() {
         std::cout<<"Menu\n"
@@ -116,7 +117,9 @@ namespace ui {
             }
         }
     }
-    void Console::run() {
+
+    void Console::run()
+    {
         int option;
 
         while (true)
@@ -138,6 +141,6 @@ namespace ui {
             } else {
                 userMethods();
             } 
-        }  
+        }
     }
 };
