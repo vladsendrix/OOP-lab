@@ -21,20 +21,27 @@ namespace domain {
     };
 
     class Scooter {
-        private:
+    private:
             std::string id;
             std::string model;
             Date commision_date;
             int mileage;
             std:: string lastStandPlace;
             State state;
-        public:
-        Scooter(std::string& id_, std::string& model_, Date& commision_date_, int& mileage_, std::string& lastStandPlace_, State& sate_);
+    public:
+        Scooter(std::string& id_, std::string& model_, Date& commision_date_, int& mileage_, std::string& lastStandPlace_, State& state_);
         std::string get_id();
         std::string get_model();
-        std::string get_commision_date();
-        std::string get_mileage();
+        Date get_commision_date();
+        int get_mileage();
         std::string get_lastStandPlace();
-        std::string get_state();
+        State get_state();
+        
+        std::string set_id();
+        std::string set_model();
+        Date set_commision_date();
+        int set_mileage();
+        std::string set_lastStandPlace();
+        State set_state();
     };
 };
