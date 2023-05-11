@@ -1,5 +1,5 @@
 #include "Domain.h"
-using std::string;
+
 namespace domain
 {
 

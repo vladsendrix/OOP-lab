@@ -31,8 +31,5 @@ namespace domain {
         Scooter(std::string& id_, std::string& model_, Date& commision_date_, int& mileage_, std::string& lastStandPlace_, State& sate_);
         std::string get_id();
         std::string get_model();
-        
-
-
     };
 }
