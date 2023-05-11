@@ -34,29 +34,18 @@ namespace domain {
         Scooter(std::string &id_, std::string &model_, Date &commision_date_, int &mileage_,
                 std::string &lastStandPlace_, State &state_);
 
-        std::string get_id();
-
-        std::string get_model();
-
-        Date get_commision_date();
-
-        int get_mileage();
-
-        std::string get_lastStandPlace();
-
-        State get_state();
-
-        std::string set_id();
-
-        std::string set_model();
-
-        Date set_commision_date();
-
-        int set_mileage();
-
-        std::string set_lastStandPlace();
-
-        State set_state();
+        std::string getID();
+        std::string getModel();
+        Date ComissionDate();
+        int getMileage();
+        std::string getLastStandPlace();
+        State getState();
+        void setID(std::string& id);
+        void setModel();
+        void setComissionDate();
+        int setMileage();
+        void setLastStandPlace();
+        void setState();
     };
 };
 

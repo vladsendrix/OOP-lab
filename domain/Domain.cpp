@@ -11,53 +11,53 @@ namespace domain {
         this->state = state;
     }
 
-    std::string Scooter::get_id() {
+    std::string Scooter::getID() {
         return this->id;
     }
 
-    std::string Scooter::get_model() {
+    std::string Scooter::getModel() {
         return this->model;
     }
 
-    Date Scooter::get_commision_date() {
+    Date Scooter::ComissionDate() {
         return this->commision_date;
     }
 
-    int Scooter::get_mileage() {
+    int Scooter::getMileage() {
         return this->mileage;
     }
 
-    std::string Scooter::get_lastStandPlace() {
+    std::string Scooter::getLastStandPlace() {
         return this->lastStandPlace;
     }
 
-    State Scooter::get_state() {
+    State Scooter::getState() {
         return this->state;
     }
 
     // setter methods
 
-    std::string Scooter::set_id() {
+    void Scooter::setID(std::string& id) {
         return this->id;
     }
 
-    std::string Scooter::set_model() {
+    void Scooter::setModel() {
         return this->model;
     }
 
-    Date Scooter::set_commision_date() {
+    void Scooter::setComissionDate() {
         return this->commision_date;
     }
 
-    int Scooter::set_mileage() {
+    void Scooter::setMileage(int& mileage) {
         return this->mileage;
     }
 
-    std::string Scooter::set_lastStandPlace() {
+    void Scooter::setLastStandPlace() {
         return this->lastStandPlace;
     }
 
-    State Scooter::set_state() {
+    void Scooter::setState(State& state) {
         return this->state;
     }
 };
