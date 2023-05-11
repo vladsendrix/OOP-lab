@@ -26,7 +26,7 @@ namespace ui {
                 return;
             }
             case 1: {
-                controller.addScooter();
+                addScooter();
                 break;
             }
             case 2: {
@@ -117,6 +117,8 @@ namespace ui {
             }
         }
     }
+
+
 
     void Console::run()
     {

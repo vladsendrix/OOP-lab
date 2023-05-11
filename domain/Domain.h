@@ -1,3 +1,4 @@
+#pragma once 
 #include <string>
 
 namespace domain {
@@ -31,5 +32,9 @@ namespace domain {
         Scooter(std::string& id_, std::string& model_, Date& commision_date_, int& mileage_, std::string& lastStandPlace_, State& sate_);
         std::string get_id();
         std::string get_model();
+        std::string get_commision_date();
+        std::string get_mileage();
+        std::string get_lastStandPlace();
+        std::string get_state();
     };
 };

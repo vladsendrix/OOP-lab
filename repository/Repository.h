@@ -7,7 +7,7 @@ namespace repository {
         private:
             std::vector<domain::Scooter> scooters;
         public:
-            explicit Repository(std::vector<domain::Scooter> scooters = std::vector<domain::Scooter>());
+            explicit Repository(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>());
             void addScooter(domain::Scooter scooter);
             void deleteScooter(domain::Scooter scooter);
             void editScooter(domain::Scooter scooter);

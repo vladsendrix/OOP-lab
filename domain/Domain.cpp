@@ -2,8 +2,7 @@
 
 namespace domain
 {
-
-    Scooter::Scooter(std::string& id, std::string& model, Date& comision_date, int& mileage, std::string& lastStandPlace, State& state)
+    Scooter::Scooter(std::string &id, std::string &model, Date &commision_date, int &mileage, std::string &lastStandPlace, State &sate)
     {
         this->id = id;
         this->model = model;
