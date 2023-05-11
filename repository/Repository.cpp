@@ -1,5 +1,6 @@
 #include "Repository.h"
 #include <fstream>
+#include <algorithm>
 
 namespace repository {
     Repository::Repository(std::vector<domain::Scooter> scooters_) {
@@ -23,7 +24,7 @@ namespace repository {
         for (auto& s : scooters) {
             if (s.getID() == scooter.getID()) {
                 s.setModel(scooter.getModel());
-                s.setComissionDate(scooter.getComissionDate());
+                s.setCommissionDate(scooter.getCommissionDate());
                 s.setMileage(scooter.getMileage());
                 s.setLastStandPlace(scooter.getLastStandPlace());
                 s.setState(scooter.getState());
@@ -47,9 +48,9 @@ namespace repository {
         for (const auto& scooter : scooters) {
             file << scooter.getID() << ","
                  << scooter.getModel() << ","
-                 << scooter.getComissionDate().year << ","
-                 << scooter.getComissionDate().month << ","
-                 << scooter.getComissionDate().day << ","
+                 << scooter.getCommissionDate().year << ","
+                 << scooter.getCommissionDate().month << ","
+                 << scooter.getCommissionDate().day << ","
                  << scooter.getMileage() << ","
                  << scooter.getLastStandPlace() << ","
                  << scooter.getState() << "\n";
