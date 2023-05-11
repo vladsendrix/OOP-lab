@@ -1,3 +1,4 @@
+#include "../repository/Repository.h"
 
 namespace controller {
     class ProductController {

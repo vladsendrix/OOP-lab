@@ -25,33 +25,33 @@ namespace ui {
                 return;
             }
             case 1: {
-                addScooter();
+                controller.addScooter();
                 break;
             }
             case 2: {
-                deleteScooter();
+                controller.deleteScooter();
                 break;
             }
             case 3: {
-                editScooter();
+                controller.editScooter();
                 break;
             }
 
             case 4: {
-                searchScooterByStandPlace();
+                controller.searchScooterByStandPlace();
                 break;
             }
 
             case 5: {
-                filterScooterByAge();
+                controller.filterScooterByAge();
                 break;
             }
             case 6: {
-                filterScooterByMileage();
+                controller.filterScooterByMileage();
                 break;
             }
             case 7: {
-                listScooterByAge();
+                controller.listScooterByAge();
                 break;
             }
             default: {
@@ -80,7 +80,7 @@ namespace ui {
                 return;
             }
             case 1: {
-                // reserveScooter();
+                // controller.reserveScooter();
                 break;
             }
             case 2: {
@@ -88,27 +88,27 @@ namespace ui {
                 break;
             }
             case 3: {
-                searchScooterByStandPlace();
+                controller.searchScooterByStandPlace();
                 break;
             }
 
             case 4: {
-                filterScooterByAge();
+                controller.filterScooterByAge();
                 break;
             }
 
             case 5: {
-                filterScooterByMileage();
+                controller.filterScooterByMileage();
                 break;
             }
 
             case 6: {
-                // reserveScooter();
+                // controller.reserveScooter();
                 break;
             }
 
             case 7: {
-                // useScooter();
+                // controller.useScooter();
                 break;
             }
             default: {
