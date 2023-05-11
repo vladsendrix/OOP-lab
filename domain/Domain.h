@@ -1,6 +1,7 @@
 #include <string>
 
 namespace domain {
+
     struct Date {
         int year, month, day;
         bool operator<(const Date& other) const {

@@ -2,6 +2,7 @@
 using std::string;
 namespace domain
 {
+
     Scooter::Scooter(std::string& id, std::string& model, Date& comision_date, int& mileage, std::string& lastStandPlace, State& state)
     {
         this->id = id;
