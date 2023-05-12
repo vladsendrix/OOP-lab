@@ -123,12 +123,14 @@ namespace ui {
                         "Enter option:";
             std::cin >> role;
             if (role == 0) {
+                std::cout<<"\n\nGoodbye!";
                 break;
             } else if (role == 1) {
                 adminMethods();
             } else if (role == 2) {
                 userMethods();
             }
+            std::cout << "\nInvalid option, please try again." << std::endl;
         }
     }
 
