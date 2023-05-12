@@ -117,7 +117,7 @@ namespace ui {
         while (true) {
             int role{-1};
             std::cout <<"\nPlease choose:\n"
-                        "0.EXIT\n"
+                        "0. EXIT\n"
                         "1. Admin\n"
                         "2. User\n"
                         "Enter option:";
@@ -133,6 +133,5 @@ namespace ui {
             std::cout << "\nInvalid option, please try again." << std::endl;
         }
     }
-
 };
 
