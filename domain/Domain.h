@@ -27,7 +27,7 @@ namespace domain {
     private:
         std::string id;
         std::string model;
-        Date commissionDate;
+        Date commissionDate{};
         int mileage;
         std::string lastStandPlace;
         State state;

@@ -103,7 +103,7 @@ namespace ui {
                 ctrl.useScooter();
                 break;
             }
-            
+
             default: {
                 std::cout << "Invalid option, please try again." << std::endl;
             }

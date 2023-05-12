@@ -3,7 +3,8 @@
 #include "../repository/Repository.h"
 #include <vector>
 #include <iostream>
-
+#include <algorithm>
+#include <string>
 namespace controller {
     class ProductController {
     private:
@@ -28,6 +29,12 @@ namespace controller {
         void reserveScooter();
 
         void useScooter();
+
+        static std::string generateID(const std::string& id_);
+
+
+        static void printScooter(const domain::Scooter& scooter);
+
     };
 };
 

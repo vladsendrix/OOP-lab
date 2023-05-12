@@ -37,27 +37,28 @@ namespace domain {
 
     // Setter methods
 
-    void Scooter::setID(const std::string& id) {
-        this->id = id;
+    void Scooter::setID(const std::string& id_) {
+        this->id = id_;
     }
 
-    void Scooter::setModel(const std::string& model) {
-        this->model = model;
+
+    void Scooter::setModel(const std::string& model_) {
+        this->model = model_;
     }
 
-    void Scooter::setCommissionDate(const Date& commissionDate) {
-        this->commissionDate = commissionDate;
+    void Scooter::setCommissionDate(const Date& commissionDate_) {
+        this->commissionDate = commissionDate_;
     }
 
-    void Scooter::setMileage(int mileage) {
-        this->mileage = mileage;
+    void Scooter::setMileage(int mileage_) {
+        this->mileage = mileage_;
     }
 
-    void Scooter::setLastStandPlace(const std::string& lastStandPlace) {
-        this->lastStandPlace = lastStandPlace;
+    void Scooter::setLastStandPlace(const std::string& lastStandPlace_) {
+        this->lastStandPlace = lastStandPlace_;
     }
 
-    void Scooter::setState(const State& state) {
-        this->state = state;
+    void Scooter::setState(const State& state_) {
+        this->state = state_;
     }
 }
