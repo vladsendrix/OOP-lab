@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 #include "../repository/Repository.h"
 #include <vector>
+#include <iostream>
 
 namespace controller {
     class ProductController {

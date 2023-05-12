@@ -4,6 +4,9 @@
 #include "../domain/Domain.h"
 #include <vector>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 namespace repository {
     class Repository {
@@ -18,13 +21,12 @@ namespace repository {
 
         void editScooter(const domain::Scooter& scooter);
 
-        static std::vector<domain::Scooter> searchScooterByStandPlace(const std::string& standPlace);
+        std::vector<domain::Scooter> getScooters() const;
 
-        static std::vector<domain::Scooter> filterScooterByAge(int age);
+        void saveDataToFile();
 
-        std::vector<domain::Scooter> filterScooterByMileage(int mileage);
+        void loadDataFromFile();
 
-        std::vector<domain::Scooter> listScooterByAge();
     };
 };
 #endif
