@@ -1,6 +1,5 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-
 #include "../repository/Repository.h"
 #include <vector>
 #include <iostream>
@@ -10,6 +9,7 @@
 #include <fstream>
 #include <unordered_map>
 #include <iomanip>
+#include <cassert>
 
 namespace controller {
     class ProductController {
@@ -30,13 +30,15 @@ namespace controller {
 
         void filterScooterByMileage();
 
-        void listScooterByAge();
+        void listScooterByMileage();
+
+        void sortScootersByID();
 
         void reserveScooter();
 
         void useScooter();
 
-        std::string generateID(const std::string &id_);
+        static std::string generateID(const std::string &id_);
 
         void printScooter(const domain::Scooter &scooter);
 
@@ -46,7 +48,7 @@ namespace controller {
 
         void printDetailHeader();
 
-        bool isValidDate(int year, int month, int day);
+        static bool isValidDate(int year, int month, int day);
 
     };
 };

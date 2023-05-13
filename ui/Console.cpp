@@ -52,7 +52,7 @@ namespace ui {
                 break;
             }
             case 7: {
-                ctrl.listScooterByAge();
+                ctrl.listScooterByMileage();
                 break;
             }
             default: {
@@ -114,7 +114,9 @@ namespace ui {
     void Console::run() {
         ctrl.loadDataFromFile();
 
-        ctrl.listScooterByAge();
+        ctrl.listScooterByMileage();
+
+        ctrl.sortScootersByID();
 
         ctrl.saveDataToFile();
         std::cout<<"\n\n";

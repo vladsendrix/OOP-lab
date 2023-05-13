@@ -50,7 +50,11 @@ namespace controller {
 
         domain::Scooter newScooter = domain::Scooter(id, model, commissionDate, mileage, lastStandPlace, state);
         repo.addScooter(newScooter);
-        std::cout << "Scooter added successfully!" << std::endl;
+
+        printDetailHeader();
+        printScooter(newScooter);
+
+        std::cout << "\nScooter added successfully!" << std::endl;
 
         //std::cin.ignore();
     }
@@ -88,7 +92,6 @@ namespace controller {
         scooterID = scooterID.substr(0, 3);
         std::transform(scooterID.begin(), scooterID.end(), scooterID.begin(),
                        [](unsigned char c) { return std::toupper(c); });
-
 
         int index = 0;
         std::vector<domain::Scooter> scooters = repo.getScooters();
@@ -203,7 +206,7 @@ namespace controller {
         }
     }
 
-    void ProductController::listScooterByAge() {
+    void ProductController::listScooterByMileage() {
         std::vector<domain::Scooter> scooters = repo.getScooters();
 
         // Sort the scooters by age in ascending order
@@ -212,25 +215,97 @@ namespace controller {
                       return scooter1.getMileage() < scooter2.getMileage();
                   });
 
-        std::cout << "List of scooters sorted by age:" << std::endl;
+        std::cout << std::endl << "\nList of scooters sorted by age:" << std::endl;
         ProductController::printDetailHeader();
         for (const auto &scooter: scooters) {
             printScooter(scooter);
         }
     }
 
+
+    void ProductController::sortScootersByID() {
+        std::vector<domain::Scooter> scooters = repo.getScooters();
+
+        // Sort the scooters by age in ascending order
+        std::sort(scooters.begin(), scooters.end(),
+                  [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                      return scooter1.getID() < scooter2.getID();
+                  });
+
+        std::cout << "List of scooters sorted by ID:" << std::endl;
+        ProductController::printDetailHeader();
+        for (const auto &scooter: scooters) {
+            printScooter(scooter);
+        }
+    }
+
+
     void ProductController::reserveScooter() {
+        printDetailHeader();
+        for (auto &scooter: repo.getScooters()) {
+            printScooter(scooter);
+        }
+        std::cout<<"Here are the scooters listed.\nPlease enter an ID to reserve a scooter: ";
+        std::string readID;
+        std::cin>>readID;
+        readID = readID.substr(0, 3);
+        std::transform(readID.begin(), readID.end(), readID.begin(), [](unsigned char c){ return std::toupper(c); });
+        std::cout << readID << std::endl;
+        bool found=false;
+
+        for (auto &scooter: repo.getScooters()) {
+            if (readID==scooter.getID()) {
+                if (scooter.getState()==domain::RESERVED) {
+                    std::cout<<"\nSorry, the scooter with the ID "<<readID<<" is reserved by someone else.\n";
+                    return;
+                }
+                found=true;
+                scooter.setState(domain::RESERVED);
+                break;
+            }
+        }
+        if (!found) {
+            std::cout<<"\nSorry, the scooter with the ID "<<readID<<" was not found.\n";
+            return;
+        }
+        std::cout<<"\nThe scooter with the ID "<<readID<<" was reserved.\n";
     }
 
     void ProductController::useScooter() {
+        std::cout<<"\nPlease enter the ID of the scooter you reserved to use it: ";
+        std::string readID;
+        std::cin>>readID;
+        readID = readID.substr(0, 3);
+        std::transform(readID.begin(), readID.end(), readID.begin(), [](unsigned char c){ return std::toupper(c); });
+        std::cout << readID << std::endl;
+        bool found=false;
+
+        for (auto &scooter: repo.getScooters()) {
+            if (readID==scooter.getID()) {
+                if (scooter.getState()==domain::RESERVED) {
+                    found=true;
+                    scooter.setState(domain::INUSE);
+                    std::cout<<"\nYou can use the scooter with the ID "<<readID<<"\n";
+                    break;
+                } else {
+                    std::cout<<"\nSorry, the scooter with the ID "<<readID<<" is not reserved\n";
+                }
+            }
+        }
+        if (!found) {
+            std::cout<<"\nSorry, the scooter with the ID "<<readID<<" was not found.\n";
+            return;
+        }
+        std::cout<<"\nThe scooter with the ID "<<readID<<" was reserved.\n";
+
     }
 
     void ProductController::printDetailHeader() {
         std::cout << std::left << std::setw(5) << "ID" << std::setw(25) << "Model" <<
                   std::setw(20) << "Commission Date" << std::setw(15) << "Mileage" <<
                   std::setw(20) << "Last Stand Place" << std::setw(15) << "State" << std::endl;
-        for (int i=0; i<95; i++) std::cout<<"-";
-        std::cout<<std::endl;
+        for (int i = 0; i < 95; i++) std::cout << "-";
+        std::cout << std::endl;
     }
 
     void ProductController::printScooter(const domain::Scooter &scooter) {
@@ -331,11 +406,11 @@ namespace controller {
                 {domain::INWAIT,       "INWAIT"},
                 {domain::OUTOFSERVICE, "OUTOFSERVICE"}
         };
-        for (const auto& scooter : this->repo.getScooters()) {
+        for (const auto &scooter: this->repo.getScooters()) {
             file << scooter.getID() << "," << scooter.getModel() << ","
-                 << std::setfill('0') <<scooter.getCommissionDate().year << ","
-                 << std::setfill('0') <<scooter.getCommissionDate().month << ","
-                 << std::setfill('0') <<scooter.getCommissionDate().day << ","
+                 << std::setfill('0') << scooter.getCommissionDate().year << ","
+                 << std::setfill('0') << scooter.getCommissionDate().month << ","
+                 << std::setfill('0') << scooter.getCommissionDate().day << ","
                  << scooter.getMileage() << ","
                  << scooter.getLastStandPlace() << ","
                  << stateMap.at(scooter.getState()) << std::endl;
@@ -399,6 +474,5 @@ namespace controller {
         }
         return true;
     }
-
 
 };

@@ -9,7 +9,7 @@ namespace repository {
 
     void Repository::addScooter(const domain::Scooter &scooter) {
         scooters.push_back(scooter);
-        saveDataToFile();
+        //saveDataToFile();
     }
 
     void Repository::deleteScooter(const domain::Scooter &scooter_) {
@@ -18,7 +18,7 @@ namespace repository {
         });
         if (it != scooters.end()) {
             scooters.erase(it, scooters.end());
-            saveDataToFile();
+            //saveDataToFile();
         }
     }
 
@@ -33,33 +33,10 @@ namespace repository {
                 break;
             }
         }
-        saveDataToFile();
+        //saveDataToFile();
     }
 
     std::vector<domain::Scooter> Repository::getScooters() const {
         return scooters;
     }
-
-    void Repository::saveDataToFile() {
-        std::ofstream file("scooters.txt");
-        if (!file.is_open()) {
-            std::cout << "Error opening file: scooters.txt" << std::endl;
-            return;
-        }
-
-        for (const auto &scooter: scooters) {
-            file << scooter.getID() << ","
-                 << scooter.getModel() << ","
-                 << scooter.getCommissionDate().year << ","
-                 << scooter.getCommissionDate().month << ","
-                 << scooter.getCommissionDate().day << ","
-                 << scooter.getMileage() << ","
-                 << scooter.getLastStandPlace() << ","
-                 << scooter.getState() << "\n";
-        }
-
-        file.close();
-    }
-
-
 };
