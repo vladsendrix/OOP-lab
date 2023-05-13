@@ -1,6 +1,7 @@
 
 #ifndef REPOSITORY_H
 #define REPOSITORY_H
+
 #include "../domain/Domain.h"
 #include <vector>
 #include <string>
@@ -15,11 +16,11 @@ namespace repository {
     public:
         explicit Repository(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>());
 
-        void addScooter(const domain::Scooter& scooter);
+        void addScooter(const domain::Scooter &scooter);
 
-        void deleteScooter(const domain::Scooter& scooter);
+        void deleteScooter(const domain::Scooter &scooter);
 
-        void editScooter(const domain::Scooter& scooter);
+        void editScooter(const domain::Scooter &scooter);
 
         std::vector<domain::Scooter> getScooters() const;
 
