@@ -115,6 +115,8 @@ namespace ui {
         ctrl.loadDataFromFile();
 
         ctrl.listScooterByAge();
+
+        ctrl.saveDataToFile();
         std::cout<<"\n\n";
         std::cout<<"@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n";
         while (true) {

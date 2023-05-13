@@ -316,6 +316,34 @@ namespace controller {
         file.close();
     }
 
+
+    void ProductController::saveDataToFile() const {
+        std::ofstream file("../scootersDataJanos.txt");
+        if (!file.is_open()) {
+            std::cout << "Error opening file: scootersData.txt" << std::endl;
+            return;
+        }
+
+        const std::unordered_map<domain::State, std::string> stateMap{
+                {domain::PARKED,       "PARKED"},
+                {domain::RESERVED,     "RESERVED"},
+                {domain::INUSE,        "INUSE"},
+                {domain::INWAIT,       "INWAIT"},
+                {domain::OUTOFSERVICE, "OUTOFSERVICE"}
+        };
+        for (const auto& scooter : this->repo.getScooters()) {
+            file << scooter.getID() << "," << scooter.getModel() << ","
+                 << std::setfill('0') <<scooter.getCommissionDate().year << ","
+                 << std::setfill('0') <<scooter.getCommissionDate().month << ","
+                 << std::setfill('0') <<scooter.getCommissionDate().day << ","
+                 << scooter.getMileage() << ","
+                 << scooter.getLastStandPlace() << ","
+                 << stateMap.at(scooter.getState()) << std::endl;
+        }
+        file.close();
+    }
+
+
     std::string ProductController::generateID(const std::string &id_) {
         if (id_.length() != 3) {
             return "";

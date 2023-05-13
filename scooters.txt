@@ -1,0 +1,10 @@
+AAA,Honda Activa,2022,1,5,1200,Central Station,0
+AAB,Vespa Primavera,2021,11,20,800,Old Town Square,0
+AAC,Yamaha Nmax,2022,3,15,1500,City Hall,0
+AAD,Piaggio Liberty,2021,12,1,1000,Main Street,0
+AAE,Kymco Agility,2022,2,25,900,Shopping Mall,0
+AAF,Suzuki Burgman,2022,4,10,2000,Airport,0
+AAG,BMW C 650 GT,2021,10,15,500,Train Station,0
+AAH,Aprilia SR Motard,2022,5,5,300,University Campus,0
+AAI,SYM Jet,2022,3,20,1200,Beach,0
+AAJ,Triumph Trident,2022,1,20,700,Park,0

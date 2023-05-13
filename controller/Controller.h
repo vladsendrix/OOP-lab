@@ -36,15 +36,17 @@ namespace controller {
 
         void useScooter();
 
-        static std::string generateID(const std::string &id_);
+        std::string generateID(const std::string &id_);
 
-        static void printScooter(const domain::Scooter &scooter);
+        void printScooter(const domain::Scooter &scooter);
 
         void loadDataFromFile();
 
-        static void printDetailHeader();
+        void saveDataToFile() const;
 
-        static bool isValidDate(int year, int month, int day);
+        void printDetailHeader();
+
+        bool isValidDate(int year, int month, int day);
 
     };
 };
