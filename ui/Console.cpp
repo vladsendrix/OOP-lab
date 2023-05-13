@@ -113,6 +113,9 @@ namespace ui {
 
     void Console::run() {
         int option;
+        ctrl.loadDataFromFile();
+        ctrl.listScooterByAge();
+        std::cout<<"\n\n";
         std::cout<<"@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n";
         while (true) {
             int role{-1};

@@ -280,4 +280,40 @@ namespace controller {
         }
     }
 
+void ProductController::loadDataFromFile() {
+    std::ifstream file("scooters.txt");
+    if (!file.is_open()) {
+        std::cout << "Error opening file: scooters.txt" << std::endl;
+        return;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string id, model, lastStandPlace;
+        int year, month, day, mileage, state;
+
+        std::getline(ss, id, ',');
+        std::getline(ss, model, ',');
+        ss >> year;
+        ss.ignore();
+        ss >> month;
+        ss.ignore();
+        ss >> day;
+        ss.ignore();
+        ss >> mileage;
+        ss.ignore();
+        std::getline(ss, lastStandPlace, ',');
+        ss >> state;
+
+        domain::Date commissionDate{year, month, day};
+        domain::State scooterState = static_cast<domain::State>(state);
+        domain::Scooter scooter(id, model, commissionDate, mileage, lastStandPlace, scooterState);
+        this->repo.addScooter(scooter);
+    }
+
+    file.close();
+}
+
+
 };

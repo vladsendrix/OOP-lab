@@ -5,6 +5,9 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <sstream>
+#include <fstream>
+
 namespace controller {
     class ProductController {
     private:
@@ -34,6 +37,8 @@ namespace controller {
 
 
         static void printScooter(const domain::Scooter& scooter);
+
+        void loadDataFromFile();
 
     };
 };
