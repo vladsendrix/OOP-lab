@@ -1,5 +1,6 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
+
 #include "../repository/Repository.h"
 #include <vector>
 #include <iostream>
@@ -7,13 +8,15 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <unordered_map>
+#include <iomanip>
 
 namespace controller {
     class ProductController {
     private:
         repository::Repository repo;
     public:
-        explicit ProductController(const repository::Repository &scooterRepo=repository::Repository());
+        explicit ProductController(const repository::Repository &scooterRepo = repository::Repository());
 
         void addScooter();
 
@@ -33,12 +36,15 @@ namespace controller {
 
         void useScooter();
 
-        static std::string generateID(const std::string& id_);
+        static std::string generateID(const std::string &id_);
 
-
-        static void printScooter(const domain::Scooter& scooter);
+        static void printScooter(const domain::Scooter &scooter);
 
         void loadDataFromFile();
+
+        static void printDetailHeader();
+
+        static bool isValidDate(int year, int month, int day);
 
     };
 };

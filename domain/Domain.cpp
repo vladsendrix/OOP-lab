@@ -1,8 +1,8 @@
 #include "Domain.h"
 
 namespace domain {
-    Scooter::Scooter(const std::string& id, const std::string& model, const Date& commissionDate,
-                     int mileage, const std::string& lastStandPlace, const State& state) {
+    Scooter::Scooter(const std::string &id, const std::string &model, const Date &commissionDate,
+                     int mileage, const std::string &lastStandPlace, const State &state) {
         this->id = id;
         this->model = model;
         this->commissionDate = commissionDate;
@@ -37,16 +37,16 @@ namespace domain {
 
     // Setter methods
 
-    void Scooter::setID(const std::string& id_) {
+    void Scooter::setID(const std::string &id_) {
         this->id = id_;
     }
 
 
-    void Scooter::setModel(const std::string& model_) {
+    void Scooter::setModel(const std::string &model_) {
         this->model = model_;
     }
 
-    void Scooter::setCommissionDate(const Date& commissionDate_) {
+    void Scooter::setCommissionDate(const Date &commissionDate_) {
         this->commissionDate = commissionDate_;
     }
 
@@ -54,11 +54,11 @@ namespace domain {
         this->mileage = mileage_;
     }
 
-    void Scooter::setLastStandPlace(const std::string& lastStandPlace_) {
+    void Scooter::setLastStandPlace(const std::string &lastStandPlace_) {
         this->lastStandPlace = lastStandPlace_;
     }
 
-    void Scooter::setState(const State& state_) {
+    void Scooter::setState(const State &state_) {
         this->state = state_;
     }
 }

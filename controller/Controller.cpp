@@ -45,7 +45,7 @@ namespace controller {
                 state = domain::OUTOFSERVICE;
                 break;
             default:
-                state = domain::PARKED;
+                state = domain::INWAIT;
         }
 
         domain::Scooter newScooter = domain::Scooter(id, model, commissionDate, mileage, lastStandPlace, state);
@@ -213,6 +213,7 @@ namespace controller {
                   });
 
         std::cout << "List of scooters sorted by age:" << std::endl;
+        ProductController::printDetailHeader();
         for (const auto &scooter: scooters) {
             printScooter(scooter);
         }
@@ -222,6 +223,97 @@ namespace controller {
     }
 
     void ProductController::useScooter() {
+    }
+
+    void ProductController::printDetailHeader() {
+        std::cout << std::left << std::setw(5) << "ID" << std::setw(25) << "Model" <<
+                  std::setw(20) << "Commission Date" << std::setw(15) << "Mileage" <<
+                  std::setw(20) << "Last Stand Place" << std::setw(15) << "State" << std::endl;
+        for (int i=0; i<95; i++) std::cout<<"-";
+        std::cout<<std::endl;
+    }
+
+    void ProductController::printScooter(const domain::Scooter &scooter) {
+
+        const domain::Date date = scooter.getCommissionDate();
+        const std::string dateToString = std::to_string(date.year) + "." + std::to_string(date.month) +
+                                         "." + std::to_string(date.day);
+
+        std::cout << std::left << std::setw(5) << scooter.getID()
+                  << std::setw(25) << scooter.getModel()
+                  << std::setw(20) << dateToString
+                  << std::setw(15) << scooter.getMileage()
+                  << std::setw(20) << scooter.getLastStandPlace()
+                  << std::setw(15) << std::left;
+
+        switch (scooter.getState()) {
+            case domain::PARKED:
+                std::cout << "PARKED" << std::endl;
+                break;
+            case domain::RESERVED:
+                std::cout << "RESERVED" << std::endl;
+                break;
+            case domain::INUSE:
+                std::cout << "IN USE" << std::endl;
+                break;
+            case domain::INWAIT:
+                std::cout << "IN WAIT" << std::endl;
+                break;
+            case domain::OUTOFSERVICE:
+                std::cout << "OUT OF SERVICE" << std::endl;
+                break;
+            default:
+                std::cout << "PARKED" << std::endl;
+        }
+    }
+
+    void ProductController::loadDataFromFile() {
+        std::ifstream file("../scootersData.txt");
+        if (!file.is_open()) {
+            std::cout << "Error opening file: scooters.txt" << std::endl;
+            return;
+        }
+
+        const std::unordered_map<std::string, domain::State> stateMap{
+                {"PARKED",       domain::PARKED},
+                {"RESERVED",     domain::RESERVED},
+                {"INUSE",        domain::INUSE},
+                {"INWAIT",       domain::INWAIT},
+                {"OUTOFSERVICE", domain::OUTOFSERVICE}
+        };
+        std::string line;
+        while (std::getline(file, line)) {
+            std::stringstream ss(line);
+            std::string id, model, lastStandPlace, stateString;
+            int year, month, day, mileage;
+
+            std::getline(ss, id, ',');
+            std::getline(ss, model, ',');
+            ss >> year;
+            ss.ignore();
+            ss >> month;
+            ss.ignore();
+            ss >> day;
+            ss.ignore();
+            ss >> mileage;
+            ss.ignore();
+            std::getline(ss, lastStandPlace, ',');
+            std::getline(ss, stateString, ',');
+
+
+            domain::Date commissionDate{2023, 01, 01};
+            if (isValidDate(year, month, day)) {
+                commissionDate = {year, month, day};
+            }
+            domain::State state = domain::PARKED;
+            auto stateIt = stateMap.find(stateString);
+            if (stateIt != stateMap.end()) {
+                state = stateIt->second;
+            }
+            domain::Scooter scooter(id, model, commissionDate, mileage, lastStandPlace, state);
+            this->repo.addScooter(scooter);
+        }
+        file.close();
     }
 
     std::string ProductController::generateID(const std::string &id_) {
@@ -249,71 +341,36 @@ namespace controller {
         return result;
     }
 
-    void ProductController::printScooter(const domain::Scooter &scooter) {
-        std::cout << "Scooter: nr. " << scooter.getID() << std::endl
-                  << "Model: " << scooter.getModel() << std::endl
-                  << "Commission date: " << scooter.getCommissionDate().year << "."
-                  << scooter.getCommissionDate().month << "."
-                  << scooter.getCommissionDate().day << std::endl
-                  << "Mileage: " << scooter.getMileage() << std::endl
-                  << "Last stand place: " << scooter.getMileage() << std::endl
-                  << "Last stand place: " << scooter.getMileage() << std::endl
-                  << "State: ";
-        switch (scooter.getState()) {
-            case domain::PARKED:
-                std::cout << "PARKED\n\n";
-                break;
-            case domain::RESERVED:
-                std::cout << "RESERVED\n\n";
-                break;
-            case domain::INUSE:
-                std::cout << "IN USE\n\n";
-                break;
-            case domain::INWAIT:
-                std::cout << "IN WAIT\n\n";
-                break;
-            case domain::OUTOFSERVICE:
-                std::cout << "OUT OF SERVICE\n\n";
-                break;
-            default:
-                std::cout << "PARKED\n\n";
+    bool ProductController::isValidDate(int year, int month, int day) {
+        if (month < 1 || month > 12) {
+            return false;
         }
+        if (day < 1 || day > 31) {
+            return false;
+        }
+        if (month == 2) {
+            if (year % 4 == 0) {
+                if (year % 100 == 0 && year % 400 != 0) {
+                    if (day > 28) {
+                        return false;
+                    }
+                } else {
+                    if (day > 29) {
+                        return false;
+                    }
+                }
+            } else {
+                if (day > 28) {
+                    return false;
+                }
+            }
+        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+            if (day > 30) {
+                return false;
+            }
+        }
+        return true;
     }
-
-void ProductController::loadDataFromFile() {
-    std::ifstream file("scooters.txt");
-    if (!file.is_open()) {
-        std::cout << "Error opening file: scooters.txt" << std::endl;
-        return;
-    }
-
-    std::string line;
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string id, model, lastStandPlace;
-        int year, month, day, mileage, state;
-
-        std::getline(ss, id, ',');
-        std::getline(ss, model, ',');
-        ss >> year;
-        ss.ignore();
-        ss >> month;
-        ss.ignore();
-        ss >> day;
-        ss.ignore();
-        ss >> mileage;
-        ss.ignore();
-        std::getline(ss, lastStandPlace, ',');
-        ss >> state;
-
-        domain::Date commissionDate{year, month, day};
-        domain::State scooterState = static_cast<domain::State>(state);
-        domain::Scooter scooter(id, model, commissionDate, mileage, lastStandPlace, scooterState);
-        this->repo.addScooter(scooter);
-    }
-
-    file.close();
-}
 
 
 };
