@@ -24,8 +24,6 @@ namespace repository {
 
         std::vector<domain::Scooter> getScooters() const;
 
-        void saveDataToFile();
-
     };
 };
 #endif

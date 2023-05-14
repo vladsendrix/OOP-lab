@@ -12,19 +12,23 @@ namespace ui {
         while (true) {
             std::cout << "\nAdmin Menu\n"
                          "0. EXIT\n"
-                         "1. Add scooter\n"
-                         "2. Delete scooter\n"
-                         "3. Edit scooter\n"
-                         "4. Search scooter by stand place\n"
-                         "5. Filter scooter by age\n"
-                         "6. Filter scooter by mileage\n"
-                         "7. List scooter by age (ascending)\n"
-                         "Enter option: ";
+                         "Scooter options:\n"
+                         "1.  Add one\n"
+                         "2.  Delete one\n"
+                         "3.  Edit one\n"
+                         "4.  Search by stand place\n"
+                         "5.  Filter by age (younger than)\n"
+                         "6.  Filter by age (older than inclusive)\n"
+                         "7.  Filter by mileage (km)(lower than) \n"
+                         "8.  Filter by mileage (km)(higher than inclusive) \n"
+                         "9.  List by age (ascending)\n"
+                         "10. List by age (descending)\n"
+                         "Enter option (0-10): ";
             int option;
             std::cin >> option;
             switch (option) {
                 case 0 : {
-                    std::cout << "Goodbye!" << std::endl;
+                    std::cout << std::endl << "Goodbye!" << std::endl;
                     return;
                 }
                 case 1: {
@@ -52,21 +56,38 @@ namespace ui {
                     system("pause");
                     break;
                 }
-
                 case 5: {
-                    ctrl.filterScooterByAge();
+                    ctrl.filterScooterByAge(true);
                     std::cout << std::endl;
                     system("pause");
                     break;
                 }
                 case 6: {
-                    ctrl.filterScooterByMileage();
+                    ctrl.filterScooterByAge(false);
                     std::cout << std::endl;
                     system("pause");
                     break;
                 }
                 case 7: {
-                    ctrl.listScooterByMileage();
+                    ctrl.filterScooterByMileage(true);
+                    std::cout << std::endl;
+                    system("pause");
+                    break;
+                }
+                case 8: {
+                    ctrl.filterScooterByMileage(false);
+                    std::cout << std::endl;
+                    system("pause");
+                    break;
+                }
+                case 9: {
+                    ctrl.listScooterByAge(true);
+                    std::cout << std::endl;
+                    system("pause");
+                    break;
+                }
+                case 10: {
+                    ctrl.listScooterByAge(false);
                     std::cout << std::endl;
                     system("pause");
                     break;
@@ -82,17 +103,20 @@ namespace ui {
         while (true) {
             std::cout << "\nUser Menu\n"
                          "0. EXIT\n"
-                         "1. Search scooter by stand place"
-                         "2. Filter scooter by age\n"
-                         "3. Filter scooter by mileage\n"
-                         "4. Reserve a scooter\n"
-                         "5. Use a scooter\n"
-                         "Enter option: ";
+                         "Scooter Options:\n"
+                         "1. Search by stand place"
+                         "2. Filter by age (younger than)\n"
+                         "3. Filter by age (older than inclusive)\n"
+                         "4. Filter by mileage (km)(lower than) \n"
+                         "5. Filter by mileage (km)(higher than inclusive) \n"
+                         "6. Reserve one\n"
+                         "7. Use one\n"
+                         "Enter option (0-7): ";
             int option;
             std::cin >> option;
             switch (option) {
                 case 0 : {
-                    std::cout << "Goodbye!" << std::endl;
+                    std::cout << std::endl << "Goodbye!" << std::endl;
                     return;
                 }
                 case 1: {
@@ -102,24 +126,36 @@ namespace ui {
                     break;
                 }
                 case 2: {
-                    ctrl.filterScooterByAge();
+                    ctrl.filterScooterByAge(true);
                     std::cout << std::endl;
                     system("pause");
                     break;
                 }
                 case 3: {
-                    ctrl.filterScooterByMileage();
+                    ctrl.filterScooterByAge(false);
                     std::cout << std::endl;
                     system("pause");
                     break;
                 }
                 case 4: {
-                    ctrl.reserveScooter();
+                    ctrl.filterScooterByMileage(true);
                     std::cout << std::endl;
                     system("pause");
                     break;
                 }
                 case 5: {
+                    ctrl.filterScooterByMileage(false);
+                    std::cout << std::endl;
+                    system("pause");
+                    break;
+                }
+                case 6: {
+                    ctrl.reserveScooter();
+                    std::cout << std::endl;
+                    system("pause");
+                    break;
+                }
+                case 7: {
                     ctrl.useScooter();
                     std::cout << std::endl;
                     system("pause");
@@ -135,8 +171,7 @@ namespace ui {
 
     void Console::run() {
         ctrl.loadDataFromFile();
-        ctrl.sortScootersByID();
-
+        ctrl.printScooterByID();
         ctrl.saveDataToFile();
         std::cout << "\n\n";
         std::cout << "@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n";

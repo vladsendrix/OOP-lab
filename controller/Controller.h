@@ -27,11 +27,11 @@ namespace controller {
 
         void searchScooterByStandPlace();
 
-        void filterScooterByAge();
+        void filterScooterByAge(bool condition);
 
-        void filterScooterByMileage();
+        void filterScooterByMileage(bool condition);
 
-        void listScooterByMileage();
+        void listScooterByAge(bool condition);
 
         void sortScootersByID();
 
@@ -48,6 +48,8 @@ namespace controller {
         void saveDataToFile() const;
 
         void printDetailHeader();
+
+        void printScooterByID();
 
         static bool isValidDate(int year, int month, int day);
 

@@ -17,7 +17,7 @@ namespace controller {
         if (!repo.getScooters().empty()) id = generateID(repo.getScooters().back().getID());
         else id = "AAA";
 
-        std::cout << "Enter the scooter details:\nModel: ";
+        std::cout << std::endl << "Enter the scooter details:\nModel: ";
         std::getline(std::cin >> std::ws, model);
 
         std::cout << std::endl << "Commission Date (yyyy-mm-dd): ";
@@ -176,17 +176,37 @@ namespace controller {
         }
     }
 
-    void ProductController::filterScooterByAge() {
+    void ProductController::filterScooterByAge(bool lowerThan) {
         int age;
+        std::string sortType;
         std::cout << "Enter the age: ";
         std::cin >> age;
-
-        std::vector<domain::Scooter> scooters = repo.getScooters();
+        age=2022-age;
+        bool printHeader = true;
         bool found = false;
-        for (const auto &scooter: scooters) {
-            if (scooter.getMileage() > age) {
-                std::cout << "Scooter: " << scooter.getID() << std::endl;
-                found = true;
+        std::vector<domain::Scooter> scooters = repo.getScooters();
+
+        if (lowerThan) {
+            for (const auto &scooter: scooters) {
+                if (scooter.getCommissionDate().year > age) {
+                    if (printHeader) {
+                        printDetailHeader();
+                    }
+                    printScooter(scooter);
+                    printHeader = false;
+                    found = true;
+                }
+            }
+        } else {
+            for (const auto &scooter: scooters) {
+                if (scooter.getCommissionDate().year <= age) {
+                    if (printHeader) {
+                        printDetailHeader();
+                    }
+                    printScooter(scooter);
+                    printHeader = false;
+                    found = true;
+                }
             }
         }
 
@@ -195,17 +215,37 @@ namespace controller {
         }
     }
 
-    void ProductController::filterScooterByMileage() {
+
+    void ProductController::filterScooterByMileage(bool lowerThan) {
         int mileage;
         std::cout << "Enter the mileage: ";
         std::cin >> mileage;
 
-        std::vector<domain::Scooter> scooters = repo.getScooters();
+        bool printHeader = true;
         bool found = false;
-        for (const auto &scooter: scooters) {
-            if (scooter.getMileage() > mileage) {
-                printScooter(scooter);
-                found = true;
+        std::vector<domain::Scooter> scooters = repo.getScooters();
+
+        if (lowerThan) {
+            for (const auto &scooter: scooters) {
+                if (scooter.getMileage() < mileage) {
+                    if (printHeader) {
+                        printDetailHeader();
+                    }
+                    printScooter(scooter);
+                    printHeader = false;
+                    found = true;
+                }
+            }
+        } else {
+            for (const auto &scooter: scooters) {
+                if (scooter.getMileage() >= mileage) {
+                    if (printHeader) {
+                        printDetailHeader();
+                    }
+                    printScooter(scooter);
+                    printHeader = false;
+                    found = true;
+                }
             }
         }
         if (!found) {
@@ -213,22 +253,32 @@ namespace controller {
         }
     }
 
-    void ProductController::listScooterByMileage() {
+    void ProductController::listScooterByAge(bool ascending) {
         std::vector<domain::Scooter> scooters = repo.getScooters();
+        std::string sortType;
+        if (ascending) {
+            sortType = "ascending";
+            // Sort the scooters by age in ascending order
+            std::sort(scooters.begin(), scooters.end(),
+                      [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                          return scooter1.getMileage() < scooter2.getMileage();
+                      });
+        } else {
+            sortType = "descending";
+            // Sort the scooters by age in ascending order
+            std::sort(scooters.begin(), scooters.end(),
+                      [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                          return scooter1.getMileage() > scooter2.getMileage();
+                      });
+        }
 
-        // Sort the scooters by age in ascending order
-        std::sort(scooters.begin(), scooters.end(),
-                  [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
-                      return scooter1.getMileage() < scooter2.getMileage();
-                  });
-
-        std::cout << std::endl << "\nList of scooters sorted by age:" << std::endl;
+        std::cout << std::endl << "\nList of scooters sorted by mileage (" << sortType << "):" << std::endl;
         ProductController::printDetailHeader();
         for (const auto &scooter: scooters) {
             printScooter(scooter);
         }
+        sortScootersByID(); // sort back scooters by ID so they remain sorted by ID
     }
-
 
     void ProductController::sortScootersByID() {
         std::vector<domain::Scooter> scooters = repo.getScooters();
@@ -239,11 +289,7 @@ namespace controller {
                       return scooter1.getID() < scooter2.getID();
                   });
 
-        std::cout << "List of scooters sorted by ID:" << std::endl;
-        ProductController::printDetailHeader();
-        for (const auto &scooter: scooters) {
-            printScooter(scooter);
-        }
+        //printScooterByID();
     }
 
 
@@ -308,9 +354,9 @@ namespace controller {
     }
 
     void ProductController::printDetailHeader() {
-        std::cout << std::left << std::setw(5) << "ID" << std::setw(25) << "Model" <<
+        std::cout << std::left << std::setw(5) << "ID" << std::setw(30) << "Model" <<
                   std::setw(20) << "Commission Date" << std::setw(15) << "Mileage" <<
-                  std::setw(20) << "Last Stand Place" << std::setw(15) << "State" << std::endl;
+                  std::setw(30) << "Last Stand Place" << std::setw(15) << "State" << std::endl;
         for (int i = 0; i < 95; i++) std::cout << "-";
         std::cout << std::endl;
     }
@@ -322,10 +368,10 @@ namespace controller {
                                          "." + std::to_string(date.day);
 
         std::cout << std::left << std::setw(5) << scooter.getID()
-                  << std::setw(25) << scooter.getModel()
+                  << std::setw(30) << scooter.getModel()
                   << std::setw(20) << dateToString
                   << std::setw(15) << scooter.getMileage()
-                  << std::setw(20) << scooter.getLastStandPlace()
+                  << std::setw(30) << scooter.getLastStandPlace()
                   << std::setw(15) << std::left;
 
         switch (scooter.getState()) {
@@ -500,6 +546,14 @@ namespace controller {
             }
         }
         return true;
+    }
+
+    void ProductController::printScooterByID() {
+        std::cout << "List of scooters sorted by ID:" << std::endl;
+        ProductController::printDetailHeader();
+        for (const auto &scooter: repo.getScooters()) {
+            printScooter(scooter);
+        }
     }
 
 }

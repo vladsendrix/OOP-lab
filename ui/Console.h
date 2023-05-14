@@ -7,7 +7,7 @@ namespace ui {
     private:
         controller::ProductController ctrl;
     public:
-        Console(controller::ProductController &scooterController);
+        explicit Console(controller::ProductController &scooterController);
 
         void run();
 
