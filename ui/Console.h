@@ -15,6 +15,6 @@ namespace ui {
 
         void userMethods();
     };
-};
+}
 
 #endif

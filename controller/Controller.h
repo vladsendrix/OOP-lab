@@ -54,6 +54,6 @@ namespace controller {
         static bool isValidDate(int year, int month, int day);
 
     };
-};
+}
 
 #endif

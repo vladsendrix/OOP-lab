@@ -10,7 +10,7 @@ namespace controller {
     void ProductController::addScooter() {
 
         std::string id, model, lastStandPlace, date;
-        domain::Date commissionDate{};
+        domain::Date commissionDate{2023,01,01};
         domain::State state;
         int mileage, stateNr;
 
@@ -22,9 +22,12 @@ namespace controller {
 
         std::cout << std::endl << "Commission Date (yyyy-mm-dd): ";
         std::getline(std::cin >> std::ws, date);
-        commissionDate.year = std::stoi(date.substr(0, 4));
-        commissionDate.month = std::stoi(date.substr(5, 2));
-        commissionDate.day = std::stoi(date.substr(8, 2));
+        if (!date.empty()) {
+            commissionDate.year = std::stoi(date.substr(0, 4));
+            commissionDate.month = std::stoi(date.substr(5, 2));
+            commissionDate.day = std::stoi(date.substr(8, 2));
+        }
+
 
         std::cout << std::endl << "Mileage: ";
         std::cin >> mileage;
@@ -112,31 +115,28 @@ namespace controller {
 
             domain::Scooter *scooterToEdit = &scooters.at(index);
 
-            std::string model, lastStandPlace, mileage, date;
-            domain::Date commissionDate{};
+            std::string model, lastStandPlace, date;
+            domain::Date commissionDate{2023,01,01};
             domain::State state;
-            int stateNr;
+            int stateNr,mileage;
 
-            std::cout << "Edit Comission Date (yyyy-mm-dd): ";
-            std::getline(std::cin, date);
+            std::cout << std::endl << "Enter new commission Date (yyyy-mm-dd): ";
+            std::getline(std::cin >> std::ws, date);
             if (!date.empty()) {
                 commissionDate.year = std::stoi(date.substr(0, 4));
                 commissionDate.month = std::stoi(date.substr(5, 2));
                 commissionDate.day = std::stoi(date.substr(8, 2));
-                scooterToEdit->setCommissionDate(commissionDate);
             }
 
-            std::cout << "Mileage: ";
-            std::getline(std::cin, mileage);
+            std::cout << std::endl << "Mileage: ";
+            std::cin >> mileage;
 
-            std::cout << "Last Stand Place: ";
-            std::getline(std::cin, lastStandPlace);
+            std::cout << std::endl << "Last Stand Place: ";
+            std::getline(std::cin >> std::ws, lastStandPlace);
+
             std::cout << std::endl
-                      << "State:(1. PARKED | 2. RESERVED | 3. IN USE | 4. IN WAIT| 5.OUT OF SERVICE)\nChoose one (1-5): ";
+                      << "State:(1. PARKED | 2. RESERVED | 3. IN USE | 4. IN WAIT | 5. OUT OF SERVICE)\nChoose one (1-5): ";
             std::cin >> stateNr;
-
-            std::cout << stateNr << std::endl;
-
             switch (stateNr) {
                 case 2:
                     state = domain::RESERVED;
@@ -153,6 +153,11 @@ namespace controller {
                 default:
                     state = domain::PARKED;
             }
+            std::cout << std::endl;
+
+            scooterToEdit->setCommissionDate(commissionDate);
+            scooterToEdit->setMileage(mileage);
+            scooterToEdit->setLastStandPlace(lastStandPlace);
             scooterToEdit->setState(state);
             std::cout << "Scooter edited successfully!" << std::endl;
         }

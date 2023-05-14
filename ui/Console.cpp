@@ -194,4 +194,4 @@ namespace ui {
             std::cout << "\nInvalid option, please try again." << std::endl;
         }
     }
-};
+}
