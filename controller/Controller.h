@@ -15,9 +15,10 @@
 namespace controller {
     class ProductController {
     private:
-        repository::Repository repo;
+        std::unique_ptr<repository::Repository> repo;
     public:
-        explicit ProductController(const repository::Repository &scooterRepo = repository::Repository());
+        explicit ProductController(
+                std::unique_ptr<repository::Repository> scooterRepo = std::make_unique<repository::Repository>());
 
         void addScooter();
 
@@ -33,23 +34,26 @@ namespace controller {
 
         void listScooterByAge(bool condition);
 
-        void sortScootersByID();
-
         void reserveScooter();
 
         void useScooter();
 
-        static std::string generateID(const std::string &id_);
 
-        void printScooter(const domain::Scooter &scooter);
+        // other helpful methods
+
+        void sortScootersByID();
+
+        static void printDetailHeader();
+
+        static void printScooter(const domain::Scooter &scooter);
+
+        void printScooterByID();
 
         void loadDataFromFile();
 
         void saveDataToFile() const;
 
-        void printDetailHeader();
-
-        void printScooterByID();
+        static std::string generateID(const std::string &id_);
 
         static bool isValidDate(int year, int month, int day);
 
