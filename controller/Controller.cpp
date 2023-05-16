@@ -417,7 +417,7 @@ namespace controller {
     }
 
     void ProductController::loadDataFromFile() {
-        std::ifstream file("../scootersData.txt");
+        std::ifstream file("scootersData.txt");
         if (!file.is_open()) {
             std::cout << "Error opening file: scooters.txt" << std::endl;
             return;
@@ -487,7 +487,7 @@ namespace controller {
 
 
     void ProductController::saveDataToFile() const {
-        std::ofstream file("../scootersDataSaved.txt");
+        std::ofstream file("scootersDataSaved.txt");
         if (!file.is_open()) {
             std::cout << "Error opening file: scootersData.txt" << std::endl;
             return;
