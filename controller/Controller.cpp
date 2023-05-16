@@ -15,8 +15,8 @@ namespace controller {
         domain::State state;
         int mileage, stateNr;
 
-        if (!repo->getScooters().empty()) id = generateID(repo->getScooters().back().getID());
-        else id = "AAA";
+        id = autoGenerateID();
+
 
         std::cout << std::endl << "Enter the scooter details:\nModel: ";
         std::getline(std::cin >> std::ws, model);
@@ -62,6 +62,7 @@ namespace controller {
         printDetailHeader();
         printScooter(newScooter);
 
+        sortScootersByID();
         saveDataToFile();
 
         std::cout << "\nScooter added successfully!" << std::endl;
@@ -159,7 +160,7 @@ namespace controller {
             domain::Scooter updatedScooter = domain::Scooter(
                     repo->getScooters().at(index).getID(),
                     repo->getScooters().at(index).getModel(),
-                    commissionDate,mileage,lastStandPlace,state);
+                    commissionDate, mileage, lastStandPlace, state);
             repo->updateScooter(updatedScooter);
             printDetailHeader();
             printScooter(repo->getScooters().at(index));
@@ -305,6 +306,7 @@ namespace controller {
         std::cout << readID << std::endl;
         bool found = false;
 
+        int index = 0;
         for (auto &scooter: repo->getScooters()) {
             if (readID == scooter.getID()) {
                 if (scooter.getState() == domain::RESERVED) {
@@ -312,14 +314,19 @@ namespace controller {
                     return;
                 }
                 found = true;
-                scooter.setState(domain::RESERVED);
                 break;
             }
+            index++;
         }
         if (!found) {
             std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
             return;
         }
+
+        domain::Scooter reservedScooter = repo->getScooters().at(index);
+        reservedScooter.setState(domain::RESERVED);
+        repo->updateScooter(reservedScooter);
+
         std::cout << "\nThe scooter with the ID " << readID << " was reserved.\n";
     }
 
@@ -332,25 +339,29 @@ namespace controller {
         std::transform(readID.begin(), readID.end(), readID.begin(), [](unsigned char c) { return std::toupper(c); });
         std::cout << readID << std::endl;
         bool found = false;
+        int index = 0;
 
         for (auto &scooter: repo->getScooters()) {
             if (readID == scooter.getID()) {
                 if (scooter.getState() == domain::RESERVED) {
                     found = true;
-                    scooter.setState(domain::INUSE);
-                    std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
                     break;
                 } else {
                     std::cout << "\nSorry, the scooter with the ID " << readID << " is not reserved\n";
                 }
             }
+            index++;
         }
+
         if (!found) {
             std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
             return;
         }
-        std::cout << "\nThe scooter with the ID " << readID << " was reserved.\n";
 
+        domain::Scooter useScooter = repo->getScooters().at(index);
+        useScooter.setState(domain::INUSE);
+        repo->updateScooter(useScooter);
+        std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
     }
 
 
@@ -517,29 +528,35 @@ namespace controller {
     }
 
 
-    std::string ProductController::generateID(const std::string &id_) {
-        if (id_.length() != 3) {
-            return "";
-        }
-        std::string result = id_;
-        if (result[2] == 'Z') {
-            result[2] = 'A';
+    std::string ProductController::autoGenerateID() {
+        std::string id = "AAA";
 
-            if (result[1] == 'z') {
-                result[1] = 'A';
+        if (!repo->getScooters().empty()) {
+            std::set<std::string> existingIDs;
 
-                if (result[0] == 'Z') {
-                    return "";
-                } else {
-                    result[0]++;
-                }
-            } else {
-                result[1]++;
+            for (const auto &scooter: repo->getScooters()) {
+                existingIDs.insert(scooter.getID());
             }
-        } else {
-            result[2]++;
+            while (existingIDs.find(id) != existingIDs.end()) {
+                if (id[2] == 'Z') {
+                    id[2] = 'A';
+                    if (id[1] == 'z') {
+                        id[1] = 'A';
+
+                        if (id[0] == 'Z') {
+                            return "";
+                        } else {
+                            id[0]++;
+                        }
+                    } else {
+                        id[1]++;
+                    }
+                } else {
+                    id[2]++;
+                }
+            }
         }
-        return result;
+        return id;
     }
 
     bool ProductController::isValidDate(int year, int month, int day) {
