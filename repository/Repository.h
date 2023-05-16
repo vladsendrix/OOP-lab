@@ -20,7 +20,7 @@ namespace repository {
 
         void deleteScooter(const domain::Scooter &scooter);
 
-        void editScooter(const domain::Scooter &scooter);
+        void updateScooter(const domain::Scooter &scooter);
 
         std::vector<domain::Scooter> getScooters() const;
 

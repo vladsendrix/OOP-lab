@@ -22,7 +22,7 @@ namespace repository {
         }
     }
 
-    void Repository::editScooter(const domain::Scooter &scooter) {
+    void Repository::updateScooter(const domain::Scooter &scooter) {
         for (auto &s: scooters) {
             if (s.getID() == scooter.getID()) {
                 s.setModel(scooter.getModel());

@@ -89,13 +89,14 @@ namespace controller {
         } else {
             domain::Scooter scooterToDelete = scooters.at(index);
             repo->deleteScooter(scooterToDelete);
+            saveDataToFile();
             std::cout << "Scooter deleted successfully!" << std::endl;
         }
     }
 
     void ProductController::editScooter() {
         std::string scooterID;
-        std::cout << "Enter the ID of the scooter to edit: ";
+        std::cout << std::endl << "Enter the ID of the scooter to edit: ";
         std::cin >> scooterID;
 
         scooterID = scooterID.substr(0, 3);
@@ -104,18 +105,16 @@ namespace controller {
 
         int index = 0;
 
-        std::vector<domain::Scooter> scooters = repo->getScooters(); // changed this line
-        for (const auto &scooter: scooters) {
+
+        for (const auto &scooter: repo->getScooters()) {
             if (scooter.getID() == scooterID) {
                 break;
             }
             index++;
         }
-        if (index == scooters.size()) {
+        if (index == repo->getScooters().size()) {
             std::cout << "Scooter not found!" << std::endl;
         } else {
-
-            domain::Scooter *scooterToEdit = &scooters.at(index);
 
             std::string model, lastStandPlace, date;
             domain::Date commissionDate{2023, 01, 01};
@@ -157,10 +156,15 @@ namespace controller {
             }
             std::cout << std::endl;
 
-            scooterToEdit->setCommissionDate(commissionDate);
-            scooterToEdit->setMileage(mileage);
-            scooterToEdit->setLastStandPlace(lastStandPlace);
-            scooterToEdit->setState(state);
+            domain::Scooter updatedScooter = domain::Scooter(
+                    repo->getScooters().at(index).getID(),
+                    repo->getScooters().at(index).getModel(),
+                    commissionDate,mileage,lastStandPlace,state);
+            repo->updateScooter(updatedScooter);
+            printDetailHeader();
+            printScooter(repo->getScooters().at(index));
+
+            saveDataToFile();
             std::cout << "Scooter edited successfully!" << std::endl;
         }
     }
