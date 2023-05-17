@@ -5,9 +5,8 @@
 #include "../domain/Domain.h"
 #include <vector>
 #include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
+#include <algorithm>
 
 namespace repository {
     class Repository {

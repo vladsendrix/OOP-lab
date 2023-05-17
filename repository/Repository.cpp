@@ -1,6 +1,4 @@
 #include "Repository.h"
-#include <fstream>
-#include <algorithm>
 
 namespace repository {
     Repository::Repository(std::vector<domain::Scooter> scooters_) {
