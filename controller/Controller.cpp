@@ -17,7 +17,6 @@ namespace controller {
 
         id = autoGenerateID();
 
-
         std::cout << std::endl << "Enter the scooter details:\nModel: ";
         std::getline(std::cin >> std::ws, model);
 
@@ -28,7 +27,6 @@ namespace controller {
             commissionDate.month = std::stoi(date.substr(5, 2));
             commissionDate.day = std::stoi(date.substr(8, 2));
         }
-
 
         std::cout << std::endl << "Mileage: ";
         std::cin >> mileage;
@@ -56,7 +54,22 @@ namespace controller {
                 state = domain::PARKED;
         }
         std::cout << std::endl;
+
+        std::string expectedID = id, expectedModel = model, expectedLastStandPlace = lastStandPlace;
+        domain::Date expectedDate = commissionDate;
+        domain::State expectedState = state;
+        int expectedMileage = mileage;
+
         domain::Scooter newScooter = domain::Scooter(id, model, commissionDate, mileage, lastStandPlace, state);
+        assert(expectedID == newScooter.getID());
+        assert(expectedModel == newScooter.getModel());
+        assert(expectedLastStandPlace == newScooter.getLastStandPlace());
+        assert(expectedMileage == newScooter.getMileage());
+        assert(expectedDate.year == newScooter.getCommissionDate().year);
+        assert(expectedDate.month == newScooter.getCommissionDate().month);
+        assert(expectedDate.day == newScooter.getCommissionDate().day);
+        assert(expectedState == newScooter.getState());
+
         repo->addScooter(newScooter);
 
         printDetailHeader();
@@ -494,6 +507,11 @@ namespace controller {
                 {"INWAIT",       domain::INWAIT},
                 {"OUTOFSERVICE", domain::OUTOFSERVICE}
         };
+
+        assert(this->repo->getScooters().empty());
+
+        int repoSize = 0;
+
         std::string line;
         while (std::getline(file, line)) {
             std::stringstream ss(line);
@@ -546,6 +564,8 @@ namespace controller {
             assert(expectedState == scooter.getState());
 
             this->repo->addScooter(scooter);
+            repoSize++;
+            assert(this->repo->getScooters().size() == repoSize);
         }
         file.close();
     }
