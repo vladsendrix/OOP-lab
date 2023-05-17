@@ -9,7 +9,6 @@ namespace repository {
 
     void Repository::addScooter(const domain::Scooter &scooter) {
         scooters.push_back(scooter);
-        //saveDataToFile();
     }
 
     void Repository::deleteScooter(const domain::Scooter &scooter_) {
@@ -18,7 +17,6 @@ namespace repository {
         });
         if (it != scooters.end()) {
             scooters.erase(it, scooters.end());
-            //saveDataToFile();
         }
     }
 
@@ -33,7 +31,6 @@ namespace repository {
                 break;
             }
         }
-        //saveDataToFile();
     }
 
     std::vector<domain::Scooter> Repository::getScooters() const {

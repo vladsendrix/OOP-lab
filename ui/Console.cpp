@@ -18,10 +18,10 @@ namespace ui {
                          "2.  Delete one\n"
                          "3.  Edit one\n"
                          "4.  Search by stand place\n"
-                         "5.  Filter by age (younger than)\n"
-                         "6.  Filter by age (older than inclusive)\n"
+                         "5.  Filter by age (younger than -inclusive)\n"
+                         "6.  Filter by age (older than)\n"
                          "7.  Filter by mileage (km)(lower than) \n"
-                         "8.  Filter by mileage (km)(higher than inclusive) \n"
+                         "8.  Filter by mileage (km)(higher than -inclusive) \n"
                          "9.  List by age (ascending)\n"
                          "10. List by age (descending)\n"
                          "Enter option (0-10): ";
@@ -106,14 +106,15 @@ namespace ui {
             std::cout << "\nUser Menu\n"
                          "0. EXIT\n"
                          "Scooter Options:\n"
-                         "1. Search by stand place"
-                         "2. Filter by age (younger than)\n"
-                         "3. Filter by age (older than inclusive)\n"
+                         "1. Search by stand place\n"
+                         "2. Filter by age (younger than -inclusive)\n"
+                         "3. Filter by age (older than)\n"
                          "4. Filter by mileage (km)(lower than) \n"
-                         "5. Filter by mileage (km)(higher than inclusive) \n"
+                         "5. Filter by mileage (km)(higher than -inclusive) \n"
                          "6. Reserve one\n"
                          "7. Use one\n"
-                         "Enter option (0-7): ";
+                         "8. Quit useage (park it)\n"
+                         "Enter option (0-8): ";
             int option;
             std::cin >> option;
             switch (option) {
@@ -163,6 +164,12 @@ namespace ui {
                     system("pause");
                     break;
                 }
+                case 8: {
+                    ctrl->parkScooter();
+                    std::cout << std::endl;
+                    system("pause");
+                    break;
+                }
                 default: {
                     std::cout << "Invalid option, please try again." << std::endl;
                 }
@@ -174,7 +181,6 @@ namespace ui {
     void Console::run() {
         ctrl->loadDataFromFile();
         ctrl->printScooterByID();
-        ctrl->saveDataToFile();
         std::cout << "\n\n";
         std::cout << "@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n";
         while (true) {

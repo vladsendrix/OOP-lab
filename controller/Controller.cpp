@@ -172,21 +172,29 @@ namespace controller {
 
     void ProductController::searchScooterByStandPlace() {
         std::string standPlace;
-        std::cout << "Enter the stand place: ";
-        std::cin >> standPlace;
+        std::cout << "Enter the stand place (or leave empty to show all scooters): ";
+        std::cin.ignore(); // Ignore any previous newline character
+        std::getline(std::cin, standPlace);
+
+        std::transform(standPlace.begin(), standPlace.end(), standPlace.begin(),
+                       [](unsigned char c) { return std::tolower(c); });
 
         std::vector<domain::Scooter> scooters = repo->getScooters();
         bool found = false;
         for (const auto &scooter: scooters) {
-            if (scooter.getLastStandPlace().find(standPlace) != std::string::npos) {
+            std::string lastStandPlace = scooter.getLastStandPlace();
+            std::transform(lastStandPlace.begin(), lastStandPlace.end(), lastStandPlace.begin(),
+                           [](unsigned char c) { return std::tolower(c); });
+            if (standPlace.empty() || lastStandPlace.find(standPlace) != std::string::npos) {
                 printScooter(scooter);
                 found = true;
             }
-            if (!found) {
-                std::cout << "No scooters found with the specified stand place!" << std::endl;
-            }
+        }
+        if (!found) {
+            std::cout << "No scooters found with the specified stand place!" << std::endl;
         }
     }
+
 
     void ProductController::filterScooterByAge(bool lowerThan) {
         int age;
@@ -232,7 +240,8 @@ namespace controller {
         int mileage;
         std::cout << "Enter the mileage: ";
         std::cin >> mileage;
-
+        std::string condition = "higher than -inclusive ";
+        if (lowerThan) condition = "lower than ";
         bool printHeader = true;
         bool found = false;
         std::vector<domain::Scooter> scooters = repo->getScooters();
@@ -261,7 +270,7 @@ namespace controller {
             }
         }
         if (!found) {
-            std::cout << "No scooters found with a mileage greater than " << mileage << " miles!" << std::endl;
+            std::cout << "No scooters found with a mileage " << condition << mileage << " miles!" << std::endl;
         }
     }
 
@@ -299,22 +308,17 @@ namespace controller {
             printScooter(scooter);
         }
         std::cout << "Here are the scooters listed.\nPlease enter an ID to reserve a scooter: ";
-        std::string readID;
-        std::cin >> readID;
-        readID = readID.substr(0, 3);
-        std::transform(readID.begin(), readID.end(), readID.begin(), [](unsigned char c) { return std::toupper(c); });
-        std::cout << readID << std::endl;
+        std::string readID = readScooterID();
         bool found = false;
-
         int index = 0;
         for (auto &scooter: repo->getScooters()) {
             if (readID == scooter.getID()) {
-                if (scooter.getState() == domain::RESERVED) {
-                    std::cout << "\nSorry, the scooter with the ID " << readID << " is reserved by someone else.\n";
-                    return;
+                if (scooter.getState() == domain::INWAIT || scooter.getState() == domain::PARKED) {
+                    found = true;
+                    break;
                 }
-                found = true;
-                break;
+                std::cout << "\nSorry, the scooter with the ID " << readID << " is not parked or in wait.\n";
+                return;
             }
             index++;
         }
@@ -322,22 +326,19 @@ namespace controller {
             std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
             return;
         }
-
         domain::Scooter reservedScooter = repo->getScooters().at(index);
         reservedScooter.setState(domain::RESERVED);
         repo->updateScooter(reservedScooter);
 
+        printDetailHeader();
+        printScooter(reservedScooter);
+
         std::cout << "\nThe scooter with the ID " << readID << " was reserved.\n";
     }
 
-
     void ProductController::useScooter() {
         std::cout << "\nPlease enter the ID of the scooter you reserved to use it: ";
-        std::string readID;
-        std::cin >> readID;
-        readID = readID.substr(0, 3);
-        std::transform(readID.begin(), readID.end(), readID.begin(), [](unsigned char c) { return std::toupper(c); });
-        std::cout << readID << std::endl;
+        std::string readID = readScooterID();
         bool found = false;
         int index = 0;
 
@@ -346,9 +347,9 @@ namespace controller {
                 if (scooter.getState() == domain::RESERVED) {
                     found = true;
                     break;
-                } else {
-                    std::cout << "\nSorry, the scooter with the ID " << readID << " is not reserved\n";
                 }
+                std::cout << "\nSorry, the scooter with the ID " << readID << " is not reserved\n";
+                return;
             }
             index++;
         }
@@ -361,11 +362,60 @@ namespace controller {
         domain::Scooter useScooter = repo->getScooters().at(index);
         useScooter.setState(domain::INUSE);
         repo->updateScooter(useScooter);
+
+        printDetailHeader();
+        printScooter(useScooter);
+
         std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
     }
 
 
+    void ProductController::parkScooter() {
+        std::cout << "\nPlease enter the ID of the scooter you are using to stop useing it (to park it): ";
+        std::string readID = readScooterID();
+        bool found = false;
+        int index = 0;
+
+        for (auto &scooter: repo->getScooters()) {
+            if (readID == scooter.getID()) {
+                if (scooter.getState() == domain::INUSE) {
+                    found = true;
+                    break;
+                }
+
+                std::cout << "\nSorry, the scooter with the ID " << readID << " is not in use\n";
+                return;
+            }
+            index++;
+        }
+
+        if (!found) {
+            std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
+            return;
+        }
+
+        std::string location;
+        std::cout << "Please enter your current location: ";
+        std::getline(std::cin, location);
+
+
+        domain::Scooter useScooter = repo->getScooters().at(index);
+        useScooter.setState(domain::PARKED);
+        useScooter.setLastStandPlace(location);
+        useScooter.setMileage(useScooter.getMileage() + 20);
+        repo->updateScooter(useScooter);
+        std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
+    }
+
     // other helpful methods
+
+    std::string ProductController::readScooterID() {
+        std::string readID;
+        std::cin >> readID;
+        readID = readID.substr(0, 3);
+        std::transform(readID.begin(), readID.end(), readID.begin(), [](unsigned char c) { return std::toupper(c); });
+        return readID;
+    }
 
     void ProductController::sortScootersByID() {
         std::vector<domain::Scooter> scooters = repo->getScooters();

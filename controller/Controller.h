@@ -9,6 +9,7 @@
 #include <sstream>
 #include <fstream>
 #include <unordered_map>
+#include <set>
 #include <iomanip>
 #include <cassert>
 
@@ -38,8 +39,12 @@ namespace controller {
 
         void useScooter();
 
+        void parkScooter();
+
 
         // other helpful methods
+
+        static std::string readScooterID();
 
         void sortScootersByID();
 
@@ -53,7 +58,7 @@ namespace controller {
 
         void saveDataToFile() const;
 
-        static std::string generateID(const std::string &id_);
+        std::string autoGenerateID();
 
         static bool isValidDate(int year, int month, int day);
 
