@@ -21,14 +21,17 @@ namespace controller {
         explicit ProductController(
                 std::unique_ptr<repository::Repository> scooterRepo = std::make_unique<repository::Repository>());
 
-        void addScooter(const std::string &model, const domain::Date &commissionDate, const int &mileage,
-                        const std::string &lastStandPlace, const domain::State &state);
+        void addScooter(const std::string &model, const std::string &date, const int &mileage,
+                        const std::string &lastStandPlace, const int &stateNr);
 
-        int findById(const std::string &id);
+        int position(const std::string &id_);
+
+        bool exists(const int &index);
 
         bool deleteScooter(const int &index);
 
-        void editScooter();
+        void editScooter(const int &index, const std::string &date, const int &mileage,
+                         const std::string &lastStandPlace,const int &stateNr);
 
         void searchScooterByStandPlace();
 
@@ -63,7 +66,7 @@ namespace controller {
 
         std::string autoGenerateID();
 
-        static bool isValidDate(int year, int month, int day);
+        static bool isValidDate(const int &year, const int &month, const int &day) ;
 
     };
 }

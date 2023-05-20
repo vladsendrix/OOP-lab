@@ -9,12 +9,40 @@ namespace controller {
 
 
     void
-    ProductController::addScooter(const std::string &model_, const domain::Date &commissionDate_, const int &mileage_,
-                                  const std::string &lastStandPlace_, const domain::State &state_) {
+    ProductController::addScooter(const std::string &model_, const std::string &date, const int &mileage_,
+                                  const std::string &lastStandPlace_, const int &stateNr_) {
         std::string id = autoGenerateID(), model = model_, lastStandPlace = lastStandPlace_;
-        domain::Date commissionDate = commissionDate_;
-        domain::State state = state_;
+
+        domain::Date commissionDate{2023, 01, 01};
+        domain::State state;
         int mileage = mileage_;
+        int year = std::stoi(date.substr(0, 4)),
+                month = std::stoi(date.substr(5, 2)),
+                day = std::stoi(date.substr(8, 2));
+
+        if (!date.empty() && isValidDate(year, month, day)) {
+
+            commissionDate.year = year;
+            commissionDate.month =month;
+            commissionDate.day = day;
+        }
+
+        switch (stateNr_) {
+            case 2:
+                state = domain::RESERVED;
+                break;
+            case 3:
+                state = domain::INUSE;
+                break;
+            case 4:
+                state = domain::INWAIT;
+                break;
+            case 5:
+                state = domain::OUTOFSERVICE;
+                break;
+            default:
+                state = domain::PARKED;
+        }
 
         std::string expectedID = id, expectedModel = model, expectedLastStandPlace = lastStandPlace;
         domain::Date expectedDate = commissionDate;
@@ -39,7 +67,7 @@ namespace controller {
     }
 
 
-    int ProductController::findById(const std::string &id_) {
+    int ProductController::position(const std::string &id_) {
         std::string id = id_;
         id = id.substr(0, 3);
         std::transform(id.begin(), id.end(), id.begin(),
@@ -55,6 +83,10 @@ namespace controller {
         return index;
     }
 
+    bool ProductController::exists(const int &index) {
+        return 0 <= index && index < repo->getScooters().size();
+    }
+
     bool ProductController::deleteScooter(const int &index) {
         std::vector<domain::Scooter> scooters = repo->getScooters();
         if (index == scooters.size()) {
@@ -66,78 +98,49 @@ namespace controller {
         return true;
     }
 
-    void ProductController::editScooter() {
-        std::string scooterID;
-        std::cout << std::endl << "Enter the ID of the scooter to edit: ";
-        std::cin >> scooterID;
+    void ProductController::editScooter(const int &index, const std::string &date, const int &mileage,
+                                        const std::string &lastStandPlace, const int &stateNr) {
 
-        scooterID = scooterID.substr(0, 3);
-        std::transform(scooterID.begin(), scooterID.end(), scooterID.begin(),
-                       [](unsigned char c) { return std::toupper(c); });
+        domain::Date commissionDate{2023, 01, 01};
+        domain::State state;
 
-        int index = 0;
+        int year = std::stoi(date.substr(0, 4)),
+                month = std::stoi(date.substr(5, 2)),
+                day = std::stoi(date.substr(8, 2));
 
-        for (const auto &scooter: repo->getScooters()) {
-            if (scooter.getID() == scooterID) {
+        if (!date.empty() && isValidDate(year, month, day)) {
+            commissionDate.year = year;
+            commissionDate.month =month;
+            commissionDate.day = day;
+        }
+
+        switch (stateNr) {
+            case 2:
+                state = domain::RESERVED;
                 break;
-            }
-            index++;
+            case 3:
+                state = domain::INUSE;
+                break;
+            case 4:
+                state = domain::INWAIT;
+                break;
+            case 5:
+                state = domain::OUTOFSERVICE;
+                break;
+            default:
+                state = domain::PARKED;
         }
-        if (index == repo->getScooters().size()) {
-            std::cout << "Scooter not found!" << std::endl;
-        } else {
+        std::cout << std::endl;
 
-            std::string model, lastStandPlace, date;
-            domain::Date commissionDate{2023, 01, 01};
-            domain::State state;
-            int stateNr, mileage;
+        domain::Scooter updatedScooter = domain::Scooter(
+                repo->getScooters().at(index).getID(),
+                repo->getScooters().at(index).getModel(),
+                commissionDate, mileage, lastStandPlace, state);
 
-            std::cout << std::endl << "Enter new commission Date (yyyy-mm-dd): ";
-            std::getline(std::cin >> std::ws, date);
-            if (!date.empty()) {
-                commissionDate.year = std::stoi(date.substr(0, 4));
-                commissionDate.month = std::stoi(date.substr(5, 2));
-                commissionDate.day = std::stoi(date.substr(8, 2));
-            }
-
-            std::cout << std::endl << "Mileage: ";
-            std::cin >> mileage;
-
-            std::cout << std::endl << "Last Stand Place: ";
-            std::getline(std::cin >> std::ws, lastStandPlace);
-
-            std::cout << std::endl
-                      << "State:(1. PARKED | 2. RESERVED | 3. IN USE | 4. IN WAIT | 5. OUT OF SERVICE)\nChoose one (1-5): ";
-            std::cin >> stateNr;
-            switch (stateNr) {
-                case 2:
-                    state = domain::RESERVED;
-                    break;
-                case 3:
-                    state = domain::INUSE;
-                    break;
-                case 4:
-                    state = domain::INWAIT;
-                    break;
-                case 5:
-                    state = domain::OUTOFSERVICE;
-                    break;
-                default:
-                    state = domain::PARKED;
-            }
-            std::cout << std::endl;
-
-            domain::Scooter updatedScooter = domain::Scooter(
-                    repo->getScooters().at(index).getID(),
-                    repo->getScooters().at(index).getModel(),
-                    commissionDate, mileage, lastStandPlace, state);
-            repo->updateScooter(updatedScooter);
-            printDetailHeader();
-            printScooter(repo->getScooters().at(index));
-
-            saveDataToFile();
-            std::cout << "Scooter edited successfully!" << std::endl;
-        }
+        repo->updateScooter(updatedScooter);
+        printDetailHeader();
+        printScooter(repo->getScooters().at(index));
+        saveDataToFile();
     }
 
     void ProductController::searchScooterByStandPlace() {
@@ -586,7 +589,7 @@ namespace controller {
         return id;
     }
 
-    bool ProductController::isValidDate(int year, int month, int day) {
+    bool ProductController::isValidDate(const int &year, const int &month, const int &day) {
         if (month < 1 || month > 12) {
             return false;
         }

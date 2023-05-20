@@ -35,21 +35,13 @@ namespace ui {
                 case 1: {
 
                     std::string model, lastStandPlace, date;
-                    domain::Date commissionDate{2023, 01, 01};
-                    domain::State state;
                     int mileage, stateNr;
-
 
                     std::cout << std::endl << "Enter the scooter details:\nModel: ";
                     std::getline(std::cin >> std::ws, model);
 
                     std::cout << std::endl << "Commission Date (yyyy-mm-dd): ";
                     std::getline(std::cin >> std::ws, date);
-                    if (!date.empty()) {
-                        commissionDate.year = std::stoi(date.substr(0, 4));
-                        commissionDate.month = std::stoi(date.substr(5, 2));
-                        commissionDate.day = std::stoi(date.substr(8, 2));
-                    }
 
                     std::cout << std::endl << "Mileage: ";
                     std::cin >> mileage;
@@ -60,46 +52,53 @@ namespace ui {
                     std::cout << std::endl
                               << "State:(1. PARKED | 2. RESERVED | 3. IN USE | 4. IN WAIT | 5. OUT OF SERVICE)\nChoose one (1-5): ";
                     std::cin >> stateNr;
-                    switch (stateNr) {
-                        case 2:
-                            state = domain::RESERVED;
-                            break;
-                        case 3:
-                            state = domain::INUSE;
-                            break;
-                        case 4:
-                            state = domain::INWAIT;
-                            break;
-                        case 5:
-                            state = domain::OUTOFSERVICE;
-                            break;
-                        default:
-                            state = domain::PARKED;
-                    }
+
                     std::cout << std::endl;
-                    ctrl->addScooter(model, commissionDate, mileage, lastStandPlace, state);
-                    std::cout << std::endl;
+                    ctrl->addScooter(model, date, mileage, lastStandPlace, stateNr);
                     std::cout << "\nScooter added successfully!" << std::endl;
-                    system("pause");
+                    std::cin >> model; // prevent the menu pop-up
                     break;
                 }
                 case 2: {
                     std::string scooterID;
                     std::cout << "Enter the ID of the scooter to delete: ";
                     std::cin >> scooterID;
-                    if (ctrl->deleteScooter(ctrl->findById(scooterID))) {
+                    if (ctrl->deleteScooter(ctrl->exists(ctrl->position(scooterID)))) {
                         std::cout << "Scooter deleted successfully!" << std::endl;
                     } else {
                         std::cout << "Scooter not found!" << std::endl;
                     }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> scooterID; // prevent the menu pop-up
                     break;
                 }
                 case 3: {
-                    ctrl->editScooter();
-                    std::cout << std::endl;
-                    system("pause");
+                    std::string scooterID;
+                    std::cout << std::endl << "Enter the ID of the scooter to edit: ";
+                    std::cin >> scooterID;
+                    if (!ctrl->exists(ctrl->position(scooterID))) {
+                        std::cout << "Scooter not found!" << std::endl;
+                    } else {
+                        std::string model, lastStandPlace, date;
+                        int stateNr, mileage;
+
+                        std::cout << std::endl << "Enter new commission Date (yyyy-mm-dd): ";
+                        std::getline(std::cin >> std::ws, date);
+
+                        std::cout << std::endl << "Mileage: ";
+                        std::cin >> mileage;
+
+                        std::cout << std::endl << "Last Stand Place: ";
+                        std::getline(std::cin >> std::ws, lastStandPlace);
+
+                        std::cout << std::endl
+                                  << "State:(1. PARKED | 2. RESERVED | 3. IN USE | 4. IN WAIT | 5. OUT OF SERVICE)\nChoose one (1-5): ";
+                        std::cin >> stateNr;
+                        std::cout << std::endl;
+
+                        ctrl->editScooter(ctrl->position(scooterID), date, mileage, lastStandPlace, stateNr);
+                        std::cout << "Scooter edited successfully!" << std::endl;
+                    }
                     break;
                 }
 
@@ -254,6 +253,5 @@ namespace ui {
             std::cout << "\nInvalid option, please try again." << std::endl;
         }
     }
-
 
 }
