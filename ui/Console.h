@@ -3,6 +3,7 @@
 
 #include "../controller/Controller.h"
 #include <memory>
+#include <iomanip>
 
 namespace ui {
     class Console {
@@ -16,6 +17,11 @@ namespace ui {
         void adminMethods();
 
         void userMethods();
+
+        void printDetailHeader() ;
+
+        void printScooter(const domain::Scooter &scooter);
+
     };
 }
 

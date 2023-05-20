@@ -8,7 +8,7 @@ namespace controller {
     }
 
 
-    void
+    domain::Scooter
     ProductController::addScooter(const std::string &model_, const std::string &date, const int &mileage_,
                                   const std::string &lastStandPlace_, const int &stateNr_) {
         std::string id = autoGenerateID(), model = model_, lastStandPlace = lastStandPlace_;
@@ -23,7 +23,7 @@ namespace controller {
         if (!date.empty() && isValidDate(year, month, day)) {
 
             commissionDate.year = year;
-            commissionDate.month =month;
+            commissionDate.month = month;
             commissionDate.day = day;
         }
 
@@ -64,6 +64,7 @@ namespace controller {
         printScooter(newScooter);
         sortScootersByID();
         saveDataToFile();
+        return newScooter;
     }
 
 
@@ -87,7 +88,7 @@ namespace controller {
         return 0 <= index && index < repo->getScooters().size();
     }
 
-    bool ProductController::deleteScooter(const int &index) {
+    bool ProductController::deleteScooter(const int &index) const {
         std::vector<domain::Scooter> scooters = repo->getScooters();
         if (index == scooters.size()) {
             return false;
@@ -98,8 +99,8 @@ namespace controller {
         return true;
     }
 
-    void ProductController::editScooter(const int &index, const std::string &date, const int &mileage,
-                                        const std::string &lastStandPlace, const int &stateNr) {
+    domain::Scooter ProductController::editScooter(const int &index, const std::string &date, const int &mileage,
+                                                   const std::string &lastStandPlace, const int &stateNr) const {
 
         domain::Date commissionDate{2023, 01, 01};
         domain::State state;
@@ -110,7 +111,7 @@ namespace controller {
 
         if (!date.empty() && isValidDate(year, month, day)) {
             commissionDate.year = year;
-            commissionDate.month =month;
+            commissionDate.month = month;
             commissionDate.day = day;
         }
 
@@ -138,38 +139,29 @@ namespace controller {
                 commissionDate, mileage, lastStandPlace, state);
 
         repo->updateScooter(updatedScooter);
-        printDetailHeader();
-        printScooter(repo->getScooters().at(index));
         saveDataToFile();
     }
 
-    void ProductController::searchScooterByStandPlace() {
-        std::string standPlace;
-        std::cout << "Enter the stand place (or leave empty to show all scooters): ";
-        std::cin.ignore(); // Ignore any previous newline character
-        std::getline(std::cin, standPlace);
+    std::vector<domain::Scooter> ProductController::searchScooterByStandPlace(std::string &standPlace) {
 
         std::transform(standPlace.begin(), standPlace.end(), standPlace.begin(),
                        [](unsigned char c) { return std::tolower(c); });
 
-        std::vector<domain::Scooter> scooters = repo->getScooters();
-        bool found = false;
+        std::vector<domain::Scooter> result, scooters;
+        scooters = repo->getScooters();
+
         for (const auto &scooter: scooters) {
             std::string lastStandPlace = scooter.getLastStandPlace();
             std::transform(lastStandPlace.begin(), lastStandPlace.end(), lastStandPlace.begin(),
                            [](unsigned char c) { return std::tolower(c); });
             if (standPlace.empty() || lastStandPlace.find(standPlace) != std::string::npos) {
-                printScooter(scooter);
-                found = true;
+                result.push_back(scooter);
             }
         }
-        if (!found) {
-            std::cout << "No scooters found with the specified stand place!" << std::endl;
-        }
+        return result;
     }
 
-
-    void ProductController::filterScooterByAge(bool lowerThan) {
+    std::vector<domain::Scooter> ProductController::filterScooterByAge(bool lowerThan,const int &age) {
         int age;
         std::string sortType;
         std::cout << "Enter the age: ";
@@ -177,35 +169,29 @@ namespace controller {
         age = 2022 - age;
         bool printHeader = true;
         bool found = false;
-        std::vector<domain::Scooter> scooters = repo->getScooters();
+        std::vector<domain::Scooter> result, scooters;
+        scooters = repo->getScooters();
 
         if (lowerThan) {
             for (const auto &scooter: scooters) {
                 if (scooter.getCommissionDate().year > age) {
-                    if (printHeader) {
-                        printDetailHeader();
-                    }
-                    printScooter(scooter);
-                    printHeader = false;
-                    found = true;
+                    result.push_back(scooter);
                 }
             }
-        } else {
-            for (const auto &scooter: scooters) {
-                if (scooter.getCommissionDate().year <= age) {
-                    if (printHeader) {
-                        printDetailHeader();
-                    }
-                    printScooter(scooter);
-                    printHeader = false;
-                    found = true;
+            return result;
+        }
+
+        for (const auto &scooter: scooters) {
+            if (scooter.getCommissionDate().year <= age) {
+                if (printHeader) {
+                    printDetailHeader();
                 }
+                printScooter(scooter);
+                printHeader = false;
+                found = true;
             }
         }
 
-        if (!found) {
-            std::cout << "No scooters found with an age greater than " << age << " years!" << std::endl;
-        }
     }
 
 
@@ -403,49 +389,6 @@ namespace controller {
     }
 
 
-    void ProductController::printDetailHeader() {
-        std::cout << std::left << std::setw(5) << "ID" << std::setw(30) << "Model" <<
-                  std::setw(20) << "Commission Date" << std::setw(15) << "Mileage" <<
-                  std::setw(30) << "Last Stand Place" << std::setw(15) << "State" << std::endl;
-        for (int i = 0; i < 110; i++) std::cout << "-";
-        std::cout << std::endl;
-    }
-
-    void ProductController::printScooter(const domain::Scooter &scooter) {
-
-        const domain::Date date = scooter.getCommissionDate();
-        const std::string dateToString = std::to_string(date.year) + "." + std::to_string(date.month) +
-                                         "." + std::to_string(date.day);
-
-        std::cout << std::left << std::setw(5) << scooter.getID()
-                  << std::setw(30) << scooter.getModel()
-                  << std::setw(20) << dateToString
-                  << std::setw(15) << scooter.getMileage()
-                  << std::setw(30) << scooter.getLastStandPlace()
-                  << std::setw(15) << std::left;
-
-        switch (scooter.getState()) {
-            case domain::PARKED:
-                std::cout << "PARKED" << std::endl;
-                break;
-            case domain::RESERVED:
-                std::cout << "RESERVED" << std::endl;
-                break;
-            case domain::INUSE:
-                std::cout << "IN USE" << std::endl;
-                break;
-            case domain::INWAIT:
-                std::cout << "IN WAIT" << std::endl;
-                break;
-            case domain::OUTOFSERVICE:
-                std::cout << "OUT OF SERVICE" << std::endl;
-                break;
-            default:
-                std::cout << "PARKED" << std::endl;
-        }
-    }
-
-
     void ProductController::printScooterByID() {
         std::cout << "List of scooters sorted by ID:" << std::endl;
         ProductController::printDetailHeader();
@@ -619,6 +562,5 @@ namespace controller {
         }
         return true;
     }
-
 
 }

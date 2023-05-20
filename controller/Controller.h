@@ -10,7 +10,6 @@
 #include <fstream>
 #include <unordered_map>
 #include <set>
-#include <iomanip>
 #include <cassert>
 
 namespace controller {
@@ -21,21 +20,21 @@ namespace controller {
         explicit ProductController(
                 std::unique_ptr<repository::Repository> scooterRepo = std::make_unique<repository::Repository>());
 
-        void addScooter(const std::string &model, const std::string &date, const int &mileage,
+        domain::Scooter addScooter(const std::string &model, const std::string &date, const int &mileage,
                         const std::string &lastStandPlace, const int &stateNr);
 
         int position(const std::string &id_);
 
         bool exists(const int &index);
 
-        bool deleteScooter(const int &index);
+        bool deleteScooter(const int &index) const;
 
-        void editScooter(const int &index, const std::string &date, const int &mileage,
-                         const std::string &lastStandPlace,const int &stateNr);
+        domain::Scooter editScooter(const int &index, const std::string &date, const int &mileage,
+                         const std::string &lastStandPlace,const int &stateNr) const;
 
-        void searchScooterByStandPlace();
+        std::vector<domain::Scooter> searchScooterByStandPlace(std::string &standPlace);
 
-        void filterScooterByAge(bool condition);
+        std::vector<domain::Scooter> filterScooterByAge(bool condition);
 
         void filterScooterByMileage(bool condition);
 

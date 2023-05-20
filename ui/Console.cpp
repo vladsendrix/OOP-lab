@@ -54,7 +54,9 @@ namespace ui {
                     std::cin >> stateNr;
 
                     std::cout << std::endl;
-                    ctrl->addScooter(model, date, mileage, lastStandPlace, stateNr);
+
+                    Console::printDetailHeader();
+                    Console::printScooter(ctrl->addScooter(model, date, mileage, lastStandPlace, stateNr));
                     std::cout << "\nScooter added successfully!" << std::endl;
                     std::cin >> model; // prevent the menu pop-up
                     break;
@@ -96,22 +98,40 @@ namespace ui {
                         std::cin >> stateNr;
                         std::cout << std::endl;
 
-                        ctrl->editScooter(ctrl->position(scooterID), date, mileage, lastStandPlace, stateNr);
+
+                        printDetailHeader();
+                        printScooter(
+                                ctrl->editScooter(ctrl->position(scooterID), date, mileage, lastStandPlace, stateNr));
+
                         std::cout << "Scooter edited successfully!" << std::endl;
                     }
+                    std::cout << std::endl;
+                    std::cin >> scooterID; // prevent the menu pop-up
                     break;
                 }
 
                 case 4: {
-                    ctrl->searchScooterByStandPlace();
+                    std::string standPlace;
+                    std::cout << "Enter the stand place (or leave empty to show all scooters): ";
+                    std::cin.ignore();
+                    std::getline(std::cin, standPlace);
+                    if (ctrl->searchScooterByStandPlace(standPlace).empty()) {
+                        std::cout << "No scooters found with the specified stand place!" << std::endl;
+                    } else {
+                        printDetailHeader();
+                        for (const auto &scooter: ctrl->searchScooterByStandPlace(standPlace)) {
+                            printScooter(scooter);
+                        }
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> standPlace; // prevent the menu pop-up
                     break;
                 }
                 case 5: {
                     ctrl->filterScooterByAge(true);
                     std::cout << std::endl;
                     system("pause");
+                    std::cout << "No scooters found with an age greater than " << age << " years!" << std::endl;
                     break;
                 }
                 case 6: {
@@ -174,9 +194,20 @@ namespace ui {
                     return;
                 }
                 case 1: {
-                    ctrl->searchScooterByStandPlace();
+                    std::string standPlace;
+                    std::cout << "Enter the stand place (or leave empty to show all scooters): ";
+                    std::cin.ignore();
+                    std::getline(std::cin, standPlace);
+                    if (ctrl->searchScooterByStandPlace(standPlace).empty()) {
+                        std::cout << "No scooters found with the specified stand place!" << std::endl;
+                    } else {
+                        printDetailHeader();
+                        for (const auto &scooter: ctrl->searchScooterByStandPlace(standPlace)) {
+                            printScooter(scooter);
+                        }
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> standPlace; // prevent the menu pop-up
                     break;
                 }
                 case 2: {
@@ -253,5 +284,49 @@ namespace ui {
             std::cout << "\nInvalid option, please try again." << std::endl;
         }
     }
+
+
+    void Console::printDetailHeader() {
+        std::cout << std::left << std::setw(5) << "ID" << std::setw(30) << "Model" <<
+                  std::setw(20) << "Commission Date" << std::setw(15) << "Mileage" <<
+                  std::setw(30) << "Last Stand Place" << std::setw(15) << "State" << std::endl;
+        for (int i = 0; i < 110; i++) std::cout << "-";
+        std::cout << std::endl;
+    }
+
+    void Console::printScooter(const domain::Scooter &scooter) {
+
+        const domain::Date date = scooter.getCommissionDate();
+        const std::string dateToString = std::to_string(date.year) + "." + std::to_string(date.month) +
+                                         "." + std::to_string(date.day);
+
+        std::cout << std::left << std::setw(5) << scooter.getID()
+                  << std::setw(30) << scooter.getModel()
+                  << std::setw(20) << dateToString
+                  << std::setw(15) << scooter.getMileage()
+                  << std::setw(30) << scooter.getLastStandPlace()
+                  << std::setw(15) << std::left;
+
+        switch (scooter.getState()) {
+            case domain::PARKED:
+                std::cout << "PARKED" << std::endl;
+                break;
+            case domain::RESERVED:
+                std::cout << "RESERVED" << std::endl;
+                break;
+            case domain::INUSE:
+                std::cout << "IN USE" << std::endl;
+                break;
+            case domain::INWAIT:
+                std::cout << "IN WAIT" << std::endl;
+                break;
+            case domain::OUTOFSERVICE:
+                std::cout << "OUT OF SERVICE" << std::endl;
+                break;
+            default:
+                std::cout << "PARKED" << std::endl;
+        }
+    }
+
 
 }
