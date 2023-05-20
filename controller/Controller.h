@@ -21,9 +21,12 @@ namespace controller {
         explicit ProductController(
                 std::unique_ptr<repository::Repository> scooterRepo = std::make_unique<repository::Repository>());
 
-        void addScooter();
+        void addScooter(const std::string &model, const domain::Date &commissionDate, const int &mileage,
+                        const std::string &lastStandPlace, const domain::State &state);
 
-        void deleteScooter();
+        int findById(const std::string &id);
+
+        bool deleteScooter(const int &index);
 
         void editScooter();
 

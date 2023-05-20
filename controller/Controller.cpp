@@ -8,52 +8,13 @@ namespace controller {
     }
 
 
-    void ProductController::addScooter() {
-
-        std::string id, model, lastStandPlace, date;
-        domain::Date commissionDate{2023, 01, 01};
-        domain::State state;
-        int mileage, stateNr;
-
-        id = autoGenerateID();
-
-        std::cout << std::endl << "Enter the scooter details:\nModel: ";
-        std::getline(std::cin >> std::ws, model);
-
-        std::cout << std::endl << "Commission Date (yyyy-mm-dd): ";
-        std::getline(std::cin >> std::ws, date);
-        if (!date.empty()) {
-            commissionDate.year = std::stoi(date.substr(0, 4));
-            commissionDate.month = std::stoi(date.substr(5, 2));
-            commissionDate.day = std::stoi(date.substr(8, 2));
-        }
-
-        std::cout << std::endl << "Mileage: ";
-        std::cin >> mileage;
-
-        std::cout << std::endl << "Last Stand Place: ";
-        std::getline(std::cin >> std::ws, lastStandPlace);
-
-        std::cout << std::endl
-                  << "State:(1. PARKED | 2. RESERVED | 3. IN USE | 4. IN WAIT | 5. OUT OF SERVICE)\nChoose one (1-5): ";
-        std::cin >> stateNr;
-        switch (stateNr) {
-            case 2:
-                state = domain::RESERVED;
-                break;
-            case 3:
-                state = domain::INUSE;
-                break;
-            case 4:
-                state = domain::INWAIT;
-                break;
-            case 5:
-                state = domain::OUTOFSERVICE;
-                break;
-            default:
-                state = domain::PARKED;
-        }
-        std::cout << std::endl;
+    void
+    ProductController::addScooter(const std::string &model_, const domain::Date &commissionDate_, const int &mileage_,
+                                  const std::string &lastStandPlace_, const domain::State &state_) {
+        std::string id = autoGenerateID(), model = model_, lastStandPlace = lastStandPlace_;
+        domain::Date commissionDate = commissionDate_;
+        domain::State state = state_;
+        int mileage = mileage_;
 
         std::string expectedID = id, expectedModel = model, expectedLastStandPlace = lastStandPlace;
         domain::Date expectedDate = commissionDate;
@@ -71,41 +32,38 @@ namespace controller {
         assert(expectedState == newScooter.getState());
 
         repo->addScooter(newScooter);
-
         printDetailHeader();
         printScooter(newScooter);
-
         sortScootersByID();
         saveDataToFile();
-
-        std::cout << "\nScooter added successfully!" << std::endl;
-
     }
 
-    void ProductController::deleteScooter() {
-        std::string scooterID;
-        std::cout << "Enter the ID of the scooter to delete: ";
-        std::cin >> scooterID;
-        scooterID = scooterID.substr(0, 3);
-        std::transform(scooterID.begin(), scooterID.end(), scooterID.begin(),
-                       [](unsigned char c) { return std::toupper(c); });
 
+    int ProductController::findById(const std::string &id_) {
+        std::string id = id_;
+        id = id.substr(0, 3);
+        std::transform(id.begin(), id.end(), id.begin(),
+                       [](unsigned char c) { return std::toupper(c); });
         int index = 0;
         std::vector<domain::Scooter> scooters = repo->getScooters();
         for (const auto &scooter: scooters) {
-            if (scooter.getID() == scooterID) {
+            if (scooter.getID() == id) {
                 break;
             }
             index++;
         }
+        return index;
+    }
+
+    bool ProductController::deleteScooter(const int &index) {
+        std::vector<domain::Scooter> scooters = repo->getScooters();
         if (index == scooters.size()) {
-            std::cout << "Scooter not found!" << std::endl;
-        } else {
-            domain::Scooter scooterToDelete = scooters.at(index);
-            repo->deleteScooter(scooterToDelete);
-            saveDataToFile();
-            std::cout << "Scooter deleted successfully!" << std::endl;
+            return false;
         }
+        domain::Scooter scooterToDelete = scooters.at(index);
+        repo->deleteScooter(scooterToDelete);
+        saveDataToFile();
+        return true;
     }
 
     void ProductController::editScooter() {
@@ -118,7 +76,6 @@ namespace controller {
                        [](unsigned char c) { return std::toupper(c); });
 
         int index = 0;
-
 
         for (const auto &scooter: repo->getScooters()) {
             if (scooter.getID() == scooterID) {
@@ -659,5 +616,6 @@ namespace controller {
         }
         return true;
     }
+
 
 }
