@@ -1,4 +1,3 @@
-
 #ifndef REPOSITORY_H
 #define REPOSITORY_H
 
@@ -15,14 +14,44 @@ namespace repository {
     public:
         explicit Repository(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>());
 
-        void addScooter(const domain::Scooter &scooter);
+        virtual void addScooter(const domain::Scooter &scooter) = 0;
 
-        void deleteScooter(const domain::Scooter &scooter);
+        virtual void deleteScooter(const domain::Scooter &scooter) = 0;
 
-        void updateScooter(const domain::Scooter &scooter);
+        virtual void updateScooter(const domain::Scooter &scooter) = 0;
 
-        std::vector<domain::Scooter> getScooters() const;
+        virtual std::vector<domain::Scooter> getScooters() const = 0;
 
+    };
+
+    class RepositoryInMemory : public Repository {
+    public:
+        explicit RepositoryInMemory(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>()) : Repository(
+                scooters_) {}
+
+        void addScooter(const domain::Scooter &scooter) override;
+
+        void deleteScooter(const domain::Scooter &scooter) override;
+
+        void updateScooter(const domain::Scooter &scooter) override;
+
+        std::vector<domain::Scooter> getScooters() const override;
+    };
+
+    class RepositoryInFile : public Repository {
+    private:
+        std::string filename;
+    public:
+        explicit RepositoryInFile(std::string filename_, std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>()) : Repository(
+                scooters_), filename(std::move(filename_)) {}
+
+        void addScooter(const domain::Scooter &scooter) override;
+
+        void deleteScooter(const domain::Scooter &scooter) override;
+
+        void updateScooter(const domain::Scooter &scooter) override;
+
+        std::vector<domain::Scooter> getScooters() const override;
     };
 };
 #endif
