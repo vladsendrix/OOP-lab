@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <set>
 #include <cassert>
+#include <memory>
 
 namespace controller {
     class ProductController {
@@ -21,7 +22,7 @@ namespace controller {
                 std::unique_ptr<repository::Repository> scooterRepo = std::make_unique<repository::Repository>());
 
         domain::Scooter addScooter(const std::string &model, const std::string &date, const int &mileage,
-                        const std::string &lastStandPlace, const int &stateNr);
+                                   const std::string &lastStandPlace, const int &stateNr);
 
         int position(const std::string &id_);
 
@@ -30,15 +31,15 @@ namespace controller {
         bool deleteScooter(const int &index) const;
 
         domain::Scooter editScooter(const int &index, const std::string &date, const int &mileage,
-                         const std::string &lastStandPlace,const int &stateNr) const;
+                                    const std::string &lastStandPlace, const int &stateNr) const;
 
         std::vector<domain::Scooter> searchScooterByStandPlace(std::string &standPlace);
 
-        std::vector<domain::Scooter> filterScooterByAge(bool condition);
+        std::vector<domain::Scooter> filterScooterByAge(bool condition, const int &age);
 
-        void filterScooterByMileage(bool condition);
+        std::vector<domain::Scooter> filterScooterByMileage(bool lowerThan, const int &mileage);
 
-        void listScooterByAge(bool condition);
+        std::vector<domain::Scooter> sortScooterByAge(bool condition);
 
         void reserveScooter();
 
@@ -65,7 +66,7 @@ namespace controller {
 
         std::string autoGenerateID();
 
-        static bool isValidDate(const int &year, const int &month, const int &day) ;
+        static bool isValidDate(const int &year, const int &month, const int &day);
 
     };
 }

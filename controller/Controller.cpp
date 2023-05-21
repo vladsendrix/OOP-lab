@@ -140,6 +140,7 @@ namespace controller {
 
         repo->updateScooter(updatedScooter);
         saveDataToFile();
+        return updatedScooter;
     }
 
     std::vector<domain::Scooter> ProductController::searchScooterByStandPlace(std::string &standPlace) {
@@ -161,105 +162,61 @@ namespace controller {
         return result;
     }
 
-    std::vector<domain::Scooter> ProductController::filterScooterByAge(bool lowerThan,const int &age) {
-        int age;
-        std::string sortType;
-        std::cout << "Enter the age: ";
-        std::cin >> age;
-        age = 2022 - age;
-        bool printHeader = true;
-        bool found = false;
+    std::vector<domain::Scooter> ProductController::filterScooterByAge(bool lowerThan, const int &age) {
+
         std::vector<domain::Scooter> result, scooters;
         scooters = repo->getScooters();
 
         if (lowerThan) {
-            for (const auto &scooter: scooters) {
-                if (scooter.getCommissionDate().year > age) {
+            for (const auto &scooter: scooters)
+                if (scooter.getCommissionDate().year > age)
                     result.push_back(scooter);
-                }
-            }
             return result;
         }
 
-        for (const auto &scooter: scooters) {
-            if (scooter.getCommissionDate().year <= age) {
-                if (printHeader) {
-                    printDetailHeader();
-                }
-                printScooter(scooter);
-                printHeader = false;
-                found = true;
-            }
-        }
-
+        for (const auto &scooter: scooters)
+            if (scooter.getCommissionDate().year <= age)
+                result.push_back(scooter);
+        return result;
     }
 
 
-    void ProductController::filterScooterByMileage(bool lowerThan) {
-        int mileage;
-        std::cout << "Enter the mileage: ";
-        std::cin >> mileage;
-        std::string condition = "higher than -inclusive ";
-        if (lowerThan) condition = "lower than ";
-        bool printHeader = true;
-        bool found = false;
-        std::vector<domain::Scooter> scooters = repo->getScooters();
+    std::vector<domain::Scooter> ProductController::filterScooterByMileage(bool lowerThan, const int &mileage) {
+
+        std::vector<domain::Scooter> result, scooters = repo->getScooters();
 
         if (lowerThan) {
-            for (const auto &scooter: scooters) {
-                if (scooter.getMileage() < mileage) {
-                    if (printHeader) {
-                        printDetailHeader();
-                    }
-                    printScooter(scooter);
-                    printHeader = false;
-                    found = true;
-                }
-            }
-        } else {
-            for (const auto &scooter: scooters) {
-                if (scooter.getMileage() >= mileage) {
-                    if (printHeader) {
-                        printDetailHeader();
-                    }
-                    printScooter(scooter);
-                    printHeader = false;
-                    found = true;
-                }
-            }
+            for (const auto &scooter: scooters)
+                if (scooter.getMileage() < mileage)
+                    result.push_back(scooter);
+            return result;
         }
-        if (!found) {
-            std::cout << "No scooters found with a mileage " << condition << mileage << " miles!" << std::endl;
-        }
+        for (const auto &scooter: scooters)
+            if (scooter.getMileage() >= mileage)
+                result.push_back(scooter);
+        return result;
     }
 
-    void ProductController::listScooterByAge(bool ascending) {
+    std::vector<domain::Scooter> ProductController::sortScooterByAge(bool ascending) {
         std::vector<domain::Scooter> scooters = repo->getScooters();
         std::string sortType;
         if (ascending) {
-            sortType = "ascending";
             // Sort the scooters by age in ascending order
             std::sort(scooters.begin(), scooters.end(),
                       [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
-                          return scooter1.getMileage() < scooter2.getMileage();
+                          return scooter1.getCommissionDate() < scooter2.getCommissionDate();
                       });
         } else {
-            sortType = "descending";
-            // Sort the scooters by age in ascending order
+            // Sort the scooters by age in descending order
             std::sort(scooters.begin(), scooters.end(),
                       [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
-                          return scooter1.getMileage() > scooter2.getMileage();
+                          return scooter2.getCommissionDate() < scooter1.getCommissionDate();
                       });
         }
 
-        std::cout << std::endl << "\nList of scooters sorted by mileage (" << sortType << "):" << std::endl;
-        ProductController::printDetailHeader();
-        for (const auto &scooter: scooters) {
-            printScooter(scooter);
-        }
-        sortScootersByID(); // sort back scooters by ID so they remain sorted by ID
+        //sortScootersByID(); // sort back scooters by ID so they remain sorted by ID
+        return scooters;
     }
-
 
     void ProductController::reserveScooter() {
         printDetailHeader();
@@ -328,13 +285,12 @@ namespace controller {
         std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
     }
 
-
     void ProductController::parkScooter() {
         std::cout << "\nPlease enter the ID of the scooter you are using to stop useing it (to park it): ";
         std::string readID = readScooterID();
         bool found = false;
         int index = 0;
-
+        State::
         for (auto &scooter: repo->getScooters()) {
             if (readID == scooter.getID()) {
                 if (scooter.getState() == domain::INUSE) {
@@ -379,13 +335,12 @@ namespace controller {
     void ProductController::sortScootersByID() {
         std::vector<domain::Scooter> scooters = repo->getScooters();
 
-        // Sort the scooters by age in ascending order
+        // Sort the scooters by ID in ascending order
         std::sort(scooters.begin(), scooters.end(),
                   [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
                       return scooter1.getID() < scooter2.getID();
                   });
 
-        //printScooterByID();
     }
 
 
@@ -404,11 +359,11 @@ namespace controller {
             return;
         }
         const std::unordered_map<std::string, domain::State> stateMap{
-                {"PARKED",       domain::PARKED},
-                {"RESERVED",     domain::RESERVED},
-                {"INUSE",        domain::INUSE},
-                {"INWAIT",       domain::INWAIT},
-                {"OUTOFSERVICE", domain::OUTOFSERVICE}
+                {"PARKED",       domain::State::PARKED},
+                {"RESERVED",     domain::State::RESERVED},
+                {"INUSE",        domain::State::INUSE},
+                {"INWAIT",       domain::State::INWAIT},
+                {"OUTOFSERVICE", domain::State::OUTOFSERVICE}
         };
 
         assert(this->repo->getScooters().empty());
@@ -422,7 +377,7 @@ namespace controller {
             int year, month, day, mileage;
 
             std::string expectedID, expectedModel, expectedLastStandPlace;
-            domain::State expectedState = domain::PARKED;
+            domain::State expectedState = domain::State::PARKED;
             domain::Date expectedDate{};
             int expectedMileage;
 
@@ -449,7 +404,7 @@ namespace controller {
                 commissionDate = {year, month, day};
                 expectedDate = {year, month, day};
             }
-            domain::State state = domain::PARKED;
+            domain::State state = domain::State::PARKED;
             auto stateIt = stateMap.find(stateString);
             if (stateIt != stateMap.end()) {
                 state = stateIt->second;
@@ -482,11 +437,11 @@ namespace controller {
         }
 
         const std::unordered_map<domain::State, std::string> stateMap{
-                {domain::PARKED,       "PARKED"},
-                {domain::RESERVED,     "RESERVED"},
-                {domain::INUSE,        "INUSE"},
-                {domain::INWAIT,       "INWAIT"},
-                {domain::OUTOFSERVICE, "OUTOFSERVICE"}
+                {domain::State::PARKED,       "PARKED"},
+                {domain::State::RESERVED,     "RESERVED"},
+                {domain::State::INUSE,        "INUSE"},
+                {domain::State::INWAIT,       "INWAIT"},
+                {domain::State::OUTOFSERVICE, "OUTOFSERVICE"}
         };
         for (const auto &scooter: this->repo->getScooters()) {
             file << scooter.getID() << "," << scooter.getModel() << ","

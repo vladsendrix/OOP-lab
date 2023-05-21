@@ -118,51 +118,76 @@ namespace ui {
                     if (ctrl->searchScooterByStandPlace(standPlace).empty()) {
                         std::cout << "No scooters found with the specified stand place!" << std::endl;
                     } else {
-                        printDetailHeader();
-                        for (const auto &scooter: ctrl->searchScooterByStandPlace(standPlace)) {
-                            printScooter(scooter);
-                        }
+                        printArrayOfScooters(ctrl->searchScooterByStandPlace(standPlace));
                     }
                     std::cout << std::endl;
                     std::cin >> standPlace; // prevent the menu pop-up
                     break;
                 }
                 case 5: {
-                    ctrl->filterScooterByAge(true);
-                    std::cout << std::endl;
-                    system("pause");
-                    std::cout << "No scooters found with an age greater than " << age << " years!" << std::endl;
+                    int age;
+                    std::cout << "Enter the age: ";
+                    std::cin >> age;
+                    age = 2022 - age;
+
+                    if (ctrl->filterScooterByAge(true, age).empty()) {
+                        std::cout << std::endl << "No scooters older than " << age << " years were found!" << std::endl;
+                    } else {
+                        printArrayOfScooters(ctrl->filterScooterByAge(true, age));
+                    }
                     break;
                 }
                 case 6: {
+                    int age;
+                    std::cout << "Enter the age: ";
+                    std::cin >> age;
+                    age = 2022 - age;
 
-                    ctrl->filterScooterByAge(false);
+                    if (ctrl->filterScooterByAge(false, age).empty()) {
+                        std::cout << std::endl << "No scooters older than " << age << " years were found!" << std::endl;
+                    } else {
+                        printArrayOfScooters(ctrl->filterScooterByAge(false, age));
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> age; // prevent the menu pop-up
                     break;
                 }
                 case 7: {
-                    ctrl->filterScooterByMileage(true);
+                    int mileage;
+                    std::cout << "Enter the mileage: ";
+                    std::cin >> mileage;
+                    std::string condition = " ";
+                    if (ctrl->filterScooterByMileage(true,mileage).empty()) {
+                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!" << std::endl;
+                    } else {
+                        printArrayOfScooters(ctrl->filterScooterByMileage(true,mileage));
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> mileage; // prevent the menu pop-up
                     break;
                 }
                 case 8: {
-                    ctrl->filterScooterByMileage(false);
+                    int mileage;
+                    std::cout << "Enter the mileage: ";
+                    std::cin >> mileage;
+                    ctrl->filterScooterByMileage(false,mileage);
                     std::cout << std::endl;
+                    std::cout << "No scooters found with a mileage lower than higher than -inclusive " << mileage << " miles!" << std::endl;
                     system("pause");
                     break;
                 }
                 case 9: {
-                    ctrl->listScooterByAge(true);
-                    std::cout << std::endl;
-                    system("pause");
+                    int placeHolder;
+                    std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
+                    printArrayOfScooters(ctrl->sortScooterByAge(true));
+                    std::cin>>placeHolder; // prevent the menu pop-up
                     break;
                 }
                 case 10: {
-                    ctrl->listScooterByAge(false);
-                    std::cout << std::endl;
-                    system("pause");
+                    int placeHolder;
+                    std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
+                    printArrayOfScooters(ctrl->sortScooterByAge(false));
+                    std::cin>>placeHolder; // prevent the menu pop-up
                     break;
                 }
                 default: {
@@ -211,15 +236,33 @@ namespace ui {
                     break;
                 }
                 case 2: {
-                    ctrl->filterScooterByAge(true);
+                    int age;
+                    std::cout << "Enter the age: ";
+                    std::cin >> age;
+                    age = 2022 - age;
+
+                    if (ctrl->filterScooterByAge(true, age).empty()) {
+                        std::cout << std::endl << "No scooters older than " << age << " years were found!" << std::endl;
+                    } else {
+                        printArrayOfScooters(ctrl->filterScooterByAge(true, age));
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> age; // prevent the menu pop-up
                     break;
                 }
                 case 3: {
-                    ctrl->filterScooterByAge(false);
+                    int age;
+                    std::cout << "Enter the age: ";
+                    std::cin >> age;
+                    age = 2022 - age;
+
+                    if (ctrl->filterScooterByAge(false, age).empty()) {
+                        std::cout << std::endl << "No scooters older than " << age << " years were found!" << std::endl;
+                    } else {
+                        printArrayOfScooters(ctrl->filterScooterByAge(false, age));
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> age; // prevent the menu pop-up
                     break;
                 }
                 case 4: {
@@ -308,19 +351,19 @@ namespace ui {
                   << std::setw(15) << std::left;
 
         switch (scooter.getState()) {
-            case domain::PARKED:
+            case domain::State::PARKED:
                 std::cout << "PARKED" << std::endl;
                 break;
-            case domain::RESERVED:
+            case domain::State::RESERVED:
                 std::cout << "RESERVED" << std::endl;
                 break;
-            case domain::INUSE:
+            case domain::State::INUSE:
                 std::cout << "IN USE" << std::endl;
                 break;
-            case domain::INWAIT:
+            case domain::State::INWAIT:
                 std::cout << "IN WAIT" << std::endl;
                 break;
-            case domain::OUTOFSERVICE:
+            case domain::State::OUTOFSERVICE:
                 std::cout << "OUT OF SERVICE" << std::endl;
                 break;
             default:
@@ -328,5 +371,11 @@ namespace ui {
         }
     }
 
+    void Console::printArrayOfScooters(const std::vector<domain::Scooter> &scooters) {
+        printDetailHeader();
+        for (const auto &scooter: scooters) {
+            printScooter(scooter);
+        }
+    }
 
 }

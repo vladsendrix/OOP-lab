@@ -13,6 +13,7 @@ namespace domain {
             if (month != other.month) return month < other.month;
             return day < other.day;
         }
+
     };
 
     enum State {

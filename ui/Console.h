@@ -22,6 +22,8 @@ namespace ui {
 
         void printScooter(const domain::Scooter &scooter);
 
+        void printArrayOfScooters(const std::vector<domain::Scooter> &scooters);
+
     };
 }
 
