@@ -266,20 +266,42 @@ namespace ui {
                     break;
                 }
                 case 4: {
-                    ctrl->filterScooterByMileage(true);
+                    int mileage;
+                    std::cout << "Enter the mileage: ";
+                    std::cin >> mileage;
+                    std::string condition = " ";
+                    if (ctrl->filterScooterByMileage(true,mileage).empty()) {
+                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!" << std::endl;
+                    } else {
+                        printArrayOfScooters(ctrl->filterScooterByMileage(true,mileage));
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> mileage; // prevent the menu pop-up
                     break;
                 }
                 case 5: {
-                    ctrl->filterScooterByMileage(false);
+                    int mileage;
+                    std::cout << "Enter the mileage: ";
+                    std::cin >> mileage;
+                    std::string condition = " ";
+                    if (ctrl->filterScooterByMileage(false,mileage).empty()) {
+                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!" << std::endl;
+                    } else {
+                        printArrayOfScooters(ctrl->filterScooterByMileage(false,mileage));
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> mileage; // prevent the menu pop-up
                     break;
                 }
                 case 6: {
+                    printArrayOfScooters(ctrl->sortScootersByID());
+                    std::cout << "Here are the scooters listed.\nPlease enter an ID to reserve a scooter: ";
+                    std::string readID;
                     ctrl->reserveScooter();
                     std::cout << std::endl;
+                    std::cout << "\nSorry, the scooter with the ID " << readID << " is not parked or in wait.\n";
+                    std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
+                    std::cout << "\nThe scooter with the ID " << readID << " was reserved.\n";
                     system("pause");
                     break;
                 }

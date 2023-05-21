@@ -41,7 +41,7 @@ namespace controller {
 
         std::vector<domain::Scooter> sortScooterByAge(bool condition);
 
-        void reserveScooter();
+        bool reserveScooter(const int &index);
 
         void useScooter();
 
@@ -49,10 +49,11 @@ namespace controller {
 
 
         // other helpful methods
+        bool is_inwait_parked(const int &index);
 
-        static std::string readScooterID();
+        std::string transformID(std::string id);
 
-        void sortScootersByID();
+        std::vector<domain::Scooter> sortScootersByID();
 
         static void printDetailHeader();
 

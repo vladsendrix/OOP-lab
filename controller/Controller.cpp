@@ -69,10 +69,7 @@ namespace controller {
 
 
     int ProductController::position(const std::string &id_) {
-        std::string id = id_;
-        id = id.substr(0, 3);
-        std::transform(id.begin(), id.end(), id.begin(),
-                       [](unsigned char c) { return std::toupper(c); });
+        std::string id = transformID(id_);
         int index = 0;
         std::vector<domain::Scooter> scooters = repo->getScooters();
         for (const auto &scooter: scooters) {
@@ -184,7 +181,6 @@ namespace controller {
     std::vector<domain::Scooter> ProductController::filterScooterByMileage(bool lowerThan, const int &mileage) {
 
         std::vector<domain::Scooter> result, scooters = repo->getScooters();
-
         if (lowerThan) {
             for (const auto &scooter: scooters)
                 if (scooter.getMileage() < mileage)
@@ -214,47 +210,32 @@ namespace controller {
                       });
         }
 
-        //sortScootersByID(); // sort back scooters by ID so they remain sorted by ID
         return scooters;
     }
 
-    void ProductController::reserveScooter() {
-        printDetailHeader();
-        for (auto &scooter: repo->getScooters()) {
-            printScooter(scooter);
+    bool ProductController::is_inwait_parked(const int &index_) {
+        int index=index_;
+        if (!exists(index)) return false;
+        const domain::Scooter scooter =repo->getScooters().at(index);
+        if (scooter.getState() == domain::INWAIT || scooter.getState() == domain::PARKED) {
+            return true;
         }
-        std::cout << "Here are the scooters listed.\nPlease enter an ID to reserve a scooter: ";
-        std::string readID = readScooterID();
-        bool found = false;
-        int index = 0;
-        for (auto &scooter: repo->getScooters()) {
-            if (readID == scooter.getID()) {
-                if (scooter.getState() == domain::INWAIT || scooter.getState() == domain::PARKED) {
-                    found = true;
-                    break;
-                }
-                std::cout << "\nSorry, the scooter with the ID " << readID << " is not parked or in wait.\n";
-                return;
-            }
-            index++;
-        }
-        if (!found) {
-            std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
-            return;
-        }
-        domain::Scooter reservedScooter = repo->getScooters().at(index);
-        reservedScooter.setState(domain::RESERVED);
-        repo->updateScooter(reservedScooter);
+        return false;
+    }
 
-        printDetailHeader();
-        printScooter(reservedScooter);
-
-        std::cout << "\nThe scooter with the ID " << readID << " was reserved.\n";
+    bool ProductController::reserveScooter(const int &index_) {
+        int index=index_;
+        if (is_inwait_parked(index)) {
+            domain::Scooter reservedScooter = repo->getScooters().at(index);
+            reservedScooter.setState(domain::RESERVED);
+            repo->updateScooter(reservedScooter);
+        }
+        return is_inwait_parked(index);
     }
 
     void ProductController::useScooter() {
         std::cout << "\nPlease enter the ID of the scooter you reserved to use it: ";
-        std::string readID = readScooterID();
+        std::string readID = transformID(id);
         bool found = false;
         int index = 0;
 
@@ -287,10 +268,10 @@ namespace controller {
 
     void ProductController::parkScooter() {
         std::cout << "\nPlease enter the ID of the scooter you are using to stop useing it (to park it): ";
-        std::string readID = readScooterID();
+        std::string readID = transformID();
         bool found = false;
         int index = 0;
-        State::
+
         for (auto &scooter: repo->getScooters()) {
             if (readID == scooter.getID()) {
                 if (scooter.getState() == domain::INUSE) {
@@ -324,15 +305,13 @@ namespace controller {
 
     // other helpful methods
 
-    std::string ProductController::readScooterID() {
-        std::string readID;
-        std::cin >> readID;
-        readID = readID.substr(0, 3);
-        std::transform(readID.begin(), readID.end(), readID.begin(), [](unsigned char c) { return std::toupper(c); });
-        return readID;
+    std::string ProductController::transformID(std::string id) {
+        id = id.substr(0, 3);
+        std::transform(id.begin(), id.end(), id.begin(), [](unsigned char c) { return std::toupper(c); });
+        return id;
     }
 
-    void ProductController::sortScootersByID() {
+    std::vector<domain::Scooter> ProductController::sortScootersByID() {
         std::vector<domain::Scooter> scooters = repo->getScooters();
 
         // Sort the scooters by ID in ascending order
@@ -340,7 +319,7 @@ namespace controller {
                   [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
                       return scooter1.getID() < scooter2.getID();
                   });
-
+        return scooters;
     }
 
 
