@@ -9,7 +9,7 @@
 
 namespace repository {
     class Repository {
-    private:
+    protected:
         std::vector<domain::Scooter> scooters;
     public:
         explicit Repository(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>());
