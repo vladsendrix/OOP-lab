@@ -214,93 +214,68 @@ namespace controller {
     }
 
     bool ProductController::is_inwait_parked(const int &index_) {
-        int index=index_;
+        int index = index_;
         if (!exists(index)) return false;
-        const domain::Scooter scooter =repo->getScooters().at(index);
-        if (scooter.getState() == domain::INWAIT || scooter.getState() == domain::PARKED) {
+        const domain::Scooter scooter = repo->getScooters().at(index);
+        if (scooter.getState() == domain::State::INWAIT || scooter.getState() == domain::State::PARKED) {
+            return true;
+        }
+        return false;
+    }
+
+
+    bool ProductController::is_reserved(const int &index_) {
+        int index = index_;
+        if (!exists(index)) return false;
+        const domain::Scooter scooter = repo->getScooters().at(index);
+        if (scooter.getState() == domain::State::RESERVED) {
+            return true;
+        }
+        return false;
+    }
+
+    bool ProductController::is_inuse(const int &index_) {
+        int index = index_;
+        if (!exists(index)) return false;
+        const domain::Scooter scooter = repo->getScooters().at(index);
+        if (scooter.getState() == domain::State::INUSE) {
             return true;
         }
         return false;
     }
 
     bool ProductController::reserveScooter(const int &index_) {
-        int index=index_;
+        int index = index_;
         if (is_inwait_parked(index)) {
             domain::Scooter reservedScooter = repo->getScooters().at(index);
-            reservedScooter.setState(domain::RESERVED);
+            reservedScooter.setState(domain::State::RESERVED);
             repo->updateScooter(reservedScooter);
         }
         return is_inwait_parked(index);
     }
 
-    void ProductController::useScooter() {
-        std::cout << "\nPlease enter the ID of the scooter you reserved to use it: ";
-        std::string readID = transformID(id);
-        bool found = false;
-        int index = 0;
 
-        for (auto &scooter: repo->getScooters()) {
-            if (readID == scooter.getID()) {
-                if (scooter.getState() == domain::RESERVED) {
-                    found = true;
-                    break;
-                }
-                std::cout << "\nSorry, the scooter with the ID " << readID << " is not reserved\n";
-                return;
-            }
-            index++;
+    bool ProductController::useScooter(const int &index_) {
+        int index=index_;
+        if (is_reserved(index)) {
+            domain::Scooter useScooter = repo->getScooters().at(index);
+            useScooter.setState(domain::State::INUSE);
+            repo->updateScooter(useScooter);
         }
-
-        if (!found) {
-            std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
-            return;
-        }
-
-        domain::Scooter useScooter = repo->getScooters().at(index);
-        useScooter.setState(domain::INUSE);
-        repo->updateScooter(useScooter);
-
-        printDetailHeader();
-        printScooter(useScooter);
-
-        std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
+        return is_inwait_parked(index);
     }
 
-    void ProductController::parkScooter() {
-        std::cout << "\nPlease enter the ID of the scooter you are using to stop useing it (to park it): ";
-        std::string readID = transformID();
-        bool found = false;
-        int index = 0;
-
-        for (auto &scooter: repo->getScooters()) {
-            if (readID == scooter.getID()) {
-                if (scooter.getState() == domain::INUSE) {
-                    found = true;
-                    break;
-                }
-
-                std::cout << "\nSorry, the scooter with the ID " << readID << " is not in use\n";
-                return;
-            }
-            index++;
-        }
-
-        if (!found) {
-            std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
-            return;
-        }
-
-        std::string location;
-        std::cout << "Please enter your current location: ";
-        std::getline(std::cin, location);
-
-
-        domain::Scooter useScooter = repo->getScooters().at(index);
-        useScooter.setState(domain::PARKED);
-        useScooter.setLastStandPlace(location);
-        useScooter.setMileage(useScooter.getMileage() + 20);
-        repo->updateScooter(useScooter);
-        std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
+    bool ProductController::parkScooter(const int &index_, const std::string &location_) {
+       int index=index_;
+       const std::string& location=location_;
+       if (is_inuse(index)) {
+           domain::Scooter useScooter = repo->getScooters().at(index);
+           useScooter.setState(domain::PARKED);
+           useScooter.setLastStandPlace(location);
+           useScooter.setMileage(useScooter.getMileage() + 20);
+           repo->updateScooter(useScooter);
+       }
+       return is_inuse(index);
     }
 
     // other helpful methods

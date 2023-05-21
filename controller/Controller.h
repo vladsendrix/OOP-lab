@@ -12,6 +12,7 @@
 #include <set>
 #include <cassert>
 #include <memory>
+#include <iomanip>
 
 namespace controller {
     class ProductController {
@@ -43,15 +44,20 @@ namespace controller {
 
         bool reserveScooter(const int &index);
 
-        void useScooter();
+        bool useScooter(const int &index_);
 
-        void parkScooter();
+
+        bool parkScooter(const int &index, const std::string &location);
 
 
         // other helpful methods
         bool is_inwait_parked(const int &index);
 
-        std::string transformID(std::string id);
+        bool is_reserved(const int &index);
+
+        bool is_inuse(const int &index_);
+
+        static std::string transformID(std::string id);
 
         std::vector<domain::Scooter> sortScootersByID();
 

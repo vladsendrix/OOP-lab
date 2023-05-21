@@ -157,10 +157,11 @@ namespace ui {
                     std::cout << "Enter the mileage: ";
                     std::cin >> mileage;
                     std::string condition = " ";
-                    if (ctrl->filterScooterByMileage(true,mileage).empty()) {
-                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!" << std::endl;
+                    if (ctrl->filterScooterByMileage(true, mileage).empty()) {
+                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!"
+                                  << std::endl;
                     } else {
-                        printArrayOfScooters(ctrl->filterScooterByMileage(true,mileage));
+                        printArrayOfScooters(ctrl->filterScooterByMileage(true, mileage));
                     }
                     std::cout << std::endl;
                     std::cin >> mileage; // prevent the menu pop-up
@@ -170,9 +171,10 @@ namespace ui {
                     int mileage;
                     std::cout << "Enter the mileage: ";
                     std::cin >> mileage;
-                    ctrl->filterScooterByMileage(false,mileage);
+                    ctrl->filterScooterByMileage(false, mileage);
                     std::cout << std::endl;
-                    std::cout << "No scooters found with a mileage lower than higher than -inclusive " << mileage << " miles!" << std::endl;
+                    std::cout << "No scooters found with a mileage lower than higher than -inclusive " << mileage
+                              << " miles!" << std::endl;
                     system("pause");
                     break;
                 }
@@ -180,14 +182,14 @@ namespace ui {
                     int placeHolder;
                     std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
                     printArrayOfScooters(ctrl->sortScooterByAge(true));
-                    std::cin>>placeHolder; // prevent the menu pop-up
+                    std::cin >> placeHolder; // prevent the menu pop-up
                     break;
                 }
                 case 10: {
                     int placeHolder;
                     std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
                     printArrayOfScooters(ctrl->sortScooterByAge(false));
-                    std::cin>>placeHolder; // prevent the menu pop-up
+                    std::cin >> placeHolder; // prevent the menu pop-up
                     break;
                 }
                 default: {
@@ -270,10 +272,11 @@ namespace ui {
                     std::cout << "Enter the mileage: ";
                     std::cin >> mileage;
                     std::string condition = " ";
-                    if (ctrl->filterScooterByMileage(true,mileage).empty()) {
-                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!" << std::endl;
+                    if (ctrl->filterScooterByMileage(true, mileage).empty()) {
+                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!"
+                                  << std::endl;
                     } else {
-                        printArrayOfScooters(ctrl->filterScooterByMileage(true,mileage));
+                        printArrayOfScooters(ctrl->filterScooterByMileage(true, mileage));
                     }
                     std::cout << std::endl;
                     std::cin >> mileage; // prevent the menu pop-up
@@ -284,10 +287,11 @@ namespace ui {
                     std::cout << "Enter the mileage: ";
                     std::cin >> mileage;
                     std::string condition = " ";
-                    if (ctrl->filterScooterByMileage(false,mileage).empty()) {
-                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!" << std::endl;
+                    if (ctrl->filterScooterByMileage(false, mileage).empty()) {
+                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!"
+                                  << std::endl;
                     } else {
-                        printArrayOfScooters(ctrl->filterScooterByMileage(false,mileage));
+                        printArrayOfScooters(ctrl->filterScooterByMileage(false, mileage));
                     }
                     std::cout << std::endl;
                     std::cin >> mileage; // prevent the menu pop-up
@@ -297,24 +301,53 @@ namespace ui {
                     printArrayOfScooters(ctrl->sortScootersByID());
                     std::cout << "Here are the scooters listed.\nPlease enter an ID to reserve a scooter: ";
                     std::string readID;
-                    ctrl->reserveScooter();
+                    std::cin.ignore();
                     std::cout << std::endl;
-                    std::cout << "\nSorry, the scooter with the ID " << readID << " is not parked or in wait.\n";
-                    std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
-                    std::cout << "\nThe scooter with the ID " << readID << " was reserved.\n";
-                    system("pause");
+                    if (!ctrl->exists(ctrl->position(readID))) {
+                        std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
+                    } else if (ctrl->reserveScooter(ctrl->position(readID))) {
+                        std::cout<<std::endl << "\nThe scooter with the ID " << readID << " was reserved.\n";
+                    } else {
+                        std::cout << "\nSorry, the scooter with the ID " << readID << " is not parked or in wait.\n";
+                    }
+                    std::cout << std::endl;
+                    std::cin >> readID; // prevent the menu pop-up
                     break;
                 }
                 case 7: {
-                    ctrl->useScooter();
+                    std::string readID;
+                    std::cout << "\nPlease enter the ID of the scooter you reserved to use it: ";
+                    std::cin>>readID;
+                    std::cin.ignore();
+                    if (!ctrl->exists(ctrl->position(readID))) {
+                        std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
+                    } else if (ctrl->useScooter(ctrl->position(readID))) {
+                        std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
+                    } else {
+                        std::cout << "\nSorry, the scooter with the ID " << readID << " is not reserved\n";
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> readID; // prevent the menu pop-up
                     break;
                 }
                 case 8: {
-                    ctrl->parkScooter();
+                    std::string readID;
+                    std::string location;
+                    std::cout << "\nPlease enter the ID of the scooter you are using to stop useing it (to park it): ";
+                    std::cin>>readID;
+                    std::cin.ignore();
+                    std::cout<<std::endl << "Please enter your current location: ";
+                    std::getline(std::cin, location);
+                    if (!ctrl->exists(ctrl->position(readID))) {
+                        std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
+                    } else if (ctrl->parkScooter(ctrl->position(readID),location)) {
+                        std::cout << "\nThe scooter with the ID " << readID
+                                <<" is parked now\n\nThank you for using our service!\n";
+                    } else {
+                        std::cout << "\nSorry, the scooter with the ID " << readID << " is not in use\n";
+                    }
                     std::cout << std::endl;
-                    system("pause");
+                    std::cin >> readID; // prevent the menu pop-up
                     break;
                 }
                 default: {
