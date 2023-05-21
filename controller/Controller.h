@@ -61,9 +61,7 @@ namespace controller {
 
         std::vector<domain::Scooter> sortScootersByID();
 
-        static void printDetailHeader();
 
-        static void printScooter(const domain::Scooter &scooter);
 
         void printScooterByID();
 

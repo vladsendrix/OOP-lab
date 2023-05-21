@@ -60,13 +60,10 @@ namespace controller {
         assert(expectedState == newScooter.getState());
 
         repo->addScooter(newScooter);
-        printDetailHeader();
-        printScooter(newScooter);
         sortScootersByID();
         saveDataToFile();
         return newScooter;
     }
-
 
     int ProductController::position(const std::string &id_) {
         std::string id = transformID(id_);
@@ -298,13 +295,7 @@ namespace controller {
     }
 
 
-    void ProductController::printScooterByID() {
-        std::cout << "List of scooters sorted by ID:" << std::endl;
-        ProductController::printDetailHeader();
-        for (const auto &scooter: repo->getScooters()) {
-            printScooter(scooter);
-        }
-    }
+
 
     void ProductController::loadDataFromFile() {
         std::ifstream file("scootersData.txt");
