@@ -6,6 +6,14 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
+#include <fstream>
+#include <unordered_map>
+#include <set>
+#include <cassert>
+#include <memory>
+#include <iomanip>
+
 
 namespace repository {
     class Repository {
@@ -21,6 +29,8 @@ namespace repository {
         virtual void updateScooter(const domain::Scooter &scooter) = 0;
 
         virtual std::vector<domain::Scooter> getScooters() const = 0;
+
+        virtual void loadDataFromFile() = 0;
 
     };
 
@@ -52,6 +62,8 @@ namespace repository {
         void updateScooter(const domain::Scooter &scooter) override;
 
         std::vector<domain::Scooter> getScooters() const override;
+
+        void saveDataToFile() const;
     };
 };
 #endif
