@@ -392,26 +392,26 @@ namespace ui {
                   << std::setw(20) << dateToString
                   << std::setw(15) << scooter.getMileage()
                   << std::setw(30) << scooter.getLastStandPlace()
-                  << std::setw(15) << std::left;
+                  << std::setw(15) ;
 
         switch (scooter.getState()) {
             case domain::State::PARKED:
-                Console::printMessage("PARKED");
+                std::cout<<"PARKED"<<std::endl;
                 break;
             case domain::State::RESERVED:
-                Console::printMessage("RESERVED");
+                std::cout<<"RESERVED"<<std::endl;
                 break;
             case domain::State::INUSE:
-                Console::printMessage("IN USE");
+                std::cout<<"IN USE"<<std::endl;
                 break;
             case domain::State::INWAIT:
-                Console::printMessage("IN WAIT");
+                std::cout<<"IN WAIT"<<std::endl;
                 break;
             case domain::State::OUTOFSERVICE:
-                Console::printMessage("OUT OF SERVICE");
+                std::cout<<"OUT OF SERVICE"<<std::endl;
                 break;
             default:
-                Console::printMessage("PARKED");
+                std::cout<<"PARKED"<<std::endl;
         }
     }
 

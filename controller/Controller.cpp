@@ -4,11 +4,11 @@ namespace controller {
 
 
     ProductController::ProductController(std::string &repoType) {
-            if (repoType == "InFile")
-                repo = std::make_unique<repository::RepositoryInFile>();
-            else {
-                repo = std::make_unique<repository::RepositoryInMemory>();
-            }
+        if (repoType == "InFile")
+            repo = std::make_unique<repository::RepositoryInFile>();
+        else {
+            repo = std::make_unique<repository::RepositoryInMemory>();
+        }
     }
 
     domain::Scooter
