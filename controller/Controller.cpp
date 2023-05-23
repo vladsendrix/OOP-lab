@@ -67,7 +67,6 @@ namespace controller {
 
         repo->addScooter(newScooter);
         sortScootersByID();
-        saveDataToFile();
         return newScooter;
     }
 
@@ -95,7 +94,6 @@ namespace controller {
         }
         domain::Scooter scooterToDelete = scooters.at(index);
         repo->deleteScooter(scooterToDelete);
-        saveDataToFile();
         return true;
     }
 
@@ -139,7 +137,6 @@ namespace controller {
                 commissionDate, mileage, lastStandPlace, state);
 
         repo->updateScooter(updatedScooter);
-        saveDataToFile();
         return updatedScooter;
     }
 
