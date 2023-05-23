@@ -71,23 +71,23 @@ namespace ui {
                 case 3: {
 
                     printMessage("Enter the ID of the scooter to edit: ");
-                    std::string scooterID=readString();
+                    std::string scooterID = readString();
                     if (!ctrl->exists(ctrl->position(scooterID))) {
                         printMessage("Scooter not found!");
                     } else {
 
                         printMessage("Enter new commission Date (yyyy-mm-dd): ");
-                        std::string date=readString();
+                        std::string date = readString();
 
                         printMessage("Mileage: ");
-                        int mileage=readNumber();
+                        int mileage = readNumber();
 
                         printMessage("Last Stand Place: ");
-                        std::string lastStandPlace=readString();
+                        std::string lastStandPlace = readString();
 
                         printMessage(
                                 "State:(1.PARKED | 2.RESERVED | 3.IN USE | 4.IN WAIT | 5.OUT OF SERVICE)\nChoose one (1-5): ");
-                        int stateNr=readNumber();
+                        int stateNr = readNumber();
                         printMessage("");
 
                         printDetailHeader();
@@ -101,10 +101,9 @@ namespace ui {
                 }
 
                 case 4: {
-                    std::string standPlace;
+
                     printMessage("Enter the stand place (or leave empty to show all scooters): ");
-                    std::cin.ignore();
-                    std::getline(std::cin, standPlace);
+                    std::string standPlace = readString();
                     if (ctrl->searchScooterByStandPlace(standPlace).empty()) {
                         printMessage("No scooters found with the specified stand place!");
                     } else {
@@ -114,13 +113,12 @@ namespace ui {
                     break;
                 }
                 case 5: {
-                    int age;
                     printMessage("Enter the age: ");
-                    std::cin >> age;
-
+                    int age = readNumber();
 
                     if (ctrl->filterScooterByAge(true, age).empty()) {
-                        printMessage("No scooters older than " + std::to_string(age) + " years were found!");
+                        printMessage(
+                                "No scooters younger than -inclusive " + std::to_string(age) + " years were found!");
                     } else {
                         printArrayOfScooters(ctrl->filterScooterByAge(true, age));
                     }
@@ -128,13 +126,10 @@ namespace ui {
                     break;
                 }
                 case 6: {
-                    int age;
-                    std::cout << "Enter the age: ";
-                    std::cin >> age;
-                    age = 2022 - age;
-
+                    printMessage("Enter the age: ");
+                    int age = readNumber();
                     if (ctrl->filterScooterByAge(false, age).empty()) {
-                        std::cout << std::endl << "No scooters older than " << age << " years were found!" << std::endl;
+                        printMessage("No scooters older than " + std::to_string(age) + " years were found!");
                     } else {
                         printArrayOfScooters(ctrl->filterScooterByAge(false, age));
                     }
@@ -142,13 +137,11 @@ namespace ui {
                     break;
                 }
                 case 7: {
-                    int mileage;
-                    std::cout << "Enter the mileage: ";
-                    std::cin >> mileage;
-                    std::string condition = " ";
+                    printMessage("Enter the mileage: ");
+                    int mileage = readNumber();
                     if (ctrl->filterScooterByMileage(true, mileage).empty()) {
-                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!"
-                                  << std::endl;
+                        printMessage(
+                                "No scooters found with a mileage lower than " + std::to_string(mileage) + " miles!");
                     } else {
                         printArrayOfScooters(ctrl->filterScooterByMileage(true, mileage));
                     }
@@ -156,13 +149,12 @@ namespace ui {
                     break;
                 }
                 case 8: {
-                    int mileage;
-                    std::cout << "Enter the mileage: ";
-                    std::cin >> mileage;
-                    std::string condition = " ";
+                    printMessage("Enter the mileage: ");
+                    int mileage = readNumber();
                     if (ctrl->filterScooterByMileage(false, mileage).empty()) {
-                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!"
-                                  << std::endl;
+                        printMessage(
+                                "No scooters found with a mileage higher than -inclusive " + std::to_string(mileage) +
+                                " miles!");
                     } else {
                         printArrayOfScooters(ctrl->filterScooterByMileage(false, mileage));
                     }
@@ -170,19 +162,19 @@ namespace ui {
                     break;
                 }
                 case 9: {
-                    std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
+                    printMessage("\nList of scooters sorted by eage (ascending):");
                     printArrayOfScooters(ctrl->sortScooterByAge(true));
                     preventMenuPopUp();
                     break;
                 }
                 case 10: {
-                    std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
+                    printMessage("\nList of scooters sorted by eage (ascending):");
                     printArrayOfScooters(ctrl->sortScooterByAge(false));
                     preventMenuPopUp();
                     break;
                 }
                 default: {
-                    std::cout << "Invalid option, please try again." << std::endl;
+                    printMessage("Invalid option, please try again.");
                     preventMenuPopUp();
                     break;
                 }
@@ -192,7 +184,7 @@ namespace ui {
 
     void Console::userMethods() {
         while (true) {
-            std::cout << "\nUser Menu\n"
+            printMessage("\nUser Menu\n"
                          "0. EXIT\n"
                          "Scooter Options:\n"
                          "1. Search by stand place\n"
@@ -203,21 +195,18 @@ namespace ui {
                          "6. Reserve one\n"
                          "7. Use one\n"
                          "8. Quit useage (park it)\n"
-                         "Enter option (0-8): ";
-            int option;
-            std::cin >> option;
+                         "Enter option (0-8): ");
+            int option = readNumber();
             switch (option) {
                 case 0 : {
-                    std::cout << std::endl << "Goodbye!" << std::endl;
+                    printMessage("Goodbye!");
                     return;
                 }
                 case 1: {
-                    std::string standPlace;
-                    std::cout << "Enter the stand place (or leave empty to show all scooters): ";
-                    std::cin.ignore();
-                    std::getline(std::cin, standPlace);
+                    printMessage("Enter the stand place (or leave empty to show all scooters): ");
+                    std::string standPlace = readString();
                     if (ctrl->searchScooterByStandPlace(standPlace).empty()) {
-                        std::cout << "No scooters found with the specified stand place!" << std::endl;
+                        printMessage("No scooters found with the specified stand place!");
                     } else {
                         printDetailHeader();
                         for (const auto &scooter: ctrl->searchScooterByStandPlace(standPlace)) {
@@ -228,13 +217,12 @@ namespace ui {
                     break;
                 }
                 case 2: {
-                    int age;
-                    std::cout << "Enter the age: ";
-                    std::cin >> age;
-                    age = 2022 - age;
+                    printMessage("Enter the age: ");
+                    int age = readNumber();
 
                     if (ctrl->filterScooterByAge(true, age).empty()) {
-                        std::cout << std::endl << "No scooters older than " << age << " years were found!" << std::endl;
+                        printMessage(
+                                "No scooters younger than -inclusive " + std::to_string(age) + " years were found!");
                     } else {
                         printArrayOfScooters(ctrl->filterScooterByAge(true, age));
                     }
@@ -242,27 +230,24 @@ namespace ui {
                     break;
                 }
                 case 3: {
-                    int age;
-                    std::cout << "Enter the age: ";
-                    std::cin >> age;
-                    age = 2022 - age;
+                    printMessage("Enter the age: ");
+                    int age = readNumber();
 
-                    if (ctrl->filterScooterByAge(false, age).empty()) {
-                        std::cout << std::endl << "No scooters older than " << age << " years were found!" << std::endl;
+                    if (ctrl->filterScooterByAge(true, age).empty()) {
+                        printMessage(
+                                "No scooters older than " + std::to_string(age) + " years were found!");
                     } else {
-                        printArrayOfScooters(ctrl->filterScooterByAge(false, age));
+                        printArrayOfScooters(ctrl->filterScooterByAge(true, age));
                     }
                     preventMenuPopUp();
                     break;
                 }
                 case 4: {
-                    int mileage;
-                    std::cout << "Enter the mileage: ";
-                    std::cin >> mileage;
-                    std::string condition = " ";
+                    printMessage("Enter the mileage: ");
+                    int mileage = readNumber();
                     if (ctrl->filterScooterByMileage(true, mileage).empty()) {
-                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!"
-                                  << std::endl;
+                        printMessage(
+                                "No scooters found with a mileage lower than " + std::to_string(mileage) + " miles!");
                     } else {
                         printArrayOfScooters(ctrl->filterScooterByMileage(true, mileage));
                     }
@@ -270,71 +255,66 @@ namespace ui {
                     break;
                 }
                 case 5: {
-                    int mileage;
-                    std::cout << "Enter the mileage: ";
-                    std::cin >> mileage;
-                    std::string condition = " ";
-                    if (ctrl->filterScooterByMileage(false, mileage).empty()) {
-                        std::cout << "No scooters found with a mileage lower than " << mileage << " miles!"
-                                  << std::endl;
+                    printMessage("Enter the mileage: ");
+                    int mileage = readNumber();
+                    if (ctrl->filterScooterByMileage(true, mileage).empty()) {
+                        printMessage(
+                                "No scooters found with a mileage higher than -inclusive " + std::to_string(mileage) +
+                                " miles!");
                     } else {
-                        printArrayOfScooters(ctrl->filterScooterByMileage(false, mileage));
+                        printArrayOfScooters(ctrl->filterScooterByMileage(true, mileage));
                     }
                     preventMenuPopUp();
                     break;
                 }
                 case 6: {
                     printArrayOfScooters(ctrl->sortScootersByID());
-                    std::cout << "Here are the scooters listed.\nPlease enter an ID to reserve a scooter: ";
-                    std::string readID;
-                    std::cin.ignore();
-                    std::cout << std::endl;
+                    printMessage("Here are the scooters listed.\nPlease enter an ID to reserve a scooter: ");
+                    std::string readID = readString();
+                    printMessage("");
                     if (!ctrl->exists(ctrl->position(readID))) {
-                        std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
+                        printMessage("\nSorry, the scooter with the ID " + readID + " was not found.\n");
                     } else if (ctrl->reserveScooter(ctrl->position(readID))) {
-                        std::cout << std::endl << "\nThe scooter with the ID " << readID << " was reserved.\n";
+                        printMessage("\nThe scooter with the ID " + readID + " was reserved.\n");
                     } else {
-                        std::cout << "\nSorry, the scooter with the ID " << readID << " is not parked or in wait.\n";
+                        printMessage("\nSorry, the scooter with the ID " + readID + " is not parked or in wait.\n");
                     }
                     preventMenuPopUp();
                     break;
                 }
                 case 7: {
-                    std::string readID;
-                    std::cout << "\nPlease enter the ID of the scooter you reserved to use it: ";
-                    std::cin >> readID;
-                    std::cin.ignore();
+                    printMessage("\nPlease enter the ID of the scooter you reserved to use it: ");
+                    std::string readID = readString();
+
                     if (!ctrl->exists(ctrl->position(readID))) {
-                        std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
+                        printMessage("\nSorry, the scooter with the ID " + readID + " was not found.\n");
                     } else if (ctrl->useScooter(ctrl->position(readID))) {
-                        std::cout << "\nYou can use the scooter with the ID " << readID << "\n";
+                        printMessage("\nYou can use the scooter with the ID " + readID + "\n");
                     } else {
-                        std::cout << "\nSorry, the scooter with the ID " << readID << " is not reserved\n";
+                        printMessage("\nSorry, the scooter with the ID " + readID + " is not reserved\n");
                     }
                     preventMenuPopUp();
                     break;
                 }
                 case 8: {
-                    std::string readID;
-                    std::string location;
-                    std::cout << "\nPlease enter the ID of the scooter you are using to stop useing it (to park it): ";
-                    std::cin >> readID;
-                    std::cin.ignore();
-                    std::cout << std::endl << "Please enter your current location: ";
-                    std::getline(std::cin, location);
+
+                    printMessage("\nPlease enter the ID of the scooter you are using to stop useing it (to park it): ");
+                    std::string readID = readString();
+                    printMessage("Please enter your current location: ");
+                    std::string location = readString();
                     if (!ctrl->exists(ctrl->position(readID))) {
-                        std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
+                        printMessage("\nSorry, the scooter with the ID " + readID + " was not found.\n");
                     } else if (ctrl->parkScooter(ctrl->position(readID), location)) {
-                        std::cout << "\nThe scooter with the ID " << readID
-                                  << " is parked now\n\nThank you for using our service!\n";
+                        printMessage("\nThe scooter with the ID " + readID
+                                     + " is parked now\n\nThank you for using our service!\n");
                     } else {
-                        std::cout << "\nSorry, the scooter with the ID " << readID << " is not in use\n";
+                        printMessage("\nSorry, the scooter with the ID " + readID + " is not in use\n");
                     }
                     preventMenuPopUp();
                     break;
                 }
                 default: {
-                    std::cout << "Invalid option, please try again." << std::endl;
+                    printMessage("Invalid option, please try again.");
                     preventMenuPopUp();
                     break;
                 }
@@ -343,22 +323,23 @@ namespace ui {
     }
 
     std::string inputRepositoryType() {
-        std::cout << "Please choose the repository type:\n"
-                     "1. In Memory\n"
-                     "2. File\n"
-                     "Enter option:";
-        int option;
-        std::cin >> option;
-        switch (option) {
-            case (1):
-                std::cout << "In Memory repository selected." << std::endl;
-                return "InMemory";
-            case (2):
-                std::cout << "File repository selected." << std::endl;
-                return "InFile";
-            default:
-                std::cout << "Invalid option, please try again." << std::endl;
-                return inputRepositoryType();
+        while (true) {
+            Console::printMessage("Please choose the repository type:\n"
+                                  "1. In Memory\n"
+                                  "2. File\n"
+                                  "Enter option:");
+            int option = Console::readNumber();
+            switch (option) {
+                case 1:
+                    Console::printMessage("In Memory repository selected.");
+                    return "InMemory";
+                case 2:
+                    Console::printMessage("File repository selected.");
+                    return "InFile";
+                default:
+                    Console::printMessage("Invalid option, please try again.");
+                    continue;
+            }
         }
     }
 
@@ -369,25 +350,23 @@ namespace ui {
     void Console::run() {
         ctrl->loadDataFromFile();
 
-        std::cout << "\n\n";
-        std::cout << "@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n";
+        Console::printMessage("\n\n@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n");
         while (true) {
-            int role{-1};
-            std::cout << "\nPlease choose:\n"
-                         "0. EXIT\n"
-                         "1. Admin\n"
-                         "2. User\n"
-                         "Enter option:";
-            std::cin >> role;
+            Console::printMessage("\nPlease choose:\n"
+                                  "0. EXIT\n"
+                                  "1. Admin\n"
+                                  "2. User\n"
+                                  "Enter option:");
+            int role = Console::readNumber();
             if (role == 0) {
-                std::cout << "\n\nGoodbye!";
+                Console::printMessage("\n\nGoodbye!");
                 break;
             } else if (role == 1) {
                 adminMethods();
             } else if (role == 2) {
                 userMethods();
             }
-            std::cout << "\nInvalid option, please try again." << std::endl;
+            Console::printMessage("\nInvalid option, please try again.");
         }
     }
 
@@ -415,22 +394,22 @@ namespace ui {
 
         switch (scooter.getState()) {
             case domain::State::PARKED:
-                std::cout << "PARKED" << std::endl;
+                Console::printMessage("PARKED");
                 break;
             case domain::State::RESERVED:
-                std::cout << "RESERVED" << std::endl;
+                Console::printMessage("RESERVED");
                 break;
             case domain::State::INUSE:
-                std::cout << "IN USE" << std::endl;
+                Console::printMessage("IN USE");
                 break;
             case domain::State::INWAIT:
-                std::cout << "IN WAIT" << std::endl;
+                Console::printMessage("IN WAIT");
                 break;
             case domain::State::OUTOFSERVICE:
-                std::cout << "OUT OF SERVICE" << std::endl;
+                Console::printMessage("OUT OF SERVICE");
                 break;
             default:
-                std::cout << "PARKED" << std::endl;
+                Console::printMessage("PARKED");
         }
     }
 
@@ -450,6 +429,7 @@ namespace ui {
 
     std::string Console::readString() {
         std::string value;
+        std::cin.ignore();
         std::getline(std::cin >> std::ws, value);
         std::cin.ignore();
         return value;
@@ -459,5 +439,4 @@ namespace ui {
         printMessage("\nPress any key and ENTER to continue: ");
         std::string preventMenuPopup = readString();
     }
-
 }
