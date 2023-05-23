@@ -60,7 +60,7 @@ namespace ui {
                     std::cout << "\nScooter added successfully!" << std::endl;
 
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -74,7 +74,7 @@ namespace ui {
                         std::cout << "Scooter not found!" << std::endl;
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -110,7 +110,7 @@ namespace ui {
                         std::cout << "Scooter edited successfully!" << std::endl;
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -126,7 +126,7 @@ namespace ui {
                         printArrayOfScooters(ctrl->searchScooterByStandPlace(standPlace));
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -143,7 +143,7 @@ namespace ui {
                     }
 
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -159,7 +159,7 @@ namespace ui {
                         printArrayOfScooters(ctrl->filterScooterByAge(false, age));
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -175,7 +175,7 @@ namespace ui {
                         printArrayOfScooters(ctrl->filterScooterByMileage(true, mileage));
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -191,7 +191,7 @@ namespace ui {
                         printArrayOfScooters(ctrl->filterScooterByMileage(false, mileage));
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -200,7 +200,7 @@ namespace ui {
                     std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
                     printArrayOfScooters(ctrl->sortScooterByAge(true));
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -209,14 +209,14 @@ namespace ui {
                     std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
                     printArrayOfScooters(ctrl->sortScooterByAge(false));
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
                 default: {
                     std::cout << "Invalid option, please try again." << std::endl;
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -259,7 +259,7 @@ namespace ui {
                         }
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -275,7 +275,7 @@ namespace ui {
                         printArrayOfScooters(ctrl->filterScooterByAge(true, age));
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -291,7 +291,7 @@ namespace ui {
                         printArrayOfScooters(ctrl->filterScooterByAge(false, age));
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -307,7 +307,7 @@ namespace ui {
                         printArrayOfScooters(ctrl->filterScooterByMileage(true, mileage));
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -323,7 +323,7 @@ namespace ui {
                         printArrayOfScooters(ctrl->filterScooterByMileage(false, mileage));
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -336,19 +336,19 @@ namespace ui {
                     if (!ctrl->exists(ctrl->position(readID))) {
                         std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
                     } else if (ctrl->reserveScooter(ctrl->position(readID))) {
-                        std::cout<<std::endl << "\nThe scooter with the ID " << readID << " was reserved.\n";
+                        std::cout << std::endl << "\nThe scooter with the ID " << readID << " was reserved.\n";
                     } else {
                         std::cout << "\nSorry, the scooter with the ID " << readID << " is not parked or in wait.\n";
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
                 case 7: {
                     std::string readID;
                     std::cout << "\nPlease enter the ID of the scooter you reserved to use it: ";
-                    std::cin>>readID;
+                    std::cin >> readID;
                     std::cin.ignore();
                     if (!ctrl->exists(ctrl->position(readID))) {
                         std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
@@ -358,7 +358,7 @@ namespace ui {
                         std::cout << "\nSorry, the scooter with the ID " << readID << " is not reserved\n";
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
@@ -366,27 +366,27 @@ namespace ui {
                     std::string readID;
                     std::string location;
                     std::cout << "\nPlease enter the ID of the scooter you are using to stop useing it (to park it): ";
-                    std::cin>>readID;
+                    std::cin >> readID;
                     std::cin.ignore();
-                    std::cout<<std::endl << "Please enter your current location: ";
+                    std::cout << std::endl << "Please enter your current location: ";
                     std::getline(std::cin, location);
                     if (!ctrl->exists(ctrl->position(readID))) {
                         std::cout << "\nSorry, the scooter with the ID " << readID << " was not found.\n";
-                    } else if (ctrl->parkScooter(ctrl->position(readID),location)) {
+                    } else if (ctrl->parkScooter(ctrl->position(readID), location)) {
                         std::cout << "\nThe scooter with the ID " << readID
-                                <<" is parked now\n\nThank you for using our service!\n";
+                                  << " is parked now\n\nThank you for using our service!\n";
                     } else {
                         std::cout << "\nSorry, the scooter with the ID " << readID << " is not in use\n";
                     }
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
                 default: {
                     std::cout << "Invalid option, please try again." << std::endl;
                     std::string preventMenuPopup;
-                    std::cout<<"\nPress any key and ENTER to continue: ";
+                    std::cout << "\nPress any key and ENTER to continue: ";
                     std::cin >> preventMenuPopup; // prevent the menu pop-up
                     break;
                 }
