@@ -394,9 +394,29 @@ namespace ui {
         }
     }
 
+    std::string inputRepositoryType() {
+        std::cout << "Please choose the repository type:\n"
+                     "1. In Memory\n"
+                     "2. File\n"
+                     "Enter option:";
+        int option;
+        std::cin >> option;
+        if (option == 1) {
+            std::cout << "In Memory repository selected." << std::endl;
+            return "InMemory";
+        } else if (option == 2) {
+            std::cout << "File repository selected." << std::endl;
+            return "InFile";
+        } else {
+            std::cout << "Invalid option, please try again." << std::endl;
+            inputRepositoryType();
+        }
+        return "InMemory";
+    }
+
 
     void Console::run() {
-        ctrl->loadDataFromFile();
+        ctrl->loadDataFromFile();        
 
         std::cout << "\n\n";
         std::cout << "@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n";

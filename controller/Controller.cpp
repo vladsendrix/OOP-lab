@@ -3,8 +3,14 @@
 namespace controller {
 
 
-    ProductController::ProductController(std::unique_ptr<repository::Repository> scooterRepo_) {
-        this->repo = std::move(scooterRepo_);
+    ProductController::ProductController(std::string &repoType) {
+        if (repoType == "InMemory") {
+            repo = std::make_unique<repository::RepositoryInMemory>();
+        } else if (repoType == "InFile") {
+            repo = std::make_unique<repository::RepositoryInFile>();
+        } else {
+            repo = std::make_unique<repository::RepositoryInMemory>();
+        }
     }
 
 
