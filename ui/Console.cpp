@@ -401,15 +401,16 @@ namespace ui {
                     "Enter option:";
         int option;
         std::cin >> option;
-        if (option == 1) {
-            std::cout << "In Memory repository selected." << std::endl;
-            return "InMemory";
-        } else if (option == 2) {
-            std::cout << "File repository selected." << std::endl;
-            return "InFile";
-        } else {
-            std::cout << "Invalid option, please try again." << std::endl;
-            return inputRepositoryType();
+        switch(option) {
+            case(1):
+                std::cout << "In Memory repository selected." << std::endl;
+                return "InMemory";
+            case(2):
+                std::cout << "File repository selected." << std::endl;
+                return "InFile";
+            default:
+                std::cout << "Invalid option, please try again." << std::endl;
+                return inputRepositoryType();
         }
     }
 
