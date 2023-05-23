@@ -1,10 +1,13 @@
 #include "Test.h"
 
 
+
 Test::Test() {
-    this->scooters = std::make_shared<repository::Repository>();
-    this->controller = std::make_shared<controller::ProductController>();
+    //this->scooters = std::make_shared<repository::Repository>();
+  //  this->scooters = std::make_shared<repository::Repository>();
+  //  this->controller = std::make_shared<controller::ProductController>();
 }
+
 
 void Test::TestAdd() {
 

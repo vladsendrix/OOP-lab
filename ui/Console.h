@@ -26,6 +26,12 @@ namespace ui {
 
         static void printMessage(const std::string &message);
 
+        static void preventMenuPopUp();
+
+        static int readNumber() ;
+
+        static std::string readString() ;
+
     };
 
         std::string inputRepositoryType();
