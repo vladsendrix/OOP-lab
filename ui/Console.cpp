@@ -348,7 +348,6 @@ namespace ui {
     }
 
     void Console::run() {
-        ctrl->loadDataFromFile();
 
         Console::printMessage("\n\n@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n");
         while (true) {

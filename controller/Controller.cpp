@@ -4,15 +4,12 @@ namespace controller {
 
 
     ProductController::ProductController(std::string &repoType) {
-        if (repoType == "InMemory") {
-            repo = std::unique_ptr<repository::RepositoryInMemory>();
-        } else if (repoType == "InFile") {
+        if (repoType == "InFile")
             repo = std::unique_ptr<repository::RepositoryInFile>();
-        } else {
+        else {
             repo = std::unique_ptr<repository::RepositoryInMemory>();
         }
     }
-
 
     domain::Scooter
     ProductController::addScooter(const std::string &model_, const std::string &date, const int &mileage_,
@@ -166,13 +163,13 @@ namespace controller {
 
         if (lowerThan) {
             for (const auto &scooter: scooters)
-                if (scooter.getCommissionDate().year > 2022-age)
+                if (scooter.getCommissionDate().year > 2022 - age)
                     result.push_back(scooter);
             return result;
         }
 
         for (const auto &scooter: scooters)
-            if (scooter.getCommissionDate().year <= 2022-age)
+            if (scooter.getCommissionDate().year <= 2022 - age)
                 result.push_back(scooter);
         return result;
     }
@@ -297,9 +294,7 @@ namespace controller {
         return scooters;
     }
 
-    void ProductController::loadDataFromFile() {
-        repo->loadDataFromFile();
-    }
+
 
     std::string ProductController::autoGenerateID() {
         std::string id = "AAA";

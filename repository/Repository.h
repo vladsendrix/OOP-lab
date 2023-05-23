@@ -2,6 +2,7 @@
 #define REPOSITORY_H
 
 #include "../domain/Domain.h"
+#include <utility>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -17,41 +18,58 @@
 
 namespace repository {
     class Repository {
-    protected:
-        std::vector<domain::Scooter> scooters;
+
     public:
-        explicit Repository(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>());
+        virtual void addScooter(const domain::Scooter &scooter) = 0;
 
-        virtual void addScooter(const domain::Scooter &scooter);
-
-        virtual void deleteScooter(const domain::Scooter &scooter);
+        virtual void deleteScooter(const domain::Scooter &scooter) = 0;
 
         virtual void updateScooter(const domain::Scooter &scooter) = 0;
 
-        virtual std::vector<domain::Scooter> getScooters() const;
+        virtual std::vector<domain::Scooter> getScooters() const = 0;
 
-        virtual void loadDataFromFile();
+        //virtual void loadDataFromFile() = 0;
+
+        //virtual void saveDataToFile() =0;
 
     };
 
     class RepositoryInMemory : public Repository {
+    private:
+        std::vector<domain::Scooter> scooters;
     public:
-        explicit RepositoryInMemory(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>())
-                : Repository(
-                scooters_) {}
+        RepositoryInMemory();
+
+        void addScooter(const domain::Scooter& scooter) override;
+
+        void deleteScooter(const domain::Scooter& scooter) override;
+
+        void updateScooter(const domain::Scooter& scooter) override;
+
+        std::vector<domain::Scooter> getScooters() const override ;
+
+
     };
 
     class RepositoryInFile : public Repository {
     private:
         std::string filename;
     public:
-        explicit RepositoryInFile(std::string filename_,
-                                  std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>()) : Repository(
-                scooters_), filename(std::move(filename_)) {}
+        explicit RepositoryInFile(const std::string&  filename);
 
-        void updateScooter(const domain::Scooter &scooter) override;
+        void addScooter(const domain::Scooter& scooter) override;
 
-        void saveDataToFile() const;
+        void deleteScooter(const domain::Scooter& scooter) override {
+            // Implement deletion logic
+        }
+
+        void updateScooter(const domain::Scooter& scooter) override ;
+
+        std::vector<domain::Scooter> getScooters() const override;
+
+        void loadDataFromFile();
+
+        void saveDataToFile() const ;
     };
 };
 #endif
