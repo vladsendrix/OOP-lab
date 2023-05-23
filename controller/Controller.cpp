@@ -5,11 +5,11 @@ namespace controller {
 
     ProductController::ProductController(std::string &repoType) {
         if (repoType == "InMemory") {
-            repo = std::make_unique<repository::RepositoryInMemory>();
+            repo = std::unique_ptr<repository::RepositoryInMemory>();
         } else if (repoType == "InFile") {
-            repo = std::make_unique<repository::RepositoryInFile>();
+            repo = std::unique_ptr<repository::RepositoryInFile>();
         } else {
-            repo = std::make_unique<repository::RepositoryInMemory>();
+            repo = std::unique_ptr<repository::RepositoryInMemory>();
         }
     }
 

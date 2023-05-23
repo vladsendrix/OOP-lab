@@ -19,6 +19,8 @@ namespace controller {
     private:
         std::unique_ptr<repository::Repository> repo;
     public:
+        ProductController() = default;
+
         explicit ProductController(std::string &repoType);
 
         domain::Scooter addScooter(const std::string &model, const std::string &date, const int &mileage,
