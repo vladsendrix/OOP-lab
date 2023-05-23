@@ -117,7 +117,7 @@ namespace ui {
                     int age;
                     printMessage("Enter the age: ");
                     std::cin >> age;
-                    age = 2022 - age;
+
 
                     if (ctrl->filterScooterByAge(true, age).empty()) {
                         printMessage("No scooters older than " + std::to_string(age) + " years were found!");

@@ -166,13 +166,13 @@ namespace controller {
 
         if (lowerThan) {
             for (const auto &scooter: scooters)
-                if (scooter.getCommissionDate().year > age)
+                if (scooter.getCommissionDate().year > 2022-age)
                     result.push_back(scooter);
             return result;
         }
 
         for (const auto &scooter: scooters)
-            if (scooter.getCommissionDate().year <= age)
+            if (scooter.getCommissionDate().year <= 2022-age)
                 result.push_back(scooter);
         return result;
     }
