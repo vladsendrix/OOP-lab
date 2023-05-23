@@ -24,6 +24,8 @@ namespace ui {
 
         static void printArrayOfScooters(const std::vector<domain::Scooter> &scooters);
 
+        static void printMessage(const std::string &message);
+
     };
 
         std::string inputRepositoryType();

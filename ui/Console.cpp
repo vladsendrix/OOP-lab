@@ -412,6 +412,9 @@ namespace ui {
         }
     }
 
+    void Console::printMessage(const std::string &message) {
+        std::cout << message << std::endl;
+    }
 
     void Console::run() {
         ctrl->loadDataFromFile();
