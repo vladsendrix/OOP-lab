@@ -357,4 +357,8 @@ namespace controller {
         return true;
     }
 
+    std::vector<domain::Scooter> ProductController::userReservedScooters() {
+        return std::vector<domain::Scooter>();
+    }
+
 }

@@ -44,11 +44,15 @@ namespace controller {
 
         std::vector<domain::Scooter> sortScooterByAge(bool condition);
 
+        std::vector<domain::Scooter> userReservedScooters();
+
         bool reserveScooter(const int &index);
 
         bool useScooter(const int &index_);
 
         bool parkScooter(const int &index, const std::string &location);
+
+
 
 
         // other helpful methods
