@@ -66,32 +66,45 @@ namespace repository {
     }
 
     RepositoryInFile::RepositoryInFile() {
-        loadDataFromFile("scootersData.csv");
+        loadDataFromFile("ScootersData.csv");
     }
 
 
     void RepositoryInFile::updateScooter(const domain::Scooter &scooter) {
-        saveDataToFile("scootersData.csv");
+        std::vector<domain::Scooter> data = getScooters();
+        for (auto &s: data) {
+            if (s.getID() == scooter.getID()) {
+                s.setModel(scooter.getModel());
+                s.setCommissionDate(scooter.getCommissionDate());
+                s.setMileage(scooter.getMileage());
+                s.setLastStandPlace(scooter.getLastStandPlace());
+                s.setState(scooter.getState());
+                break;
+            }
+        }
+        saveDataToFile("ScootersData.csv", data);
     }
 
 
     void RepositoryInFile::addScooter(const domain::Scooter &scooter) {
-
+        std::vector<domain::Scooter> data = getScooters();
+        data.push_back(scooter);
+        saveDataToFile("ScootersData.csv", data);
     }
 
     std::vector<domain::Scooter> RepositoryInFile::getScooters() const {
-        return loadDataFromFile("scootersData.csv");
+        return loadDataFromFile("ScootersData.csv");
     }
 
     void RepositoryInFile::deleteScooter(const domain::Scooter &scooter_) {
-        std::vector<domain::Scooter> scooters = loadDataFromFile("scootersData.csv");
-        auto it = std::remove_if(scooters.begin(), scooters.end(), [&scooter_](const domain::Scooter &scooter) {
+        std::vector<domain::Scooter> data = loadDataFromFile("ScootersData.csv");
+        auto it = std::remove_if(data.begin(), data.end(), [&scooter_](const domain::Scooter &scooter) {
             return scooter.getID() == scooter_.getID();
         });
-        if (it != scooters.end()) {
-            scooters.erase(it, scooters.end());
+        if (it != data.end()) {
+            data.erase(it, data.end());
         }
-
+        saveDataToFile("ScootersData.csv", data);
     }
 
 
@@ -145,7 +158,7 @@ namespace repository {
         return scooters;
     }
 
-    void RepositoryInFile::saveDataToFile(const std::string &fileName) const {
+    void RepositoryInFile::saveDataToFile(const std::string &fileName, const std::vector<domain::Scooter> &data) {
         std::ofstream file(fileName);
         if (!file.is_open()) {
             std::cout << "Error opening file: scootersData.csv!" << std::endl;
@@ -159,7 +172,7 @@ namespace repository {
                 {domain::State::INWAIT,       "INWAIT"},
                 {domain::State::OUTOFSERVICE, "OUTOFSERVICE"}
         };
-        for (const auto &scooter: getScooters()) {
+        for (const auto &scooter: data) {
             file << scooter.getID() << "," << scooter.getModel() << ","
                  << std::setfill('0') << scooter.getCommissionDate().year << ","
                  << std::setfill('0') << scooter.getCommissionDate().month << ","

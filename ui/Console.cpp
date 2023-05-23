@@ -196,8 +196,9 @@ namespace ui {
                          "5. Filter by mileage (km)(higher than -inclusive) \n"
                          "6. Reserve one\n"
                          "7. Use one\n"
-                         "8. Quit useage (park it)\n"
-                         "Enter option (0-8): ");
+                         "8. Quit usage (park it)\n"
+                         "9. View list of reserved ones\n"
+                         "Enter option (0-9): ");
             int option = readNumber();
             switch (option) {
                 case 0 : {
@@ -313,6 +314,11 @@ namespace ui {
                         printMessage("\nSorry, the scooter with the ID " + readID + " is not in use\n");
                     }
                     preventMenuPopUp();
+                    break;
+                }
+                case 9: {
+                    // TODOs IMPLEMENTATION
+                    // implememnt a method so the user can view their reserved scooters
                     break;
                 }
                 default: {

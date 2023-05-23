@@ -67,7 +67,7 @@ namespace repository {
 
         static std::vector<domain::Scooter> loadDataFromFile(const std::string &fileName) ;
 
-        void saveDataToFile(const std::string &fileName) const ;
+        static void saveDataToFile(const std::string &fileName,const std::vector<domain::Scooter> &data) ;
     };
 }
 #endif
