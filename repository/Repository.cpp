@@ -1,9 +1,6 @@
 #include "Repository.h"
 
 namespace repository {
-//    Repository::Repository(std::vector<domain::Scooter> scooters_) {
-//        this->scooters = std::move(scooters_);
-//    }
 
     RepositoryInMemory::RepositoryInMemory() {
             domain::Scooter scooter1=domain::Scooter("AAA","Honda Activa",{2022,01,05},1200,"Central Station",domain::State::PARKED);
