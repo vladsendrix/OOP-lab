@@ -55,7 +55,7 @@ namespace repository {
         return scooters;
     }
 
-    RepositoryInFile::RepositoryInFile(const std::string& filename) {
+    RepositoryInFile::RepositoryInFile() {
         loadDataFromFile();
     }
 
@@ -96,14 +96,19 @@ namespace repository {
     }
 
     std::vector<domain::Scooter> RepositoryInFile::getScooters() const {
-        return std::vector<domain::Scooter>();
+        return loadDataFromFile();
     }
 
-    void RepositoryInFile::loadDataFromFile() {
+    void RepositoryInFile::deleteScooter(const domain::Scooter &scooter) {
+
+    }
+
+
+    std::vector<domain::Scooter> RepositoryInFile::loadDataFromFile() {
         std::ifstream file("scootersData.txt");
         if (!file.is_open()) {
             std::cout << "Error opening file: scooters.txt" << std::endl;
-            return;
+            return {};
         }
         const std::unordered_map<std::string, domain::State> stateMap{
                 {"PARKED",       domain::State::PARKED},
@@ -113,20 +118,13 @@ namespace repository {
                 {"OUTOFSERVICE", domain::State::OUTOFSERVICE}
         };
 
-        assert(getScooters().empty());
-
-        int repoSize = 0;
+        std::vector<domain::Scooter> scooters;
 
         std::string line;
         while (std::getline(file, line)) {
             std::stringstream ss(line);
             std::string id, model, lastStandPlace, stateString;
             int year, month, day, mileage;
-
-            std::string expectedID, expectedModel, expectedLastStandPlace;
-            domain::State expectedState = domain::State::PARKED;
-            domain::Date expectedDate{};
-            int expectedMileage;
 
             std::getline(ss, id, ',');
             std::getline(ss, model, ',');
@@ -141,35 +139,22 @@ namespace repository {
             std::getline(ss, lastStandPlace, ',');
             std::getline(ss, stateString, ',');
 
-            expectedID = id;
-            expectedModel = model;
-            expectedMileage = mileage;
-            expectedLastStandPlace = lastStandPlace;
-
-            domain::Date commissionDate{2023, 01, 01};
+            domain::Date commissionDate{year, month, day};
 
             domain::State state = domain::State::PARKED;
             auto stateIt = stateMap.find(stateString);
             if (stateIt != stateMap.end()) {
                 state = stateIt->second;
-                expectedState = stateIt->second;
             }
             domain::Scooter scooter(id, model, commissionDate, mileage, lastStandPlace, state);
-
-            assert(expectedID == scooter.getID());
-            assert(expectedModel == scooter.getModel());
-            assert(expectedLastStandPlace == scooter.getLastStandPlace());
-            assert(expectedMileage == scooter.getMileage());
-            assert(expectedDate.year == scooter.getCommissionDate().year);
-            assert(expectedDate.month == scooter.getCommissionDate().month);
-            assert(expectedDate.day == scooter.getCommissionDate().day);
-            assert(expectedState == scooter.getState());
-
-            addScooter(scooter);
-            repoSize++;
+            scooters.push_back(scooter);
         }
         file.close();
+
+        return scooters;
     }
+
+
 }
 
 

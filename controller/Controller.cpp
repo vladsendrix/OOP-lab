@@ -4,17 +4,17 @@ namespace controller {
 
 
     ProductController::ProductController(std::string &repoType) {
-        if (repoType == "InFile")
-            repo = std::unique_ptr<repository::RepositoryInFile>();
-        else {
-            repo = std::unique_ptr<repository::RepositoryInMemory>();
-        }
+            if (repoType == "InFile")
+                repo = std::make_unique<repository::RepositoryInFile>();
+            else {
+                repo = std::make_unique<repository::RepositoryInMemory>();
+            }
     }
 
     domain::Scooter
     ProductController::addScooter(const std::string &model_, const std::string &date, const int &mileage_,
                                   const std::string &lastStandPlace_, const int &stateNr_) {
-        std::string id = autoGenerateID(), model = model_, lastStandPlace = lastStandPlace_;
+        auto id = autoGenerateID(), model = model_, lastStandPlace = lastStandPlace_;
 
         domain::Date commissionDate{2023, 01, 01};
         domain::State state;
@@ -293,7 +293,6 @@ namespace controller {
                   });
         return scooters;
     }
-
 
 
     std::string ProductController::autoGenerateID() {

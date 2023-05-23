@@ -10,6 +10,8 @@ namespace ui {
 
     void Console::adminMethods() {
 
+        printDetailHeader();
+        printArrayOfScooters(ctrl->sortScootersByID());
         while (true) {
             printMessage("\nAdmin Menu\n"
                          "0. EXIT\n"
@@ -332,6 +334,7 @@ namespace ui {
             switch (option) {
                 case 1:
                     Console::printMessage("In Memory repository selected.");
+                    Console::printDetailHeader();
                     return "InMemory";
                 case 2:
                     Console::printMessage("File repository selected.");

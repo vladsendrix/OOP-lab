@@ -18,6 +18,7 @@ namespace controller {
     class ProductController {
     private:
         std::unique_ptr<repository::Repository> repo;
+
     public:
         ProductController() = default;
 

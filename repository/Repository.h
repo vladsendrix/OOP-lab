@@ -55,21 +55,19 @@ namespace repository {
     private:
         std::string filename;
     public:
-        explicit RepositoryInFile(const std::string&  filename);
+        explicit RepositoryInFile();
 
         void addScooter(const domain::Scooter& scooter) override;
 
-        void deleteScooter(const domain::Scooter& scooter) override {
-            // Implement deletion logic
-        }
+        void deleteScooter(const domain::Scooter& scooter) override;
 
         void updateScooter(const domain::Scooter& scooter) override ;
 
         std::vector<domain::Scooter> getScooters() const override;
 
-        void loadDataFromFile();
+        static std::vector<domain::Scooter> loadDataFromFile() ;
 
         void saveDataToFile() const ;
     };
-};
+}
 #endif
