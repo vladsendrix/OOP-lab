@@ -31,6 +31,11 @@ namespace repository {
         }
     }
 
+    void RepositoryInFile::updateScooter(const domain::Scooter &scooter) {
+        Repository::updateScooter(scooter);
+        saveDataToFile();
+    }
+
     std::vector<domain::Scooter> Repository::getScooters() const {
         return scooters;
     }
