@@ -65,9 +65,9 @@ namespace repository {
 
         std::vector<domain::Scooter> getScooters() const override;
 
-        static std::vector<domain::Scooter> loadDataFromFile() ;
+        static std::vector<domain::Scooter> loadDataFromFile(const std::string &fileName) ;
 
-        void saveDataToFile() const ;
+        void saveDataToFile(const std::string &fileName) const ;
     };
 }
 #endif

@@ -56,56 +56,38 @@ namespace repository {
     }
 
     RepositoryInFile::RepositoryInFile() {
-        loadDataFromFile();
+        loadDataFromFile("scootersData.csv");
     }
 
 
     void RepositoryInFile::updateScooter(const domain::Scooter &scooter) {
-        saveDataToFile();
+        saveDataToFile("scootersData.csv");
     }
 
 
-    void RepositoryInFile::saveDataToFile() const {
-        std::ofstream file("scootersDataSaved.txt");
-        if (!file.is_open()) {
-            std::cout << "Error opening file: scootersData.txt" << std::endl;
-            return;
-        }
-
-        const std::unordered_map<domain::State, std::string> stateMap{
-                {domain::State::PARKED,       "PARKED"},
-                {domain::State::RESERVED,     "RESERVED"},
-                {domain::State::INUSE,        "INUSE"},
-                {domain::State::INWAIT,       "INWAIT"},
-                {domain::State::OUTOFSERVICE, "OUTOFSERVICE"}
-        };
-        for (const auto &scooter: getScooters()) {
-            file << scooter.getID() << "," << scooter.getModel() << ","
-                 << std::setfill('0') << scooter.getCommissionDate().year << ","
-                 << std::setfill('0') << scooter.getCommissionDate().month << ","
-                 << std::setfill('0') << scooter.getCommissionDate().day << ","
-                 << scooter.getMileage() << ","
-                 << scooter.getLastStandPlace() << ","
-                 << stateMap.at(scooter.getState()) << std::endl;
-        }
-        file.close();
-    }
 
     void RepositoryInFile::addScooter(const domain::Scooter &scooter) {
 
     }
 
     std::vector<domain::Scooter> RepositoryInFile::getScooters() const {
-        return loadDataFromFile();
+        return loadDataFromFile("scootersData.csv");
     }
 
-    void RepositoryInFile::deleteScooter(const domain::Scooter &scooter) {
+    void RepositoryInFile::deleteScooter(const domain::Scooter &scooter_) {
+        std::vector<domain::Scooter> scooters= loadDataFromFile("scootersData.csv");
+        auto it = std::remove_if(scooters.begin(), scooters.end(), [&scooter_](const domain::Scooter &scooter) {
+            return scooter.getID() == scooter_.getID();
+        });
+        if (it != scooters.end()) {
+            scooters.erase(it, scooters.end());
+        }
 
     }
 
 
-    std::vector<domain::Scooter> RepositoryInFile::loadDataFromFile() {
-        std::ifstream file("scootersData.csv");
+    std::vector<domain::Scooter> RepositoryInFile::loadDataFromFile(const std::string &fileName) {
+        std::ifstream file(fileName);
         if (!file.is_open()) {
             std::cout << "Error opening file: scootersData.csv" << std::endl;
             return {};
@@ -154,6 +136,32 @@ namespace repository {
         return scooters;
     }
 
+
+    void RepositoryInFile::saveDataToFile(const std::string &fileName) const {
+        std::ofstream file(fileName);
+        if (!file.is_open()) {
+            std::cout << "Error opening file: scootersData.csv!"<< std::endl;
+            return;
+        }
+
+        const std::unordered_map<domain::State, std::string> stateMap{
+                {domain::State::PARKED,       "PARKED"},
+                {domain::State::RESERVED,     "RESERVED"},
+                {domain::State::INUSE,        "INUSE"},
+                {domain::State::INWAIT,       "INWAIT"},
+                {domain::State::OUTOFSERVICE, "OUTOFSERVICE"}
+        };
+        for (const auto &scooter: getScooters()) {
+            file << scooter.getID() << "," << scooter.getModel() << ","
+                 << std::setfill('0') << scooter.getCommissionDate().year << ","
+                 << std::setfill('0') << scooter.getCommissionDate().month << ","
+                 << std::setfill('0') << scooter.getCommissionDate().day << ","
+                 << scooter.getMileage() << ","
+                 << scooter.getLastStandPlace() << ","
+                 << stateMap.at(scooter.getState()) << std::endl;
+        }
+        file.close();
+    }
 
 }
 
