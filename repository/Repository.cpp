@@ -34,4 +34,103 @@ namespace repository {
     std::vector<domain::Scooter> Repository::getScooters() const {
         return scooters;
     }
+
+    void Repository::loadDataFromFile() {
+        std::ifstream file("scootersData.txt");
+        if (!file.is_open()) {
+            std::cout << "Error opening file: scooters.txt" << std::endl;
+            return;
+        }
+        const std::unordered_map<std::string, domain::State> stateMap{
+                {"PARKED",       domain::State::PARKED},
+                {"RESERVED",     domain::State::RESERVED},
+                {"INUSE",        domain::State::INUSE},
+                {"INWAIT",       domain::State::INWAIT},
+                {"OUTOFSERVICE", domain::State::OUTOFSERVICE}
+        };
+
+        assert(getScooters().empty());
+
+        int repoSize = 0;
+
+        std::string line;
+        while (std::getline(file, line)) {
+            std::stringstream ss(line);
+            std::string id, model, lastStandPlace, stateString;
+            int year, month, day, mileage;
+
+            std::string expectedID, expectedModel, expectedLastStandPlace;
+            domain::State expectedState = domain::State::PARKED;
+            domain::Date expectedDate{};
+            int expectedMileage;
+
+            std::getline(ss, id, ',');
+            std::getline(ss, model, ',');
+            ss >> year;
+            ss.ignore();
+            ss >> month;
+            ss.ignore();
+            ss >> day;
+            ss.ignore();
+            ss >> mileage;
+            ss.ignore();
+            std::getline(ss, lastStandPlace, ',');
+            std::getline(ss, stateString, ',');
+
+            expectedID = id;
+            expectedModel = model;
+            expectedMileage = mileage;
+            expectedLastStandPlace = lastStandPlace;
+
+            domain::Date commissionDate{2023, 01, 01};
+
+            domain::State state = domain::State::PARKED;
+            auto stateIt = stateMap.find(stateString);
+            if (stateIt != stateMap.end()) {
+                state = stateIt->second;
+                expectedState = stateIt->second;
+            }
+            domain::Scooter scooter(id, model, commissionDate, mileage, lastStandPlace, state);
+
+            assert(expectedID == scooter.getID());
+            assert(expectedModel == scooter.getModel());
+            assert(expectedLastStandPlace == scooter.getLastStandPlace());
+            assert(expectedMileage == scooter.getMileage());
+            assert(expectedDate.year == scooter.getCommissionDate().year);
+            assert(expectedDate.month == scooter.getCommissionDate().month);
+            assert(expectedDate.day == scooter.getCommissionDate().day);
+            assert(expectedState == scooter.getState());
+
+            addScooter(scooter);
+            repoSize++;
+        }
+        file.close();
+    }
+
+
+    void RepositoryInFile::saveDataToFile() const {
+        std::ofstream file("scootersDataSaved.txt");
+        if (!file.is_open()) {
+            std::cout << "Error opening file: scootersData.txt" << std::endl;
+            return;
+        }
+
+        const std::unordered_map<domain::State, std::string> stateMap{
+                {domain::State::PARKED,       "PARKED"},
+                {domain::State::RESERVED,     "RESERVED"},
+                {domain::State::INUSE,        "INUSE"},
+                {domain::State::INWAIT,       "INWAIT"},
+                {domain::State::OUTOFSERVICE, "OUTOFSERVICE"}
+        };
+        for (const auto &scooter: getScooters()) {
+            file << scooter.getID() << "," << scooter.getModel() << ","
+                 << std::setfill('0') << scooter.getCommissionDate().year << ","
+                 << std::setfill('0') << scooter.getCommissionDate().month << ","
+                 << std::setfill('0') << scooter.getCommissionDate().day << ","
+                 << scooter.getMileage() << ","
+                 << scooter.getLastStandPlace() << ","
+                 << stateMap.at(scooter.getState()) << std::endl;
+        }
+        file.close();
+    }
 };

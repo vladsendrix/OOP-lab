@@ -46,7 +46,6 @@ namespace controller {
 
         bool useScooter(const int &index_);
 
-
         bool parkScooter(const int &index, const std::string &location);
 
 
