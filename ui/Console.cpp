@@ -396,9 +396,9 @@ namespace ui {
 
     std::string inputRepositoryType() {
         std::cout << "Please choose the repository type:\n"
-                     "1. In Memory\n"
-                     "2. File\n"
-                     "Enter option:";
+                    "1. In Memory\n"
+                    "2. File\n"
+                    "Enter option:";
         int option;
         std::cin >> option;
         if (option == 1) {
@@ -409,9 +409,8 @@ namespace ui {
             return "InFile";
         } else {
             std::cout << "Invalid option, please try again." << std::endl;
-            inputRepositoryType();
+            return inputRepositoryType();
         }
-        return "InMemory";
     }
 
 
