@@ -22,15 +22,15 @@ namespace repository {
     public:
         explicit Repository(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>());
 
-        virtual void addScooter(const domain::Scooter &scooter) = 0;
+        virtual void addScooter(const domain::Scooter &scooter);
 
-        virtual void deleteScooter(const domain::Scooter &scooter) = 0;
+        virtual void deleteScooter(const domain::Scooter &scooter);
 
-        virtual void updateScooter(const domain::Scooter &scooter) = 0;
+        virtual void updateScooter(const domain::Scooter &scooter);
 
-        virtual std::vector<domain::Scooter> getScooters() const = 0;
+        virtual std::vector<domain::Scooter> getScooters() const;
 
-        virtual void loadDataFromFile() = 0;
+        virtual void loadDataFromFile();
 
     };
 
@@ -38,14 +38,6 @@ namespace repository {
     public:
         explicit RepositoryInMemory(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>()) : Repository(
                 scooters_) {}
-
-        void addScooter(const domain::Scooter &scooter) override;
-
-        void deleteScooter(const domain::Scooter &scooter) override;
-
-        void updateScooter(const domain::Scooter &scooter) override;
-
-        std::vector<domain::Scooter> getScooters() const override;
     };
 
     class RepositoryInFile : public Repository {
@@ -54,14 +46,6 @@ namespace repository {
     public:
         explicit RepositoryInFile(std::string filename_, std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>()) : Repository(
                 scooters_), filename(std::move(filename_)) {}
-
-        void addScooter(const domain::Scooter &scooter) override;
-
-        void deleteScooter(const domain::Scooter &scooter) override;
-
-        void updateScooter(const domain::Scooter &scooter) override;
-
-        std::vector<domain::Scooter> getScooters() const override;
 
         void saveDataToFile() const;
     };
