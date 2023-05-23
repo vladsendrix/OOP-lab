@@ -196,7 +196,6 @@ namespace ui {
                     break;
                 }
                 case 9: {
-                    int placeHolder;
                     std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
                     printArrayOfScooters(ctrl->sortScooterByAge(true));
                     std::string preventMenuPopup;
@@ -205,7 +204,6 @@ namespace ui {
                     break;
                 }
                 case 10: {
-                    int placeHolder;
                     std::cout << std::endl << "\nList of scooters sorted by eage (ascending):" << std::endl;
                     printArrayOfScooters(ctrl->sortScooterByAge(false));
                     std::string preventMenuPopup;
@@ -396,16 +394,16 @@ namespace ui {
 
     std::string inputRepositoryType() {
         std::cout << "Please choose the repository type:\n"
-                    "1. In Memory\n"
-                    "2. File\n"
-                    "Enter option:";
+                     "1. In Memory\n"
+                     "2. File\n"
+                     "Enter option:";
         int option;
         std::cin >> option;
-        switch(option) {
-            case(1):
+        switch (option) {
+            case (1):
                 std::cout << "In Memory repository selected." << std::endl;
                 return "InMemory";
-            case(2):
+            case (2):
                 std::cout << "File repository selected." << std::endl;
                 return "InFile";
             default:
@@ -416,7 +414,7 @@ namespace ui {
 
 
     void Console::run() {
-        ctrl->loadDataFromFile();        
+        ctrl->loadDataFromFile();
 
         std::cout << "\n\n";
         std::cout << "@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n";

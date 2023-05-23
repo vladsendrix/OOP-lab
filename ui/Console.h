@@ -18,11 +18,11 @@ namespace ui {
 
         void userMethods();
 
-        void printDetailHeader() ;
+        static void printDetailHeader() ;
 
-        void printScooter(const domain::Scooter &scooter);
+        static void printScooter(const domain::Scooter &scooter);
 
-        void printArrayOfScooters(const std::vector<domain::Scooter> &scooters);
+        static void printArrayOfScooters(const std::vector<domain::Scooter> &scooters);
 
     };
 

@@ -62,7 +62,6 @@ namespace controller {
         std::vector<domain::Scooter> sortScootersByID();
 
 
-
         void printScooterByID();
 
         void loadDataFromFile();

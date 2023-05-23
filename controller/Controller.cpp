@@ -256,7 +256,7 @@ namespace controller {
 
 
     bool ProductController::useScooter(const int &index_) {
-        int index=index_;
+        int index = index_;
         if (is_reserved(index)) {
             domain::Scooter useScooter = repo->getScooters().at(index);
             useScooter.setState(domain::State::INUSE);
@@ -266,16 +266,16 @@ namespace controller {
     }
 
     bool ProductController::parkScooter(const int &index_, const std::string &location_) {
-       int index=index_;
-       const std::string& location=location_;
-       if (is_inuse(index)) {
-           domain::Scooter useScooter = repo->getScooters().at(index);
-           useScooter.setState(domain::PARKED);
-           useScooter.setLastStandPlace(location);
-           useScooter.setMileage(useScooter.getMileage() + 20);
-           repo->updateScooter(useScooter);
-       }
-       return is_inuse(index);
+        int index = index_;
+        const std::string &location = location_;
+        if (is_inuse(index)) {
+            domain::Scooter useScooter = repo->getScooters().at(index);
+            useScooter.setState(domain::PARKED);
+            useScooter.setLastStandPlace(location);
+            useScooter.setMileage(useScooter.getMileage() + 20);
+            repo->updateScooter(useScooter);
+        }
+        return is_inuse(index);
     }
 
     // other helpful methods

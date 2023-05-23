@@ -36,7 +36,8 @@ namespace repository {
 
     class RepositoryInMemory : public Repository {
     public:
-        explicit RepositoryInMemory(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>()) : Repository(
+        explicit RepositoryInMemory(std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>())
+                : Repository(
                 scooters_) {}
     };
 
@@ -44,7 +45,8 @@ namespace repository {
     private:
         std::string filename;
     public:
-        explicit RepositoryInFile(std::string filename_, std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>()) : Repository(
+        explicit RepositoryInFile(std::string filename_,
+                                  std::vector<domain::Scooter> scooters_ = std::vector<domain::Scooter>()) : Repository(
                 scooters_), filename(std::move(filename_)) {}
 
         void updateScooter(const domain::Scooter &scooter) override;
