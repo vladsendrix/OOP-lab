@@ -18,7 +18,7 @@ namespace ui {
 
         void userMethods();
 
-        static void printDetailHeader() ;
+        static void printDetailHeader();
 
         static void printScooter(const domain::Scooter &scooter);
 
@@ -28,13 +28,13 @@ namespace ui {
 
         static void preventMenuPopUp();
 
-        static int readNumber() ;
+        static int readNumber();
 
-        static std::string readString() ;
+        static std::string readString();
 
     };
 
-        std::string inputRepositoryType();
+    std::string inputRepositoryType();
 
 }
 
