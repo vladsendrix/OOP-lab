@@ -18,6 +18,7 @@ namespace controller {
     class ProductController {
     private:
         std::unique_ptr<repository::Repository> repo;
+        std::string dbName;
 
     public:
         ProductController() = default;
@@ -29,7 +30,7 @@ namespace controller {
 
         int position(const std::string &id_);
 
-        bool exists(const int &index);
+        bool exists(const int &index) const;
 
         bool deleteScooter(const int &index) const;
 
@@ -66,12 +67,6 @@ namespace controller {
 
         std::vector<domain::Scooter> sortScootersByID();
 
-
-        void printScooterByID();
-
-        void loadDataFromFile();
-
-        void saveDataToFile() const;
 
         std::string autoGenerateID();
 

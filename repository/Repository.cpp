@@ -35,20 +35,27 @@ namespace repository {
         scooters.push_back(scooter10);
     }
 
-    void RepositoryInMemory::addScooter(const domain::Scooter &scooter) {
-        scooters.push_back(scooter);
+    void RepositoryInMemory::addScooter(const domain::Scooter &scooter, const std::string &dbName) {
+        if (dbName == "dbUser")
+            userScooters.push_back(scooter);
+        else
+            scooters.push_back(scooter);
     }
 
-    void RepositoryInMemory::deleteScooter(const domain::Scooter &scooter_) {
-        auto it = std::remove_if(scooters.begin(), scooters.end(), [&scooter_](const domain::Scooter &scooter) {
+    void RepositoryInMemory::deleteScooter(const domain::Scooter &scooter_, const std::string &dbName) {
+        std::vector<domain::Scooter> *db = &scooters;
+        if (dbName == "dbUser")
+            db = &userScooters;
+        auto it = std::remove_if(db->begin(), db->end(), [&scooter_](const domain::Scooter &scooter) {
             return scooter.getID() == scooter_.getID();
         });
-        if (it != scooters.end()) {
-            scooters.erase(it, scooters.end());
+        if (it != db->end()) {
+            db->erase(it, db->end());
         }
     }
 
     void RepositoryInMemory::updateScooter(const domain::Scooter &scooter) {
+
         for (auto &s: scooters) {
             if (s.getID() == scooter.getID()) {
                 s.setModel(scooter.getModel());
@@ -61,17 +68,41 @@ namespace repository {
         }
     }
 
-    std::vector<domain::Scooter> RepositoryInMemory::getScooters() const {
+    std::vector<domain::Scooter> RepositoryInMemory::getScooters(const std::string &dbName) const {
+        if (dbName == "dbUser") return userScooters;
         return scooters;
     }
 
     RepositoryInFile::RepositoryInFile() {
-        loadDataFromFile("ScootersData.csv");
+        adminFile = "ScootersData.csv";
+        userFile = "UserData.csv";
+        loadDataFromFile(adminFile);
+    }
+
+
+    void RepositoryInFile::addScooter(const domain::Scooter &scooter, const std::string &dbName) {
+        std::string save = "ScootersData.csv";
+
+        std::vector<domain::Scooter> data = getScooters(dbName);
+        data.push_back(scooter);
+        if (dbName == "dbUser") saveDataToFile(userFile, data);
+        else saveDataToFile(adminFile, data);
+    }
+
+    void RepositoryInFile::deleteScooter(const domain::Scooter &scooter_, const std::string &dbName) {
+        std::vector<domain::Scooter> data = loadDataFromFile(adminFile);
+        auto it = std::remove_if(data.begin(), data.end(), [&scooter_](const domain::Scooter &scooter) {
+            return scooter.getID() == scooter_.getID();
+        });
+        if (it != data.end()) {
+            data.erase(it, data.end());
+        }
+        saveDataToFile(adminFile, data);
     }
 
 
     void RepositoryInFile::updateScooter(const domain::Scooter &scooter) {
-        std::vector<domain::Scooter> data = getScooters();
+        std::vector<domain::Scooter> data = getScooters("dbAdmin");
         for (auto &s: data) {
             if (s.getID() == scooter.getID()) {
                 s.setModel(scooter.getModel());
@@ -82,29 +113,13 @@ namespace repository {
                 break;
             }
         }
-        saveDataToFile("ScootersData.csv", data);
+        saveDataToFile(adminFile, data);
     }
 
 
-    void RepositoryInFile::addScooter(const domain::Scooter &scooter) {
-        std::vector<domain::Scooter> data = getScooters();
-        data.push_back(scooter);
-        saveDataToFile("ScootersData.csv", data);
-    }
-
-    std::vector<domain::Scooter> RepositoryInFile::getScooters() const {
-        return loadDataFromFile("ScootersData.csv");
-    }
-
-    void RepositoryInFile::deleteScooter(const domain::Scooter &scooter_) {
-        std::vector<domain::Scooter> data = loadDataFromFile("ScootersData.csv");
-        auto it = std::remove_if(data.begin(), data.end(), [&scooter_](const domain::Scooter &scooter) {
-            return scooter.getID() == scooter_.getID();
-        });
-        if (it != data.end()) {
-            data.erase(it, data.end());
-        }
-        saveDataToFile("ScootersData.csv", data);
+    std::vector<domain::Scooter> RepositoryInFile::getScooters(const std::string &dbName) const {
+        if (dbName == "dbUser") return loadDataFromFile(userFile);
+        return loadDataFromFile(adminFile);
     }
 
 
