@@ -317,8 +317,6 @@ namespace ui {
                     break;
                 }
                 case 9: {
-                    // TODOs IMPLEMENTATION
-                    // implememnt a method so the user can view their reserved scooters
                     printMessage("Here are your reserved scooters:\n");
                     printArrayOfScooters(ctrl->userReservedScooters());
                     break;
