@@ -91,12 +91,11 @@ namespace repository {
 
     void RepositoryInFile::deleteScooter(const domain::Scooter &scooter_, const std::string &dbName) {
         std::vector<domain::Scooter> data = loadDataFromFile(adminFile);
-        auto it = std::remove_if(data.begin(), data.end(), [&scooter_](const domain::Scooter &scooter) {
+
+        data.erase(std::remove_if(data.begin(), data.end(), [&scooter_](const domain::Scooter& scooter) {
             return scooter.getID() == scooter_.getID();
-        });
-        if (it != data.end()) {
-            data.erase(it, data.end());
-        }
+        }), data.end());
+
         saveDataToFile(adminFile, data);
     }
 

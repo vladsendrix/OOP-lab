@@ -1,7 +1,6 @@
 #include "Console.h"
 #include <iostream>
 
-
 namespace ui {
 
     Console::Console(std::shared_ptr<controller::ProductController> scooterController_) {
@@ -9,7 +8,6 @@ namespace ui {
     }
 
     void Console::adminMethods() {
-
         printArrayOfScooters(ctrl->sortScootersByID());
         while (true) {
             printMessage("\nAdmin Menu\n"
@@ -49,8 +47,6 @@ namespace ui {
                             "State:(1.PARKED | 2.RESERVED | 3.IN USE | 4.IN WAIT | 5.OUT OF SERVICE)\nChoose one (1-5):");
                     int stateNr = readNumber();
 
-                    printMessage("\n");
-
                     Console::printDetailHeader();
                     Console::printScooter(ctrl->addScooter(model, date, mileage, lastStandPlace, stateNr));
                     printMessage("\nScooter added successfully!");
@@ -68,9 +64,8 @@ namespace ui {
                         } else {
                             printMessage("Error deleting scooter!");
                         }
-                    } else {
-                        printMessage("Scooter not found!");
-                    }
+                    } else printMessage("Scooter not found!");
+
                     preventMenuPopUp();
                     break;
                 }
@@ -97,7 +92,8 @@ namespace ui {
                         printMessage("");
 
                         printDetailHeader();
-                        domain::Scooter editedScooter = ctrl->editScooter(position, date, mileage, lastStandPlace, stateNr);
+                        domain::Scooter editedScooter = ctrl->editScooter(position, date, mileage, lastStandPlace,
+                                                                          stateNr);
                         printScooter(editedScooter);
 
                         printMessage("Scooter edited successfully!");
@@ -108,7 +104,6 @@ namespace ui {
                 }
 
                 case 4: {
-
                     printMessage("Enter the stand place (or leave empty to show all scooters): ");
                     std::string standPlace = readString();
                     std::vector<domain::Scooter> scooters = ctrl->searchScooterByStandPlace(standPlace);
@@ -129,13 +124,13 @@ namespace ui {
                     std::vector<domain::Scooter> filteredScooters = ctrl->filterScooterByAge(inclusive, age);
 
                     if (filteredScooters.empty()) {
-                        printMessage("No scooters younger than or equal to " + std::to_string(age) + " years were found!");
+                        printMessage(
+                                "No scooters younger than or equal to " + std::to_string(age) + " years were found!");
                     } else {
                         printArrayOfScooters(filteredScooters);
                     }
                     preventMenuPopUp();
                     break;
-
                 }
                 case 6: {
                     printMessage("Enter the age: ");
@@ -152,7 +147,6 @@ namespace ui {
 
                     preventMenuPopUp();
                     break;
-
                 }
                 case 7: {
                     printMessage("Enter the mileage: ");
@@ -162,14 +156,13 @@ namespace ui {
                     std::vector<domain::Scooter> filteredScooters = ctrl->filterScooterByMileage(lessThan, mileage);
 
                     if (filteredScooters.empty()) {
-                        printMessage("No scooters found with a mileage lower than " + std::to_string(mileage) + " miles!");
+                        printMessage(
+                                "No scooters found with a mileage lower than " + std::to_string(mileage) + " miles!");
                     } else {
                         printArrayOfScooters(filteredScooters);
                     }
-
                     preventMenuPopUp();
                     break;
-
                 }
                 case 8: {
                     printMessage("Enter the mileage: ");
@@ -179,13 +172,13 @@ namespace ui {
                     std::vector<domain::Scooter> filteredScooters = ctrl->filterScooterByMileage(lessThan, mileage);
 
                     if (filteredScooters.empty()) {
-                        printMessage("No scooters found with a mileage higher than " + std::to_string(mileage) + " miles!");
+                        printMessage(
+                                "No scooters found with a mileage higher than " + std::to_string(mileage) + " miles!");
                     } else {
                         printArrayOfScooters(filteredScooters);
                     }
                     preventMenuPopUp();
                     break;
-
                 }
                 case 9: {
                     printMessage("\nList of scooters sorted by eage (ascending):");
@@ -238,7 +231,7 @@ namespace ui {
                         printMessage("No scooters found with the specified stand place!");
                     } else {
                         printDetailHeader();
-                        for (const auto& scooter : scooters) {
+                        for (const auto &scooter: scooters) {
                             printScooter(scooter);
                         }
                     }
@@ -252,10 +245,11 @@ namespace ui {
                     std::vector<domain::Scooter> filteredScooters = ctrl->filterScooterByAge(true, age);
 
                     if (filteredScooters.empty()) {
-                        printMessage("No scooters younger than or equal to " + std::to_string(age) + " years were found!");
+                        printMessage(
+                                "No scooters younger than or equal to " + std::to_string(age) + " years were found!");
                     } else {
                         printDetailHeader();
-                        for (const auto& scooter : filteredScooters) {
+                        for (const auto &scooter: filteredScooters) {
                             printScooter(scooter);
                         }
                     }
@@ -287,7 +281,9 @@ namespace ui {
                     std::vector<domain::Scooter> filteredScooters = ctrl->filterScooterByMileage(true, mileage);
 
                     if (filteredScooters.empty()) {
-                        printMessage("No scooters found with a mileage lower than or equal to " + std::to_string(mileage) + " miles!");
+                        printMessage(
+                                "No scooters found with a mileage lower than or equal to " + std::to_string(mileage) +
+                                " miles!");
                     } else {
                         printArrayOfScooters(filteredScooters);
                     }
@@ -304,7 +300,9 @@ namespace ui {
                     std::vector<domain::Scooter> filteredScooters = ctrl->filterScooterByMileage(lessThan, mileage);
 
                     if (filteredScooters.empty()) {
-                        printMessage("No scooters found with a mileage higher than or equal to " + std::to_string(mileage) + " miles!");
+                        printMessage(
+                                "No scooters found with a mileage higher than or equal to " + std::to_string(mileage) +
+                                " miles!");
                     } else {
                         printArrayOfScooters(filteredScooters);
                     }
@@ -325,12 +323,12 @@ namespace ui {
                     } else if (ctrl->reserveScooter(position)) {
                         printMessage("\nThe scooter with the ID " + readID + " was reserved.\n");
                     } else {
-                        printMessage("\nSorry, the scooter with the ID " + readID + " is not available for reservation.\n");
+                        printMessage(
+                                "\nSorry, the scooter with the ID " + readID + " is not available for reservation.\n");
                     }
 
                     preventMenuPopUp();
                     break;
-
                 }
                 case 7: {
                     printMessage("\nPlease enter the ID of the scooter you reserved to use it: ");
@@ -348,10 +346,8 @@ namespace ui {
 
                     preventMenuPopUp();
                     break;
-
                 }
                 case 8: {
-
                     printMessage("\nPlease enter the ID of the scooter you are using to stop using it (to park it): ");
                     std::string readID = readString();
 
@@ -363,14 +359,14 @@ namespace ui {
                     if (position == -1) {
                         printMessage("\nSorry, the scooter with the ID " + readID + " was not found.\n");
                     } else if (ctrl->parkScooter(position, location)) {
-                        printMessage("\nThe scooter with the ID " + readID + " is parked now.\n\nThank you for using our service!\n");
+                        printMessage("\nThe scooter with the ID " + readID +
+                                     " is parked now.\n\nThank you for using our service!\n");
                     } else {
                         printMessage("\nSorry, the scooter with the ID " + readID + " is not in use.\n");
                     }
 
                     preventMenuPopUp();
                     break;
-
                 }
                 case 9: {
                     printMessage("Here are your reserved scooters:\n");
@@ -412,7 +408,6 @@ namespace ui {
     }
 
     void Console::run() {
-
         Console::printMessage("\n\n@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos\n\n");
         while (true) {
             Console::printMessage("\nPlease choose:\n"
@@ -443,7 +438,6 @@ namespace ui {
     }
 
     void Console::printScooter(const domain::Scooter &scooter) {
-
         const domain::Date date = scooter.getCommissionDate();
         const std::string dateToString = std::to_string(date.year) + "." + std::to_string(date.month) +
                                          "." + std::to_string(date.day);

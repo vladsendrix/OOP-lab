@@ -28,10 +28,6 @@ namespace repository {
 
         virtual std::vector<domain::Scooter> getScooters(const std::string &dbName) const = 0;
 
-        //virtual void loadDataFromFile() = 0;
-
-        //virtual void saveDataToFile() =0;
-
     };
 
     class RepositoryInMemory : public Repository {
@@ -48,7 +44,6 @@ namespace repository {
         void updateScooter(const domain::Scooter &scooter) override;
 
         std::vector<domain::Scooter> getScooters(const std::string &dbName) const override;
-
 
     };
 
