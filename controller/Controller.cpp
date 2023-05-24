@@ -365,7 +365,7 @@ namespace controller {
                 reservedScooters.push_back(scooter);
             }
         }
-        return std::vector<domain::Scooter> (reservedScooters);
+        return reservedScooters;
     }
 
 }

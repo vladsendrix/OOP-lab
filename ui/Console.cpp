@@ -353,7 +353,7 @@ namespace ui {
     }
 
     void Console::printMessage(const std::string &message) {
-        std::cout << std::endl << message << std::endl;
+        std::cout << std::endl << message<<"\n";
     }
 
     void Console::run() {
@@ -431,15 +431,16 @@ namespace ui {
 
     int Console::readNumber() {
         int value;
-        std::cin >> value;
+        std::string line;
+        std::getline(std::cin, line);
+        std::istringstream iss(line);
+        iss >> value;
         return value;
     }
 
     std::string Console::readString() {
         std::string value;
-        std::cin.ignore();
-        std::getline(std::cin >> std::ws, value);
-        std::cin.ignore();
+        std::getline(std::cin, value);
         return value;
     }
 
