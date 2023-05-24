@@ -358,7 +358,14 @@ namespace controller {
     }
 
     std::vector<domain::Scooter> ProductController::userReservedScooters() {
-        return std::vector<domain::Scooter>();
+        std::vector<domain::Scooter> scooters = repo->getScooters();
+        std::vector<domain::Scooter> reservedScooters;
+        for (const auto &scooter: scooters) {
+            if (scooter.getState() == domain::State::RESERVED) {
+                reservedScooters.push_back(scooter);
+            }
+        }
+        return std::vector<domain::Scooter> (reservedScooters);
     }
 
 }
