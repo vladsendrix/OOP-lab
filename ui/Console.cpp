@@ -197,7 +197,7 @@ namespace ui {
                          "6. Reserve one\n"
                          "7. Use one\n"
                          "8. Quit usage (park it)\n"
-                         "9. View list of reserved ones\n"
+                         "9. View list of reserved scooters\n"
                          "Enter option (0-9): ");
             int option = readNumber();
             switch (option) {
@@ -320,7 +320,7 @@ namespace ui {
                     // TODOs IMPLEMENTATION
                     // implememnt a method so the user can view their reserved scooters
                     printMessage("Here are your reserved scooters:\n");
-                    printArrayOfScooters(ctrl->userReservedScooters);
+                    printArrayOfScooters(ctrl->userReservedScooters());
                     break;
                 }
                 default: {
