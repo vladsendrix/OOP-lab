@@ -19,8 +19,6 @@ add_executable(OOP_lab
         domain/Domain.h
         repository/Repository.cpp
         repository/Repository.h
-        test/Test.cpp
-        test/Test.h
         ui/Console.cpp
         ui/Console.h
         app.cpp)
