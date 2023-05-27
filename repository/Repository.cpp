@@ -2,10 +2,6 @@
 
 namespace repository {
 
-    Repository::Repository(std::vector<domain::Scooter> scooters_) {
-        this->scooters = std::move(scooters_);
-    }
-
     void Repository::addScooter(const domain::Scooter &scooter) {
         scooters.push_back(scooter);
     }
