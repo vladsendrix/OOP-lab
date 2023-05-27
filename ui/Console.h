@@ -33,9 +33,6 @@ namespace ui {
         static std::string readString();
 
     };
-
-    std::string inputRepositoryType();
-
 }
 
 #endif

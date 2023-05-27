@@ -382,27 +382,6 @@ namespace ui {
         }
     }
 
-    std::string inputRepositoryType() {
-        while (true) {
-            Console::printMessage("Please choose the repository type:\n"
-                                  "1. In Memory\n"
-                                  "2. File\n"
-                                  "Enter option:");
-            int option = Console::readNumber();
-            switch (option) {
-                case 1:
-                    Console::printMessage("In Memory repository selected.");
-                    return "InMemory";
-                case 2:
-                    Console::printMessage("File repository selected.");
-                    return "InFile";
-                default:
-                    Console::printMessage("Invalid option, please try again.");
-                    continue;
-            }
-        }
-    }
-
     void Console::printMessage(const std::string &message) {
         std::cout << std::endl << message << "\n";
     }
