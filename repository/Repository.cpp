@@ -107,16 +107,8 @@ namespace repository {
         }
         file.close();
     }
+
+    Repository::Repository() {
+        scooters= loadDataFromFile("ScootersData.csv");
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-

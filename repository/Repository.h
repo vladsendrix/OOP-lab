@@ -22,7 +22,7 @@ namespace repository {
         std::vector<domain::Scooter> scooters;
 
     public:
-        Repository() : scooters(std::vector<domain::Scooter>()) {}
+        Repository();
 
         void addScooter(const domain::Scooter &scooter);
 
@@ -34,7 +34,7 @@ namespace repository {
 
         void saveDataToFile(const std::string &fileName, const std::vector<domain::Scooter> &data);
 
-        std::vector<domain::Scooter> loadDataFromFile(const std::string &fileName);
+        static std::vector<domain::Scooter> loadDataFromFile(const std::string &fileName);
     };
 
 }
