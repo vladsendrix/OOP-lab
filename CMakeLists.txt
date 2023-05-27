@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 project(OOP_lab)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 23)
 
 include_directories(.)
 include_directories(controller)
@@ -9,6 +9,8 @@ include_directories(domain)
 include_directories(repository)
 include_directories(test)
 include_directories(ui)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(OOP_lab
         controller/Controller.cpp
