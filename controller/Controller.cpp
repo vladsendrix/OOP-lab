@@ -4,6 +4,7 @@ namespace controller {
 
 
     ProductController::ProductController() {
+        repo = std::make_unique<repository::Repository>();
     }
 
 domain::Scooter ProductController::addScooter(const std::string &model, const std::string &date, const int &mileage_,
