@@ -2,60 +2,24 @@
 
 namespace repository {
 
-    RepositoryInMemory::RepositoryInMemory() {
-        domain::Scooter scooter1 = domain::Scooter("AAA", "Honda Activa", {2022, 01, 05}, 1200, "Central Station",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter2 = domain::Scooter("AAB", "Vespa Primavera", {2021, 11, 20}, 800, "Old Town Square",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter3 = domain::Scooter("AAC", "Yamaha Nmax", {2022, 03, 15}, 1500, "City Hall",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter4 = domain::Scooter("AAD", "Piaggio Liberty", {2021, 12, 01}, 1000, "Main Street",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter5 = domain::Scooter("AAE", "Kymco Agility", {2022, 02, 25}, 900, "Shopping Mall",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter6 = domain::Scooter("AAF", "Suzuki Burgman", {2022, 04, 10}, 2000, "Airport",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter7 = domain::Scooter("AAG", "BMW C 650 GT", {2021, 10, 15}, 500, "Train Station",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter8 = domain::Scooter("AAH", "Aprilia SR Motard", {2022, 05, 05}, 300, "University Campus",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter9 = domain::Scooter("AAI", "SYM Jet", {2022, 03, 20}, 1200, "Beach",
-                                                   domain::State::PARKED);
-        domain::Scooter scooter10 = domain::Scooter("AAJ", "Triumph Trident", {2022, 01, 20}, 700, "Park",
-                                                    domain::State::PARKED);
-        scooters.push_back(scooter1);
-        scooters.push_back(scooter2);
-        scooters.push_back(scooter3);
-        scooters.push_back(scooter4);
-        scooters.push_back(scooter5);
-        scooters.push_back(scooter6);
-        scooters.push_back(scooter7);
-        scooters.push_back(scooter8);
-        scooters.push_back(scooter9);
-        scooters.push_back(scooter10);
+    Repository::Repository(std::vector<domain::Scooter> scooters_) {
+        this->scooters = std::move(scooters_);
     }
 
-    void RepositoryInMemory::addScooter(const domain::Scooter &scooter, const std::string &dbName) {
-        if (dbName == "dbUser")
-            userScooters.push_back(scooter);
-        else
-            scooters.push_back(scooter);
+    void Repository::addScooter(const domain::Scooter &scooter) {
+        scooters.push_back(scooter);
     }
 
-    void RepositoryInMemory::deleteScooter(const domain::Scooter &scooter_, const std::string &dbName) {
-        std::vector<domain::Scooter> *db = &scooters;
-        if (dbName == "dbUser")
-            db = &userScooters;
-        auto it = std::remove_if(db->begin(), db->end(), [&scooter_](const domain::Scooter &scooter) {
+    void Repository::deleteScooter(const domain::Scooter &scooter_) {
+        auto it = std::remove_if(scooters.begin(), scooters.end(), [&scooter_](const domain::Scooter &scooter) {
             return scooter.getID() == scooter_.getID();
         });
-        if (it != db->end()) {
-            db->erase(it, db->end());
+        if (it != scooters.end()) {
+            scooters.erase(it, scooters.end());
         }
     }
 
-    void RepositoryInMemory::updateScooter(const domain::Scooter &scooter) {
-
+    void Repository::updateScooter(const domain::Scooter &scooter) {
         for (auto &s: scooters) {
             if (s.getID() == scooter.getID()) {
                 s.setModel(scooter.getModel());
@@ -68,61 +32,11 @@ namespace repository {
         }
     }
 
-    std::vector<domain::Scooter> RepositoryInMemory::getScooters(const std::string &dbName) const {
-        if (dbName == "dbUser") return userScooters;
+    std::vector<domain::Scooter> Repository::getScooters() const {
         return scooters;
     }
 
-    RepositoryInFile::RepositoryInFile() {
-        adminFile = "ScootersData.csv";
-        userFile = "UserData.csv";
-        loadDataFromFile(adminFile);
-    }
-
-
-    void RepositoryInFile::addScooter(const domain::Scooter &scooter, const std::string &dbName) {
-        std::string save = "ScootersData.csv";
-
-        std::vector<domain::Scooter> data = getScooters(dbName);
-        data.push_back(scooter);
-        if (dbName == "dbUser") saveDataToFile(userFile, data);
-        else saveDataToFile(adminFile, data);
-    }
-
-    void RepositoryInFile::deleteScooter(const domain::Scooter &scooter_, const std::string &dbName) {
-        std::vector<domain::Scooter> data = loadDataFromFile(adminFile);
-
-        data.erase(std::remove_if(data.begin(), data.end(), [&scooter_](const domain::Scooter& scooter) {
-            return scooter.getID() == scooter_.getID();
-        }), data.end());
-
-        saveDataToFile(adminFile, data);
-    }
-
-
-    void RepositoryInFile::updateScooter(const domain::Scooter &scooter) {
-        std::vector<domain::Scooter> data = getScooters("dbAdmin");
-        for (auto &s: data) {
-            if (s.getID() == scooter.getID()) {
-                s.setModel(scooter.getModel());
-                s.setCommissionDate(scooter.getCommissionDate());
-                s.setMileage(scooter.getMileage());
-                s.setLastStandPlace(scooter.getLastStandPlace());
-                s.setState(scooter.getState());
-                break;
-            }
-        }
-        saveDataToFile(adminFile, data);
-    }
-
-
-    std::vector<domain::Scooter> RepositoryInFile::getScooters(const std::string &dbName) const {
-        if (dbName == "dbUser") return loadDataFromFile(userFile);
-        return loadDataFromFile(adminFile);
-    }
-
-
-    std::vector<domain::Scooter> RepositoryInFile::loadDataFromFile(const std::string &fileName) {
+    std::vector<domain::Scooter> Repository::loadDataFromFile(const std::string &fileName) {
         std::ifstream file(fileName);
         if (!file.is_open()) {
             std::cout << "Error opening file: scootersData.csv" << std::endl;
@@ -172,7 +86,7 @@ namespace repository {
         return scooters;
     }
 
-    void RepositoryInFile::saveDataToFile(const std::string &fileName, const std::vector<domain::Scooter> &data) {
+    void Repository::saveDataToFile(const std::string &fileName, const std::vector<domain::Scooter> &data) {
         std::ofstream file(fileName);
         if (!file.is_open()) {
             std::cout << "Error opening file: scootersData.csv!" << std::endl;

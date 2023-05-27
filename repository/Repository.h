@@ -18,53 +18,24 @@
 
 namespace repository {
     class Repository {
-
-    public:
-        virtual void addScooter(const domain::Scooter &scooter, const std::string &dbName) = 0;
-
-        virtual void deleteScooter(const domain::Scooter &scooter, const std::string &dbName) = 0;
-
-        virtual void updateScooter(const domain::Scooter &scooter) = 0;
-
-        virtual std::vector<domain::Scooter> getScooters(const std::string &dbName) const = 0;
-
-    };
-
-    class RepositoryInMemory : public Repository {
     private:
         std::vector<domain::Scooter> scooters;
-        std::vector<domain::Scooter> userScooters;
+
     public:
-        RepositoryInMemory();
+        Repository(std::vector<domain::Scooter> scooters_);
 
-        void addScooter(const domain::Scooter &scooter, const std::string &dbName) override;
+        void addScooter(const domain::Scooter &scooter);
 
-        void deleteScooter(const domain::Scooter &scooter, const std::string &dbName) override;
+        void deleteScooter(const domain::Scooter &scooter);
 
-        void updateScooter(const domain::Scooter &scooter) override;
+        void updateScooter(const domain::Scooter &scooter);
 
-        std::vector<domain::Scooter> getScooters(const std::string &dbName) const override;
+        std::vector<domain::Scooter> getScooters() const;
 
+        void saveDataToFile(const std::string &fileName, const std::vector<domain::Scooter> &data);
+
+        std::vector<domain::Scooter> loadDataFromFile(const std::string &fileName);
     };
 
-    class RepositoryInFile : public Repository {
-    private:
-        std::string adminFile;
-        std::string userFile;
-    public:
-        explicit RepositoryInFile();
-
-        void addScooter(const domain::Scooter &scooter, const std::string &dbName) override;
-
-        void deleteScooter(const domain::Scooter &scooter, const std::string &dbName) override;
-
-        void updateScooter(const domain::Scooter &scooter) override;
-
-        std::vector<domain::Scooter> getScooters(const std::string &dbName) const override;
-
-        static std::vector<domain::Scooter> loadDataFromFile(const std::string &fileName);
-
-        static void saveDataToFile(const std::string &fileName, const std::vector<domain::Scooter> &data);
-    };
 }
 #endif
