@@ -35,7 +35,7 @@ namespace repository {
     std::vector<domain::Scooter> Repository::loadDataFromFile(const std::string &fileName) {
         std::ifstream file(fileName);
         if (!file.is_open()) {
-            std::cout << "Error opening file: scootersData.csv" << std::endl;
+            std::cout << "Error opening file:" <<fileName <<std::endl;
             return {};
         }
         const std::unordered_map<std::string, domain::State> stateMap{

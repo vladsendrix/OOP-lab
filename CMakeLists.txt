@@ -9,10 +9,23 @@ include_directories(domain)
 include_directories(repository)
 include_directories(test)
 include_directories(ui)
+include_directories(gui)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+set(CMAKE_PREFIX_PATH "C:/Qt/5.15.2/mingw81_64")
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
 add_executable(OOP_lab
+        app.cpp
         controller/Controller.cpp
         controller/Controller.h
         domain/Domain.cpp
@@ -21,4 +34,10 @@ add_executable(OOP_lab
         repository/Repository.h
         ui/Console.cpp
         ui/Console.h
-        app.cpp)
+        gui/mainwindow.cpp
+        gui/mainwindow.h
+        )
+
+target_link_libraries(OOP_lab PRIVATE Qt5::Widgets)
+
+
