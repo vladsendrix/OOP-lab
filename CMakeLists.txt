@@ -11,9 +11,6 @@ include_directories(test)
 include_directories(ui)
 include_directories(gui)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-set(CMAKE_PREFIX_PATH "C:/Qt/5.15.2/mingw81_64")
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
