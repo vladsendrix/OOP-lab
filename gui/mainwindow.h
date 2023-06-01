@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QInputDialog>
+#include <QTextEdit>
 #include "Console.h"
 
 class MainWindow : public QMainWindow
@@ -28,6 +30,9 @@ private slots:
     void onQuitUsageButtonClicked();
     void onViewReservedScootersButtonClicked();
     void onGoBackButtonClicked();
+    void printScooterDetails(const domain::Scooter& scooter);
+    void printListOfScooters(const std::vector<domain::Scooter>& scooters);
+    static QString getStateString(domain::State state);
 
 private:
     std::shared_ptr<controller::ProductController> controller;

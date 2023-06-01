@@ -61,4 +61,12 @@ namespace domain {
     void Scooter::setState(const State &state_) {
         this->state = state_;
     }
+
+
+    std::string Date::toString() const {
+        std::stringstream ss;
+        ss << year << "." << month << "." << day;
+        return ss.str();
+    }
+
 }

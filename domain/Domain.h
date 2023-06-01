@@ -2,6 +2,7 @@
 #define DOMAIN_H
 
 #include <string>
+#include <sstream>
 
 namespace domain {
 
@@ -14,7 +15,10 @@ namespace domain {
             return day < other.day;
         }
 
+        std::string toString() const;
     };
+
+
 
     enum State {
         PARKED,
