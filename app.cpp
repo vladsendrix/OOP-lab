@@ -1,27 +1,16 @@
 #include <memory>
 #include "repository/Repository.h"
 #include "controller/Controller.h"
-#include "ui/Console.h"
-#include <iostream>
 #include <QApplication>
 #include "gui/mainwindow.h"
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-
-    MainWindow mainWindow;
+    std::shared_ptr<repository::Repository> scooters = std::make_shared<repository::Repository>("ScootersData.csv");
+    std::shared_ptr<controller::ProductController> controller = std::make_shared<controller::ProductController>(scooters);
+    MainWindow mainWindow(controller);
     mainWindow.show();
 
-    return app.exec();
+    return QApplication::exec();
 }
-
-
-//int main() {
-//    std::shared_ptr<repository::Repository> scooters = std::make_shared<repository::Repository>();
-//    std::shared_ptr<controller::ProductController> controller = std::make_shared<controller::ProductController>();
-//    std::unique_ptr<ui::Console> app = std::make_unique<ui::Console>(controller);
-//    app->run();
-//    return 0;
-//}

@@ -108,7 +108,8 @@ namespace repository {
         file.close();
     }
 
-    Repository::Repository() {
-        scooters= loadDataFromFile("ScootersData.csv");
+    Repository::Repository(const std::string &fileName_) {
+
+        scooters= loadDataFromFile(fileName_);
     }
 }

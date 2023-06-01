@@ -10,7 +10,7 @@ class MainWindow : public QMainWindow
 Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(std::shared_ptr<controller::ProductController> controller, QWidget *parent = nullptr);
 
 private slots:
     void onUserButtonClicked();
@@ -30,6 +30,7 @@ private slots:
     void onGoBackButtonClicked();
 
 private:
+    std::shared_ptr<controller::ProductController> controller;
     QPushButton *userButton;
     QPushButton *adminButton;
 };

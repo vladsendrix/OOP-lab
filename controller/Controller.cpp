@@ -3,12 +3,18 @@
 namespace controller {
 
 
-    ProductController::ProductController() {
-        repo = std::make_unique<repository::Repository>();
+    ProductController::ProductController(std::shared_ptr<repository::Repository> repo_)
+            : repo(std::move(repo_)) {
+        // Constructor implementation
     }
 
-domain::Scooter ProductController::addScooter(const std::string &model, const std::string &date, const int &mileage_,
-                                                   const std::string &lastStandPlace, const int &stateNr_) {
+
+
+
+
+    domain::Scooter
+    ProductController::addScooter(const std::string &model, const std::string &date, const int &mileage_,
+                                  const std::string &lastStandPlace, const int &stateNr_) {
         auto id = autoGenerateID();
 
         domain::Date commissionDate{2023, 01, 01};
@@ -247,7 +253,7 @@ domain::Scooter ProductController::addScooter(const std::string &model, const st
 
     bool ProductController::parkScooter(const int &index_, const std::string &location_) {
         int index = index_;
-        const std::string& location = location_;
+        const std::string &location = location_;
         if (is_inuse(index)) {
             domain::Scooter useScooter = repo->getScooters().at(index);
             useScooter.setState(domain::State::PARKED);
@@ -351,4 +357,6 @@ domain::Scooter ProductController::addScooter(const std::string &model, const st
         }
         return reservedScooters;
     }
+
+
 }

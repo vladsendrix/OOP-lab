@@ -22,7 +22,7 @@ namespace repository {
         std::vector<domain::Scooter> scooters;
 
     public:
-        Repository();
+        explicit Repository(const std::string &fileName_);
 
         void addScooter(const domain::Scooter &scooter);
 

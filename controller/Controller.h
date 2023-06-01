@@ -17,10 +17,11 @@
 namespace controller {
     class ProductController {
     private:
-        std::unique_ptr<repository::Repository> repo;
+        std::shared_ptr<repository::Repository> repo;  // Update to shared_ptr
 
     public:
-        ProductController();
+        explicit ProductController(std::shared_ptr<repository::Repository> repo);  // Update parameter type
+
 
         domain::Scooter addScooter(const std::string &model, const std::string &date, const int &mileage,
                                    const std::string &lastStandPlace, const int &stateNr);
