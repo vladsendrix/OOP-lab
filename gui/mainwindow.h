@@ -33,11 +33,13 @@ private slots:
     void printScooterDetails(const domain::Scooter& scooter);
     void printListOfScooters(const std::vector<domain::Scooter>& scooters);
     static QString getStateString(domain::State state);
+    void printDetailHeader();
 
 private:
     std::shared_ptr<controller::ProductController> controller;
     QPushButton *userButton;
     QPushButton *adminButton;
+    QPushButton *exitButton;
 };
 
 #endif // MAINWINDOW_H

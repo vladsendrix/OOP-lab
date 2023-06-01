@@ -4,25 +4,93 @@
 #include <QInputDialog>
 #include <utility>
 #include <QTextEdit>
+#include <QLabel>
+#include <QTextStream>
+#include <QTableWidget>
+#include <QHeaderView>
+
 
 MainWindow::MainWindow(std::shared_ptr<controller::ProductController> controller, QWidget *parent)
-        : QMainWindow(parent), controller(std::move(controller)) {
+        : QMainWindow(parent), controller(std::move(controller))
+{
     resize(1000, 800);
+
+    // Set the stylesheet for the main window
+    setStyleSheet("QWidget { background-color: #555555; }");
 
     auto *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
 
     auto *layout = new QVBoxLayout(centralWidget);
 
+    auto *titleLabel = new QLabel("Welcome to our Scooter APP", this);
+    titleLabel->setStyleSheet("QLabel { "
+                              "color: #F6F5AE; "
+                              "font-size: 50px; "
+                              "padding: 30px 0;"
+                              "}");
+    titleLabel->setAlignment(Qt::AlignCenter);
+
+    auto *authorsLabel = new QLabel("@authors: Sendroiu Vlad, Rapolti Zsolt, Stelli Janos", this);
+    authorsLabel->setStyleSheet("QLabel { "
+                                "color: #F6F5AE;"
+                                "font-size: 20px;"
+                                "padding: 0 0 50px;"
+                                "}");
+    authorsLabel->setAlignment(Qt::AlignCenter);
+
     userButton = new QPushButton("User", this);
     adminButton = new QPushButton("Admin", this);
+    exitButton = new QPushButton("EXIT", this);
 
-    layout->addWidget(userButton);
-    layout->addWidget(adminButton);
+    adminButton->setStyleSheet("QPushButton { "
+                               "background-color: #F6F5AE; "
+                               "color: #000; "
+                               "font-size: 50px; "
+                               "width: 150px; "
+                               "height: 75px; "
+                               "}");
 
-    connect(userButton, &QPushButton::clicked, this, &MainWindow::onUserButtonClicked);
+    userButton->setStyleSheet("QPushButton { "
+                              "background-color: #F6F5AE; "
+                              "color: #000; "
+                              "font-size: 50px; "
+                              "width: 150px; "
+                              "height: 75px; "
+                              "}");
+
+    exitButton->setStyleSheet("QPushButton { "
+                              "background-color: #F6F5AE; "
+                              "color: #000; "
+                              "font-size: 30px; "
+                              "width: 100px; "
+                              "height: 50px; "
+                              "}");
+
+    auto *buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(adminButton);
+    buttonLayout->addWidget(userButton);
+    buttonLayout->setSpacing(50);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
+    buttonLayout->setAlignment(Qt::AlignCenter);
+
+    layout->addWidget(titleLabel);
+    layout->addWidget(authorsLabel);
+    layout->addLayout(buttonLayout);
+    layout->addSpacing(30);
+    layout->addWidget(exitButton, 0, Qt::AlignHCenter);
+    layout->setContentsMargins(0, 0, 0, 20);
+    layout->setSpacing(0);
+    layout->setAlignment(Qt::AlignCenter);
+
+    centralWidget->setLayout(layout);
+
     connect(adminButton, &QPushButton::clicked, this, &MainWindow::onAdminButtonClicked);
+    connect(userButton, &QPushButton::clicked, this, &MainWindow::onUserButtonClicked);
+    connect(exitButton, &QPushButton::clicked, this, &MainWindow::close);
 }
+
+
 
 
 void MainWindow::onAdminButtonClicked() {
@@ -123,7 +191,8 @@ void MainWindow::onAddScooterButtonClicked() {
     std::string dateString = date.toStdString();
     std::string lastStandPlaceString = lastStandPlace.toStdString();
 
-    domain::Scooter addedScooter = controller->addScooter(modelString, dateString, mileage, lastStandPlaceString, stateNr);
+    domain::Scooter addedScooter = controller->addScooter(modelString, dateString, mileage, lastStandPlaceString,
+                                                          stateNr);
 
     // Print the added scooter details
     // You can define your own method to print the scooter details based on your UI design
@@ -164,7 +233,8 @@ void MainWindow::onEditScooterButtonClicked() {
         std::string dateString = date.toStdString();
         std::string lastStandPlaceString = lastStandPlace.toStdString();
 
-        domain::Scooter editedScooter = controller->editScooter(position, dateString, mileage, lastStandPlaceString, stateNr);
+        domain::Scooter editedScooter = controller->editScooter(position, dateString, mileage, lastStandPlaceString,
+                                                                stateNr);
 
         // Print the edited scooter details
         // You can define your own method to print the scooter details based on your UI design
@@ -176,7 +246,8 @@ void MainWindow::onEditScooterButtonClicked() {
 
 
 void MainWindow::onSearchByStandPlaceButtonClicked() {
-    QString standPlace = QInputDialog::getText(this, "Search by Stand Place", "Enter the stand place (or leave empty to show all scooters):");
+    QString standPlace = QInputDialog::getText(this, "Search by Stand Place",
+                                               "Enter the stand place (or leave empty to show all scooters):");
 
     std::string standPlaceString = standPlace.toStdString();
     std::vector<domain::Scooter> scooters = controller->searchScooterByStandPlace(standPlaceString);
@@ -197,7 +268,8 @@ void MainWindow::onFilterByAgeButtonClicked() {
     std::vector<domain::Scooter> filteredScooters = controller->filterScooterByAge(inclusive, age);
 
     if (filteredScooters.empty()) {
-        QMessageBox::information(this, "Filter by Age", "No scooters younger than or equal to " + QString::number(age) + " years were found!");
+        QMessageBox::information(this, "Filter by Age",
+                                 "No scooters younger than or equal to " + QString::number(age) + " years were found!");
     } else {
         // Print the list of filtered scooters
         // You can define your own method to print the scooter list based on your UI design
@@ -212,7 +284,8 @@ void MainWindow::onFilterByMileageButtonClicked() {
     std::vector<domain::Scooter> filteredScooters = controller->filterScooterByMileage(lessThan, mileage);
 
     if (filteredScooters.empty()) {
-        QMessageBox::information(this, "Filter by Mileage", "No scooters found with a mileage lower than " + QString::number(mileage) + " miles!");
+        QMessageBox::information(this, "Filter by Mileage",
+                                 "No scooters found with a mileage lower than " + QString::number(mileage) + " miles!");
     } else {
         // Print the list of filtered scooters
         // You can define your own method to print the scooter list based on your UI design
@@ -225,6 +298,7 @@ void MainWindow::onListByAgeAscendingButtonClicked() {
 
     // Print the sorted list of scooters
     // You can define your own method to print the scooter list based on your UI design
+
     printListOfScooters(sortedScooters);
 }
 
@@ -233,6 +307,7 @@ void MainWindow::onListByAgeDescendingButtonClicked() {
 
     // Print the sorted list of scooters
     // You can define your own method to print the scooter list based on your UI design
+
     printListOfScooters(sortedScooters);
 }
 
@@ -268,62 +343,102 @@ void MainWindow::onGoBackButtonClicked() {
 }
 
 
-
 void MainWindow::printScooterDetails(const domain::Scooter& scooter) {
-    // Create a QTextEdit widget to display the scooter details
-    auto* detailsTextEdit = new QTextEdit(this);
-    detailsTextEdit->setReadOnly(true);
-
-    // Format the scooter details
-    QString detailsText = "Scooter Details:\n\n";
-    detailsText += "ID: " + QString::fromStdString(scooter.getID()) + "\n";
-    detailsText += "Model: " + QString::fromStdString(scooter.getModel()) + "\n";
-    detailsText += "Commission Date: " + QString::fromStdString(scooter.getCommissionDate().toString()) + "\n";
-    detailsText += "Mileage: " + QString::number(scooter.getMileage()) + " miles\n";
-    detailsText += "Last Stand Place: " + QString::fromStdString(scooter.getLastStandPlace()) + "\n";
-    detailsText += "State: " + getStateString(scooter.getState()) + "\n";
-
-    // Set the formatted details text to the QTextEdit widget
-    detailsTextEdit->setPlainText(detailsText);
-
     // Create a QDialog to display the scooter details
     auto* detailsDialog = new QDialog(this);
     detailsDialog->setWindowTitle("Scooter Details");
+
     auto* layout = new QVBoxLayout(detailsDialog);
-    layout->addWidget(detailsTextEdit);
+
+    // Create the table widget
+    auto* tableWidget = new QTableWidget(detailsDialog);
+    tableWidget->setRowCount(1);
+    tableWidget->setColumnCount(6);
+    tableWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    // Set the table header
+    //tableWidget->setHorizontalHeaderLabels({"ID", "Model", "Commission Date", "Mileage", "Last Stand Place", "State"});
+
+    // Populate the table with scooter details
+    auto* idItem = new QTableWidgetItem(QString::fromStdString(scooter.getID()));
+    auto* modelItem = new QTableWidgetItem(QString::fromStdString(scooter.getModel()));
+    auto* commissionDateItem = new QTableWidgetItem(QString::fromStdString(scooter.getCommissionDate().toString()));
+    auto* mileageItem = new QTableWidgetItem(QString::number(scooter.getMileage()) + " miles");
+    auto* lastStandPlaceItem = new QTableWidgetItem(QString::fromStdString(scooter.getLastStandPlace()));
+    auto* stateItem = new QTableWidgetItem(getStateString(scooter.getState()));
+
+    tableWidget->setItem(0, 0, idItem);
+    tableWidget->setItem(0, 1, modelItem);
+    tableWidget->setItem(0, 2, commissionDateItem);
+    tableWidget->setItem(0, 3, mileageItem);
+    tableWidget->setItem(0, 4, lastStandPlaceItem);
+    tableWidget->setItem(0, 5, stateItem);
+
+    layout->addWidget(tableWidget);
+    detailsDialog->setLayout(layout);
+
+    // Resize the columns to fit the content
+    tableWidget->resizeColumnsToContents();
 
     // Display the QDialog
     detailsDialog->exec();
 }
 
 void MainWindow::printListOfScooters(const std::vector<domain::Scooter>& scooters) {
-    // Create a QTextEdit widget to display the list of scooters
-    auto* listTextEdit = new QTextEdit(this);
-    listTextEdit->setReadOnly(true);
-
-    // Format the list of scooters
-    QString listText = "List of Scooters:\n\n";
-    for (const auto& scooter : scooters) {
-        listText += "ID: " + QString::fromStdString(scooter.getID()) + "\n";
-        listText += "Model: " + QString::fromStdString(scooter.getModel()) + "\n";
-        listText += "Commission Date: " + QString::fromStdString(scooter.getCommissionDate().toString()) + "\n";
-        listText += "Mileage: " + QString::number(scooter.getMileage()) + " miles\n";
-        listText += "Last Stand Place: " + QString::fromStdString(scooter.getLastStandPlace()) + "\n";
-        listText += "State: " + getStateString(scooter.getState()) + "\n\n";
-    }
-
-    // Set the formatted list text to the QTextEdit widget
-    listTextEdit->setPlainText(listText);
-
     // Create a QDialog to display the list of scooters
     auto* listDialog = new QDialog(this);
     listDialog->setWindowTitle("List of Scooters");
+
     auto* layout = new QVBoxLayout(listDialog);
-    layout->addWidget(listTextEdit);
+
+    // Create the table widget
+    auto* tableWidget = new QTableWidget(listDialog);
+    tableWidget->setRowCount(scooters.size());
+    tableWidget->setColumnCount(6);
+    tableWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    tableWidget->setFixedSize(1280, 720);
+
+    // Set the table header with the scooter details
+    QStringList headerLabels = {"ID", "Model", "Commission Date", "Mileage", "Last Stand Place", "State"};
+    tableWidget->setHorizontalHeaderLabels(headerLabels);
+
+    // Set the font size and text color for the header labels
+    QFont headerFont = tableWidget->horizontalHeader()->font();
+    headerFont.setPointSize(15);
+    tableWidget->horizontalHeader()->setFont(headerFont);
+    tableWidget->horizontalHeader()->setStyleSheet("color: #000;");
+
+    // Set the font size and text color for the table
+    QFont tableFont = tableWidget->font();
+    tableFont.setPointSize(10);
+    tableWidget->setFont(tableFont);
+    tableWidget->setStyleSheet("color: white;");
+
+    // Populate the table with scooter details
+    for (int row = 0; row < scooters.size(); ++row) {
+        const auto& scooter = scooters[row];
+        QTableWidgetItem* idItem = new QTableWidgetItem(QString::fromStdString(scooter.getID()));
+        QTableWidgetItem* modelItem = new QTableWidgetItem(QString::fromStdString(scooter.getModel()));
+        QTableWidgetItem* commissionDateItem = new QTableWidgetItem(QString::fromStdString(scooter.getCommissionDate().toString()));
+        QTableWidgetItem* mileageItem = new QTableWidgetItem(QString::number(scooter.getMileage()) + " miles");
+        QTableWidgetItem* lastStandPlaceItem = new QTableWidgetItem(QString::fromStdString(scooter.getLastStandPlace()));
+        QTableWidgetItem* stateItem = new QTableWidgetItem(getStateString(scooter.getState()));
+
+        tableWidget->setItem(row, 0, idItem);
+        tableWidget->setItem(row, 1, modelItem);
+        tableWidget->setItem(row, 2, commissionDateItem);
+        tableWidget->setItem(row, 3, mileageItem);
+        tableWidget->setItem(row, 4, lastStandPlaceItem);
+        tableWidget->setItem(row, 5, stateItem);
+    }
+
+    layout->addWidget(tableWidget);
+    listDialog->setLayout(layout);
 
     // Display the QDialog
     listDialog->exec();
 }
+
 
 QString MainWindow::getStateString(domain::State state) {
     switch (state) {
@@ -342,7 +457,46 @@ QString MainWindow::getStateString(domain::State state) {
     }
 }
 
+void MainWindow::printDetailHeader() {
+    const int idWidth = 5;
+    const int modelWidth = 30;
+    const int commissionDateWidth = 20;
+    const int mileageWidth = 15;
+    const int lastStandPlaceWidth = 30;
+    const int stateWidth = 15;
 
+    // Create a QTableWidget with 1 row and 6 columns
+    QTableWidget* tableWidget = new QTableWidget(1, 6);
+    tableWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    tableWidget->horizontalHeader()->setVisible(false);
 
+    // Set the header labels
+    tableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("ID"));
+    tableWidget->setHorizontalHeaderItem(1, new QTableWidgetItem("Model"));
+    tableWidget->setHorizontalHeaderItem(2, new QTableWidgetItem("Commission Date"));
+    tableWidget->setHorizontalHeaderItem(3, new QTableWidgetItem("Mileage"));
+    tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem("Last Stand Place"));
+    tableWidget->setHorizontalHeaderItem(5, new QTableWidgetItem("State"));
+
+    // Set the column widths
+    tableWidget->setColumnWidth(0, idWidth * 10);
+    tableWidget->setColumnWidth(1, modelWidth * 10);
+    tableWidget->setColumnWidth(2, commissionDateWidth * 10);
+    tableWidget->setColumnWidth(3, mileageWidth * 10);
+    tableWidget->setColumnWidth(4, lastStandPlaceWidth * 10);
+    tableWidget->setColumnWidth(5, stateWidth * 10);
+
+    // Create a layout and add the table widget to it
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(tableWidget);
+
+    // Create a QDialog and set the layout
+    QDialog* dialog = new QDialog(this);
+    dialog->setWindowTitle("Detail Header");
+    dialog->setLayout(layout);
+
+    // Display the QDialog
+    dialog->exec();
+}
 
 
