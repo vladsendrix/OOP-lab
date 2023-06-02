@@ -31,11 +31,9 @@ private slots:
     void onQuitUsageButtonClicked();
     void onViewReservedScootersButtonClicked();
     void onGoBackButtonClicked();
-    void closeEvent(QCloseEvent* event);
     void printScooterDetails(const domain::Scooter& scooter);
     void printListOfScooters(const std::vector<domain::Scooter>& scooters);
     static QString getStateString(domain::State state);
-    void printDetailHeader();
 
 private:
     std::shared_ptr<controller::ProductController> controller;

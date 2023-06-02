@@ -3,7 +3,6 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <utility>
-#include <QTextEdit>
 #include <QLabel>
 #include <QTextStream>
 #include <QTableWidget>
@@ -112,6 +111,18 @@ MainWindow::MainWindow(std::shared_ptr<controller::ProductController> controller
     connect(adminButton, &QPushButton::clicked, this, &MainWindow::onAdminButtonClicked);
     connect(userButton, &QPushButton::clicked, this, &MainWindow::onUserButtonClicked);
     connect(exitButton, &QPushButton::clicked, this, &MainWindow::close);
+}
+
+
+void MainWindow::onGoBackButtonClicked() {
+    // Close the current window
+    close();
+
+    // Create a new instance of the main window
+    MainWindow* mainWindow = new MainWindow(controller);
+
+    // Show the new main window
+    mainWindow->show();
 }
 
 void MainWindow::onAdminButtonClicked() {
@@ -496,28 +507,6 @@ void MainWindow::onViewReservedScootersButtonClicked() {
     printListOfScooters(userScooters);
 }
 
-void MainWindow::onGoBackButtonClicked() {
-    // Reset the central widget to the original user/admin selection
-    auto *centralWidget = new QWidget(this);
-    setCentralWidget(centralWidget);
-
-    auto *layout = new QVBoxLayout(centralWidget);
-
-    layout->addWidget(userButton);
-    layout->addWidget(adminButton);
-
-    connect(userButton, &QPushButton::clicked, this, &MainWindow::onUserButtonClicked);
-    connect(adminButton, &QPushButton::clicked, this, &MainWindow::onAdminButtonClicked);
-
-    // Disconnect the closeEvent to prevent closing the app
-    disconnect(this, &MainWindow::closeEvent, this, &QWidget::close);
-}
-
-void MainWindow::closeEvent(QCloseEvent *event) {
-    // Handle the close event to prevent the app from closing without confirmation
-    event->ignore();
-    onGoBackButtonClicked();
-}
 
 
 void MainWindow::printScooterDetails(const domain::Scooter &scooter) {
@@ -647,44 +636,4 @@ QString MainWindow::getStateString(domain::State state) {
     }
 }
 
-void MainWindow::printDetailHeader() {
-    const int idWidth = 5;
-    const int modelWidth = 30;
-    const int commissionDateWidth = 20;
-    const int mileageWidth = 15;
-    const int lastStandPlaceWidth = 30;
-    const int stateWidth = 15;
 
-    // Create a QTableWidget with 1 row and 6 columns
-    auto *tableWidget = new QTableWidget(1, 6);
-    tableWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    tableWidget->horizontalHeader()->setVisible(false);
-
-    // Set the header labels
-    tableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("ID"));
-    tableWidget->setHorizontalHeaderItem(1, new QTableWidgetItem("Model"));
-    tableWidget->setHorizontalHeaderItem(2, new QTableWidgetItem("Commission Date"));
-    tableWidget->setHorizontalHeaderItem(3, new QTableWidgetItem("Mileage"));
-    tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem("Last Stand Place"));
-    tableWidget->setHorizontalHeaderItem(5, new QTableWidgetItem("State"));
-
-    // Set the column widths
-    tableWidget->setColumnWidth(0, idWidth * 10);
-    tableWidget->setColumnWidth(1, modelWidth * 10);
-    tableWidget->setColumnWidth(2, commissionDateWidth * 10);
-    tableWidget->setColumnWidth(3, mileageWidth * 10);
-    tableWidget->setColumnWidth(4, lastStandPlaceWidth * 10);
-    tableWidget->setColumnWidth(5, stateWidth * 10);
-
-    // Create a layout and add the table widget to it
-    auto *layout = new QVBoxLayout();
-    layout->addWidget(tableWidget);
-
-    // Create a QDialog and set the layout
-    auto *dialog = new QDialog(this);
-    dialog->setWindowTitle("Detail Header");
-    dialog->setLayout(layout);
-
-    // Display the QDialog
-    dialog->exec();
-}
