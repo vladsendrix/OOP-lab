@@ -41,7 +41,10 @@ namespace controller {
 
         std::vector<domain::Scooter> filterScooterByMileage(bool lowerThan, const int &mileage);
 
-        std::vector<domain::Scooter> sortScooterByAge(bool condition);
+
+
+
+        std::vector<domain::Scooter> sortScooters(bool condition, const std::string& sortBy);
 
         std::vector<domain::Scooter> userReservedScooters();
 
@@ -63,7 +66,6 @@ namespace controller {
 
         static std::string transformID(std::string id);
 
-        std::vector<domain::Scooter> sortScootersByID();
 
 
         std::string autoGenerateID();

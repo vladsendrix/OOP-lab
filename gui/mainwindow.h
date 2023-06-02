@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QInputDialog>
 #include <QTextEdit>
+#include <QCloseEvent>
 #include "Console.h"
 
 class MainWindow : public QMainWindow
@@ -23,13 +24,14 @@ private slots:
     void onSearchByStandPlaceButtonClicked();
     void onFilterByAgeButtonClicked();
     void onFilterByMileageButtonClicked();
-    void onListByAgeAscendingButtonClicked();
-    void onListByAgeDescendingButtonClicked();
+    void onViewAllScootersButtonClicked();
+
     void onReserveScooterButtonClicked();
     void onUseScooterButtonClicked();
     void onQuitUsageButtonClicked();
     void onViewReservedScootersButtonClicked();
     void onGoBackButtonClicked();
+    void closeEvent(QCloseEvent* event);
     void printScooterDetails(const domain::Scooter& scooter);
     void printListOfScooters(const std::vector<domain::Scooter>& scooters);
     static QString getStateString(domain::State state);

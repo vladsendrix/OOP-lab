@@ -5,11 +5,7 @@ namespace controller {
 
     ProductController::ProductController(std::shared_ptr<repository::Repository> repo_)
             : repo(std::move(repo_)) {
-        // Constructor implementation
     }
-
-
-
 
 
     domain::Scooter
@@ -49,7 +45,7 @@ namespace controller {
 
         domain::Scooter newScooter = domain::Scooter(id, model, commissionDate, mileage, lastStandPlace, state);
         repo->addScooter(newScooter);
-        sortScootersByID();
+        sortScooters(true,"ID");
         return newScooter;
     }
 
@@ -176,25 +172,6 @@ namespace controller {
         return result;
     }
 
-    std::vector<domain::Scooter> ProductController::sortScooterByAge(bool ascending) {
-        std::vector<domain::Scooter> scooters = repo->getScooters();
-        std::string sortType;
-        if (ascending) {
-            // Sort the scooters by age in ascending order
-            std::sort(scooters.begin(), scooters.end(),
-                      [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
-                          return scooter1.getCommissionDate() < scooter2.getCommissionDate();
-                      });
-        } else {
-            // Sort the scooters by age in descending order
-            std::sort(scooters.begin(), scooters.end(),
-                      [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
-                          return scooter2.getCommissionDate() < scooter1.getCommissionDate();
-                      });
-        }
-
-        return scooters;
-    }
 
     bool ProductController::is_inwait_parked(const int &index_) {
         int index = index_;
@@ -265,23 +242,58 @@ namespace controller {
         return false;
     }
 
+
+    // all the sortings
+    std::vector<domain::Scooter> ProductController::sortScooters(bool ascending, const std::string &sortBy) {
+        std::vector<domain::Scooter> scooters = repo->getScooters();
+
+        if (sortBy == "ID") {
+            std::sort(scooters.begin(), scooters.end(),
+                      [ascending](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                          return ascending ? scooter1.getID() < scooter2.getID() : scooter1.getID() > scooter2.getID();
+                      });
+        } else if (sortBy == "Model") {
+            std::sort(scooters.begin(), scooters.end(),
+                      [ascending](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                          return ascending ? scooter1.getModel() < scooter2.getModel() : scooter1.getModel() >
+                                                                                         scooter2.getModel();
+                      });
+        } else if (sortBy == "Age") {
+            std::sort(scooters.begin(), scooters.end(),
+                      [ascending](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                          return ascending ? scooter1.getCommissionDate() < scooter2.getCommissionDate() :
+                                 scooter2.getCommissionDate() < scooter1.getCommissionDate();
+                      });
+        } else if (sortBy == "Mileage") {
+            std::sort(scooters.begin(), scooters.end(),
+                      [ascending](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                          return ascending ? scooter1.getMileage() < scooter2.getMileage() : scooter1.getMileage() >
+                                                                                             scooter2.getMileage();
+                      });
+        } else if (sortBy == "LastStandPlace") {
+            std::sort(scooters.begin(), scooters.end(),
+                      [ascending](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                          return ascending ? scooter1.getLastStandPlace() < scooter2.getLastStandPlace() :
+                                 scooter1.getLastStandPlace() > scooter2.getLastStandPlace();
+                      });
+        } else if (sortBy == "State") {
+            std::sort(scooters.begin(), scooters.end(),
+                      [ascending](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
+                          return ascending ? scooter1.getState() < scooter2.getState() : scooter1.getState() >
+                                                                                         scooter2.getState();
+                      });
+        }
+        return scooters;
+    }
+
+    // END all sortings
+
     // other helpful methods
 
     std::string ProductController::transformID(std::string id) {
         id = id.substr(0, 3);
         std::transform(id.begin(), id.end(), id.begin(), [](unsigned char c) { return std::toupper(c); });
         return id;
-    }
-
-    std::vector<domain::Scooter> ProductController::sortScootersByID() {
-        std::vector<domain::Scooter> scooters = repo->getScooters();
-
-        // Sort the scooters by ID in ascending order
-        std::sort(scooters.begin(), scooters.end(),
-                  [](const domain::Scooter &scooter1, const domain::Scooter &scooter2) {
-                      return scooter1.getID() < scooter2.getID();
-                  });
-        return scooters;
     }
 
 
@@ -357,6 +369,5 @@ namespace controller {
         }
         return reservedScooters;
     }
-
 
 }

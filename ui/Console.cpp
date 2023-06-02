@@ -8,7 +8,7 @@ namespace ui {
     }
 
     void Console::adminMethods() {
-        printArrayOfScooters(ctrl->sortScootersByID());
+        printArrayOfScooters(ctrl->sortScooters(true,"ID"));
         while (true) {
             printMessage("\nAdmin Menu\n"
                          "0. EXIT\n"
@@ -182,13 +182,13 @@ namespace ui {
                 }
                 case 9: {
                     printMessage("\nList of scooters sorted by eage (ascending):");
-                    printArrayOfScooters(ctrl->sortScooterByAge(true));
+                    printArrayOfScooters(ctrl->sortScooters(true,"Age"));
                     preventMenuPopUp();
                     break;
                 }
                 case 10: {
                     printMessage("\nList of scooters sorted by eage (ascending):");
-                    printArrayOfScooters(ctrl->sortScooterByAge(false));
+                    printArrayOfScooters(ctrl->sortScooters(false,"Age"));
                     preventMenuPopUp();
                     break;
                 }
@@ -310,7 +310,7 @@ namespace ui {
                     break;
                 }
                 case 6: {
-                    printArrayOfScooters(ctrl->sortScootersByID());
+                    printArrayOfScooters(ctrl->sortScooters(true,"ID"));
 
                     printMessage("Here are the scooters listed.\nPlease enter an ID to reserve a scooter: ");
                     std::string readID = readString();
