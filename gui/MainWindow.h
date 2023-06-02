@@ -6,7 +6,7 @@
 #include <QInputDialog>
 #include <QTextEdit>
 #include <QCloseEvent>
-#include "Console.h"
+#include "../ui/Console.h"
 
 class MainWindow : public QMainWindow
 {

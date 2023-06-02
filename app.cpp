@@ -2,7 +2,7 @@
 #include "repository/Repository.h"
 #include "controller/Controller.h"
 #include <QApplication>
-#include "gui/mainwindow.h"
+#include "gui/MainWindow.h"
 
 
 int main(int argc, char *argv[]) {
