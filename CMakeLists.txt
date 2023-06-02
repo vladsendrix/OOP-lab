@@ -3,6 +3,8 @@ project(OOP_lab)
 
 set(CMAKE_CXX_STANDARD 23)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 include_directories(.)
 include_directories(controller)
 include_directories(domain)
@@ -19,7 +21,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Widgets REQUIRED)
 
 add_executable(OOP_lab
         app.cpp
@@ -31,10 +33,8 @@ add_executable(OOP_lab
         repository/Repository.h
         ui/Console.cpp
         ui/Console.h
-        gui/mainwindow.cpp
-        gui/mainwindow.h
+        gui/MainWindow.cpp
+        gui/MainWindow.h
         )
 
-target_link_libraries(OOP_lab PRIVATE Qt5::Widgets)
-
-
+target_link_libraries(OOP_lab PRIVATE Qt6::Widgets)
