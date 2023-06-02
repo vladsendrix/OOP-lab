@@ -7,9 +7,7 @@
 #include <QTextStream>
 #include <QTableWidget>
 #include <QHeaderView>
-#include <QCloseEvent>
 #include <QFileDialog>
-
 
 
 MainWindow::MainWindow(std::shared_ptr<controller::ProductController> controller, QWidget *parent)
@@ -119,7 +117,7 @@ void MainWindow::onGoBackButtonClicked() {
     close();
 
     // Create a new instance of the main window
-    MainWindow* mainWindow = new MainWindow(controller);
+    auto *mainWindow = new MainWindow(controller);
 
     // Show the new main window
     mainWindow->show();
@@ -506,7 +504,6 @@ void MainWindow::onViewReservedScootersButtonClicked() {
     std::vector<domain::Scooter> userScooters = controller->userReservedScooters();
     printListOfScooters(userScooters);
 }
-
 
 
 void MainWindow::printScooterDetails(const domain::Scooter &scooter) {
