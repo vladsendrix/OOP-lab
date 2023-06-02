@@ -2,20 +2,22 @@
 
 namespace repository {
 
-    void Repository::addScooter(const domain::Scooter &scooter) {
+    void Repository::addScooter(const domain::Scooter &scooter, const std::string &fileName) {
         scooters.push_back(scooter);
+        saveDataToFile(fileName,scooters);
     }
 
-    void Repository::deleteScooter(const domain::Scooter &scooter_) {
+    void Repository::deleteScooter(const domain::Scooter &scooter_,const std::string& fileName) {
         auto it = std::remove_if(scooters.begin(), scooters.end(), [&scooter_](const domain::Scooter &scooter) {
             return scooter.getID() == scooter_.getID();
         });
         if (it != scooters.end()) {
             scooters.erase(it, scooters.end());
         }
+        saveDataToFile(fileName,scooters);
     }
 
-    void Repository::updateScooter(const domain::Scooter &scooter) {
+    void Repository::updateScooter(const domain::Scooter &scooter,const std::string &fileName) {
         for (auto &s: scooters) {
             if (s.getID() == scooter.getID()) {
                 s.setModel(scooter.getModel());
@@ -26,11 +28,14 @@ namespace repository {
                 break;
             }
         }
+        saveDataToFile(fileName,scooters);
     }
 
-    std::vector<domain::Scooter> Repository::getScooters() const {
+    std::vector<domain::Scooter> Repository::getScooters(const std::string &fileName) const {
         return scooters;
     }
+
+
 
     std::vector<domain::Scooter> Repository::loadDataFromFile(const std::string &fileName) {
         std::ifstream file(fileName);

@@ -9,6 +9,8 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QCloseEvent>
+#include <QFileDialog>
+
 
 
 MainWindow::MainWindow(std::shared_ptr<controller::ProductController> controller, QWidget *parent)
@@ -138,9 +140,9 @@ void MainWindow::onAdminButtonClicked() {
                           "background-color: #F6F5AE; "
                           "color: #000; "
                           "font-size: 30px; "
-                          "width: 350px; "
+                          "width: 300px; "
                           "height: 50px; "
-                          "border-radius:10px;"
+                          "border-radius: 10px;"
                           "}"
                           "QPushButton:hover { "
                           "background-color: #D8D7A4; "
@@ -187,6 +189,12 @@ void MainWindow::onUserButtonClicked() {
     // Create a QMessageBox to display a message when the user button is clicked
     // QMessageBox::information(this, "User Button", "User button clicked!");
 
+    QString fileName = QFileDialog::getOpenFileName(this, "Select File", QString(), "Data Files (*.dat *.txt *.csv)");
+    if (!fileName.isEmpty()) {
+        controller->setUserFile(fileName.toStdString());
+    }
+
+
     // Create the user options buttons
     auto *goBackButton = new QPushButton("Go back", this);
     auto *searchButton = new QPushButton("Search by Stand Place", this);
@@ -212,13 +220,14 @@ void MainWindow::onUserButtonClicked() {
                           "background-color: #F6F5AE; "
                           "color: #000; "
                           "font-size: 30px; "
-                          "width: 250px; "
+                          "width: 300px; "
                           "height: 50px; "
                           "border-radius:10px;"
                           "}"
                           "QPushButton:hover { "
                           "background-color: #D8D7A4; "
                           "}";
+
     goBackButton->setStyleSheet(buttonStyle);
     searchButton->setStyleSheet(buttonStyle);
     filterAgeButton->setStyleSheet(buttonStyle);
@@ -263,11 +272,19 @@ void MainWindow::onUserButtonClicked() {
 }
 
 void MainWindow::onAddScooterButtonClicked() {
+    QInputDialog dialog(this);
+    dialog.setOption(QInputDialog::UseListViewForComboBoxItems, true);
+    dialog.setFixedSize(800, 600);
+
     QString model = QInputDialog::getText(this, "Add Scooter", "Enter the scooter model:");
     QString date = QInputDialog::getText(this, "Add Scooter", "Enter the commission date (yyyy-mm-dd):");
     int mileage = QInputDialog::getInt(this, "Add Scooter", "Enter the mileage:");
     QString lastStandPlace = QInputDialog::getText(this, "Add Scooter", "Enter the last stand place:");
     int stateNr = QInputDialog::getInt(this, "Add Scooter", "Enter the state number (1-5):");
+
+    QFont font;
+    font.setPointSize(20);
+    dialog.setFont(font);
 
     std::string modelString = model.toStdString();
     std::string dateString = date.toStdString();
@@ -280,8 +297,19 @@ void MainWindow::onAddScooterButtonClicked() {
     // You can define your own method to print the scooter details based on your UI design
     printScooterDetails(addedScooter);
 
+    QMessageBox messageBox(this);
+    messageBox.setStyleSheet(
+            "QMessageBox { background-color: #f0f0f0; "
+            "color: #fff; "
+            "font-size: 20px; "
+            "width:100px;"
+            "height:50px;"
+            "}"); // Set background color, font color, and font size
     QMessageBox::information(this, "Add Scooter", "Scooter added successfully!");
+
+    resize(800, 600); // Resize the window to 800x600 pixels
 }
+
 
 void MainWindow::onDeleteScooterButtonClicked() {
     QString scooterID = QInputDialog::getText(this, "Delete Scooter", "Enter the ID of the scooter to delete:");
@@ -376,7 +404,7 @@ void MainWindow::onFilterByMileageButtonClicked() {
 }
 
 void MainWindow::onViewAllScootersButtonClicked() {
-    std::vector<domain::Scooter> sortedScooters = controller->sortScooters(true,"Age");
+    std::vector<domain::Scooter> sortedScooters = controller->sortScooters(true, "ID");
 
     // Print the sorted list of scooters
     // You can define your own method to print the scooter list based on your UI design
@@ -387,7 +415,7 @@ void MainWindow::onViewAllScootersButtonClicked() {
 
 void MainWindow::onReserveScooterButtonClicked() {
     QMessageBox::information(this, "Reserve Scooter", "Reserve Scooter button clicked!");
-    printListOfScooters(controller->sortScooters(true,"ID"));
+    printListOfScooters(controller->sortScooters(true, "ID"));
 
     QString readID = QInputDialog::getText(this, "Here are the scooters listed.",
                                            "Please enter an ID to reserve a scooter: ");
@@ -463,7 +491,9 @@ void MainWindow::onQuitUsageButtonClicked() {
 }
 
 void MainWindow::onViewReservedScootersButtonClicked() {
-    QMessageBox::information(this, "View Reserved Scooters", "View Reserved Scooters button clicked!");
+    //QMessageBox::information(this, "View Reserved Scooters", "View Reserved Scooters button clicked!");
+    std::vector<domain::Scooter> userScooters = controller->userReservedScooters();
+    printListOfScooters(userScooters);
 }
 
 void MainWindow::onGoBackButtonClicked() {
@@ -531,19 +561,20 @@ void MainWindow::printScooterDetails(const domain::Scooter &scooter) {
     detailsDialog->exec();
 }
 
-void MainWindow::printListOfScooters(const std::vector<domain::Scooter>& scooters) {
+void MainWindow::printListOfScooters(const std::vector<domain::Scooter> &scooters) {
     // Create a QDialog to display the list of scooters
-    auto* listDialog = new QDialog(this);
+    auto *listDialog = new QDialog(this);
     listDialog->setWindowTitle("List of Scooters");
     listDialog->setFixedSize(1280, 720);
-    auto* layout = new QVBoxLayout(listDialog);
+    auto *layout = new QVBoxLayout(listDialog);
 
     // Create the table widget
-    auto* tableWidget = new QTableWidget(listDialog);
+    auto *tableWidget = new QTableWidget(listDialog);
     tableWidget->setRowCount(scooters.size());
     tableWidget->setColumnCount(6);
     tableWidget->horizontalHeader()->setStretchLastSection(true); // Adjust the table size to fit the window
-    tableWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); // Expand the table to fill the available space
+    tableWidget->setSizePolicy(QSizePolicy::Expanding,
+                               QSizePolicy::Expanding); // Expand the table to fill the available space
 
     // Set the table header with the scooter details
     QStringList headerLabels = {"ID", "Model", "Commission Date", "Mileage", "Last Stand Place", "State"};
@@ -568,13 +599,13 @@ void MainWindow::printListOfScooters(const std::vector<domain::Scooter>& scooter
 
     // Populate the table with scooter details
     for (int row = 0; row < scooters.size(); ++row) {
-        const auto& scooter = scooters[row];
-        auto* idItem = new QTableWidgetItem(QString::fromStdString(scooter.getID()));
-        auto* modelItem = new QTableWidgetItem(QString::fromStdString(scooter.getModel()));
-        auto* commissionDateItem = new QTableWidgetItem(QString::fromStdString(scooter.getCommissionDate().toString()));
-        auto* mileageItem = new QTableWidgetItem(QString::number(scooter.getMileage()) + " miles");
-        auto* lastStandPlaceItem = new QTableWidgetItem(QString::fromStdString(scooter.getLastStandPlace()));
-        auto* stateItem = new QTableWidgetItem(getStateString(scooter.getState()));
+        const auto &scooter = scooters[row];
+        auto *idItem = new QTableWidgetItem(QString::fromStdString(scooter.getID()));
+        auto *modelItem = new QTableWidgetItem(QString::fromStdString(scooter.getModel()));
+        auto *commissionDateItem = new QTableWidgetItem(QString::fromStdString(scooter.getCommissionDate().toString()));
+        auto *mileageItem = new QTableWidgetItem(QString::number(scooter.getMileage()) + " miles");
+        auto *lastStandPlaceItem = new QTableWidgetItem(QString::fromStdString(scooter.getLastStandPlace()));
+        auto *stateItem = new QTableWidgetItem(getStateString(scooter.getState()));
 
         tableWidget->setItem(row, 0, idItem);
         tableWidget->setItem(row, 1, modelItem);
@@ -597,9 +628,6 @@ void MainWindow::printListOfScooters(const std::vector<domain::Scooter>& scooter
     // Display the QDialog
     listDialog->exec();
 }
-
-
-
 
 
 QString MainWindow::getStateString(domain::State state) {

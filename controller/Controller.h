@@ -18,8 +18,13 @@ namespace controller {
     class ProductController {
     private:
         std::shared_ptr<repository::Repository> repo;  // Update to shared_ptr
+        std::string adminFile;
+        std::string userFile;
 
     public:
+
+        void setUserFile(const std::string &fileName);
+
         explicit ProductController(std::shared_ptr<repository::Repository> repo);  // Update parameter type
 
 

@@ -24,15 +24,15 @@ namespace repository {
     public:
         explicit Repository(const std::string &fileName_);
 
-        void addScooter(const domain::Scooter &scooter);
+        void addScooter(const domain::Scooter &scooter, const std::string &fileName);
 
-        void deleteScooter(const domain::Scooter &scooter);
+        void deleteScooter(const domain::Scooter &scooter, const std::string &fileName);
 
-        void updateScooter(const domain::Scooter &scooter);
+        void updateScooter(const domain::Scooter &scooter, const std::string &fileName);
 
-        std::vector<domain::Scooter> getScooters() const;
+        std::vector<domain::Scooter> getScooters(const std::string &fileName_) const;
 
-        void saveDataToFile(const std::string &fileName, const std::vector<domain::Scooter> &data);
+        static void saveDataToFile(const std::string &fileName, const std::vector<domain::Scooter> &data);
 
         static std::vector<domain::Scooter> loadDataFromFile(const std::string &fileName);
     };

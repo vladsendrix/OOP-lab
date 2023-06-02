@@ -5,6 +5,12 @@ namespace controller {
 
     ProductController::ProductController(std::shared_ptr<repository::Repository> repo_)
             : repo(std::move(repo_)) {
+        adminFile="ScootersData.csv";
+        //userFile="UserData.csv";
+    }
+
+    void ProductController::setUserFile(const std::string &fileName) {
+        userFile=fileName;
     }
 
 
@@ -44,7 +50,7 @@ namespace controller {
         }
 
         domain::Scooter newScooter = domain::Scooter(id, model, commissionDate, mileage, lastStandPlace, state);
-        repo->addScooter(newScooter);
+        repo->addScooter(newScooter,adminFile);
         sortScooters(true,"ID");
         return newScooter;
     }
@@ -52,7 +58,7 @@ namespace controller {
     int ProductController::position(const std::string &id_) {
         std::string id = transformID(id_);
         int index = 0;
-        std::vector<domain::Scooter> scooters = repo->getScooters();
+        std::vector<domain::Scooter> scooters = repo->getScooters(adminFile);
         for (const auto &scooter: scooters) {
             if (scooter.getID() == id) {
                 return index;
@@ -63,16 +69,16 @@ namespace controller {
     }
 
     bool ProductController::exists(const int &index) const {
-        return 0 <= index && index < repo->getScooters().size();
+        return 0 <= index && index < repo->getScooters(adminFile).size();
     }
 
     bool ProductController::deleteScooter(const int &index) const {
-        std::vector<domain::Scooter> scooters = repo->getScooters();
+        std::vector<domain::Scooter> scooters = repo->getScooters(adminFile);
         if (!exists(index)) {
             return false;
         }
         domain::Scooter scooterToDelete = scooters.at(index);
-        repo->deleteScooter(scooterToDelete);
+        repo->deleteScooter(scooterToDelete,adminFile);
         return true;
     }
 
@@ -111,11 +117,11 @@ namespace controller {
         std::cout << std::endl;
 
         domain::Scooter updatedScooter = domain::Scooter(
-                repo->getScooters().at(index).getID(),
-                repo->getScooters().at(index).getModel(),
+                repo->getScooters(adminFile).at(index).getID(),
+                repo->getScooters(adminFile).at(index).getModel(),
                 commissionDate, mileage, lastStandPlace, state);
 
-        repo->updateScooter(updatedScooter);
+        repo->updateScooter(updatedScooter,adminFile);
         return updatedScooter;
     }
 
@@ -125,7 +131,7 @@ namespace controller {
                        [](unsigned char c) { return std::tolower(c); });
 
         std::vector<domain::Scooter> result, scooters;
-        scooters = repo->getScooters();
+        scooters = repo->getScooters(adminFile);
 
         for (const auto &scooter: scooters) {
             std::string lastStandPlace = scooter.getLastStandPlace();
@@ -141,7 +147,7 @@ namespace controller {
     std::vector<domain::Scooter> ProductController::filterScooterByAge(bool lowerThan, const int &age) {
 
         std::vector<domain::Scooter> result, scooters;
-        scooters = repo->getScooters();
+        scooters = repo->getScooters(adminFile);
 
         if (lowerThan) {
             for (const auto &scooter: scooters)
@@ -159,7 +165,7 @@ namespace controller {
 
     std::vector<domain::Scooter> ProductController::filterScooterByMileage(bool lowerThan, const int &mileage) {
 
-        std::vector<domain::Scooter> result, scooters = repo->getScooters();
+        std::vector<domain::Scooter> result, scooters = repo->getScooters(adminFile);
         if (lowerThan) {
             for (const auto &scooter: scooters)
                 if (scooter.getMileage() < mileage)
@@ -176,7 +182,7 @@ namespace controller {
     bool ProductController::is_inwait_parked(const int &index_) {
         int index = index_;
         if (!exists(index)) return false;
-        const domain::Scooter scooter = repo->getScooters().at(index);
+        const domain::Scooter scooter = repo->getScooters(adminFile).at(index);
         if (scooter.getState() == domain::State::INWAIT || scooter.getState() == domain::State::PARKED) {
             return true;
         }
@@ -187,7 +193,7 @@ namespace controller {
     bool ProductController::is_reserved(const int &index_) {
         int index = index_;
         if (!exists(index)) return false;
-        const domain::Scooter scooter = repo->getScooters().at(index);
+        const domain::Scooter scooter = repo->getScooters(adminFile).at(index);
         if (scooter.getState() == domain::State::RESERVED) {
             return true;
         }
@@ -197,7 +203,7 @@ namespace controller {
     bool ProductController::is_inuse(const int &index_) {
         int index = index_;
         if (!exists(index)) return false;
-        const domain::Scooter scooter = repo->getScooters().at(index);
+        const domain::Scooter scooter = repo->getScooters(adminFile).at(index);
         if (scooter.getState() == domain::State::INUSE) {
             return true;
         }
@@ -207,10 +213,10 @@ namespace controller {
     bool ProductController::reserveScooter(const int &index_) {
         int index = index_;
         if (is_inwait_parked(index)) {
-            domain::Scooter reservedScooter = repo->getScooters().at(index);
+            domain::Scooter reservedScooter = repo->getScooters(adminFile).at(index);
             reservedScooter.setState(domain::State::RESERVED);
-            repo->updateScooter(reservedScooter);
-            repo->addScooter(reservedScooter);
+            repo->updateScooter(reservedScooter,adminFile);
+            repo->addScooter(reservedScooter,userFile);
             return true;
         }
         return false;
@@ -220,9 +226,9 @@ namespace controller {
     bool ProductController::useScooter(const int &index_) {
         int index = index_;
         if (is_reserved(index)) {
-            domain::Scooter useScooter = repo->getScooters().at(index);
+            domain::Scooter useScooter = repo->getScooters(adminFile).at(index);
             useScooter.setState(domain::State::INUSE);
-            repo->updateScooter(useScooter);
+            repo->updateScooter(useScooter,adminFile);
             return true;
         }
         return false;
@@ -232,11 +238,11 @@ namespace controller {
         int index = index_;
         const std::string &location = location_;
         if (is_inuse(index)) {
-            domain::Scooter useScooter = repo->getScooters().at(index);
+            domain::Scooter useScooter = repo->getScooters(adminFile).at(index);
             useScooter.setState(domain::State::PARKED);
             useScooter.setLastStandPlace(location);
             useScooter.setMileage(useScooter.getMileage() + 20);
-            repo->updateScooter(useScooter);
+            repo->updateScooter(useScooter,adminFile);
             return true;
         }
         return false;
@@ -245,7 +251,7 @@ namespace controller {
 
     // all the sortings
     std::vector<domain::Scooter> ProductController::sortScooters(bool ascending, const std::string &sortBy) {
-        std::vector<domain::Scooter> scooters = repo->getScooters();
+        std::vector<domain::Scooter> scooters = repo->getScooters(adminFile);
 
         if (sortBy == "ID") {
             std::sort(scooters.begin(), scooters.end(),
@@ -300,10 +306,10 @@ namespace controller {
     std::string ProductController::autoGenerateID() {
         std::string id = "AAA";
 
-        if (!repo->getScooters().empty()) {
+        if (!repo->getScooters(adminFile).empty()) {
             std::set<std::string> existingIDs;
 
-            for (const auto &scooter: repo->getScooters()) {
+            for (const auto &scooter: repo->getScooters(adminFile)) {
                 existingIDs.insert(scooter.getID());
             }
             while (existingIDs.find(id) != existingIDs.end()) {
@@ -360,7 +366,7 @@ namespace controller {
     }
 
     std::vector<domain::Scooter> ProductController::userReservedScooters() {
-        std::vector<domain::Scooter> scooters = repo->getScooters();
+        std::vector<domain::Scooter> scooters = repo->getScooters(userFile);
         std::vector<domain::Scooter> reservedScooters;
         for (const auto &scooter: scooters) {
             if (scooter.getState() == domain::State::RESERVED) {
@@ -369,5 +375,4 @@ namespace controller {
         }
         return reservedScooters;
     }
-
 }
